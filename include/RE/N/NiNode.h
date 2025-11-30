@@ -6,19 +6,21 @@
 
 namespace RE
 {
-    class NiNode : public NiAVObject
+    class __declspec(novtable) NiNode :
+        public NiAVObject 
     {
     public:
-        inline static constexpr auto RTTI = RTTI_NiNode;
+        SF_RTTI(NiNode);
 
-        ~NiNode() override;
-        NiNode* GetAsNiNode() override;
-        void AddChild(NiAVObject* a_child) override;
-        bool RemoveChild(NiAVObject* a_child) override;
-        NiAVObject* GetObjectByName(const BSFixedString& a_name) override;
-        NiAVObject* FindObjectRecursive(const BSFixedString& a_name) override;
-        NiTransform* GetLocalTransform() override;
-        void SetLocalTransform(const NiTransform& a_transform) override; // 38
+        //add
+        virtual ~NiNode() = default;
+        virtual NiNode* GetAsNiNode();
+        virtual void* AddChild(NiAVObject* child);
+        virtual bool* RemoveChild(NiAVObject* child);
+        virtual NiAVObject* GetObjectByName(const BSFixedString& name);
+        virtual NiAVObject* FindObjectRecursive(const BSFixedString& name);
+        virtual NiTransform* GetLocalTransform();
+        virtual void* SetLocalTransform(const NiTransform& transform);
 
         // members
         BSTArray<NiPointer<NiAVObject>> children;   // 130
