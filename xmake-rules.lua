@@ -72,6 +72,8 @@ rule("commonlibsf.plugin")
         target:set("arch", "x64")
         target:set("kind", "shared")
 
+        target:add("deps", "commonlibsf")
+
         target:add("installfiles", target:targetfile(), { prefixdir = "SFSE/Plugins" })
         target:add("installfiles", target:symbolfile(), { prefixdir = "SFSE/Plugins" })
 

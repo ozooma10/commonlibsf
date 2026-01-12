@@ -96,7 +96,7 @@ namespace RE::BSScript
 			}
 
 			bVar3 = _InterlockedCompareExchange(reinterpret_cast<volatile long*>(&(this->refCountAndHandleLock)),
-						uVar1 | 0x80000000, uVar1) == uVar1;
+						uVar1 | 0x80000000, uVar1) == (long)uVar1;
 
 		} while (!bVar3);
 		_mm_mfence();
@@ -107,13 +107,12 @@ namespace RE::BSScript
 
 	void Object::IncRef()
 	{
-		std::uint32_t uVar1;
+		std::uint32_t uVar1 = 0;
 		std::uint32_t uVar2;
-		std::uint64_t uVar3;
-		std::uint32_t uVar4;
+		//std::uint64_t uVar3;
+		std::uint32_t uVar4 = 0;
 		bool          bVar5;
 
-		uVar4 = 0;
 		do {
 			while (true) {
 				_mm_mfence();
@@ -144,7 +143,7 @@ namespace RE::BSScript
 			}
 
 			bVar5 = _InterlockedCompareExchange(reinterpret_cast<volatile long*>(&(this->refCountAndHandleLock)),
-						uVar2 + 1, uVar2) == uVar2;
+						uVar2 + 1, uVar2) == (long)uVar2;
 			if (bVar5) {
 				uVar1 = uVar2;
 				return;

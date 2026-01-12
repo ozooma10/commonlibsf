@@ -1,17 +1,17 @@
 -- set minimum xmake version
-set_xmakever("2.8.2")
+set_xmakever("3.0.0")
 
--- set project
+-- set project constants
 set_project("commonlibsf")
 set_arch("x64")
 set_languages("c++23")
 set_warnings("allextra")
 set_encodings("utf-8")
 
--- add rules
+-- add common rules
 add_rules("mode.debug", "mode.releasedbg")
 
--- add includes
+-- include subprojects
 includes("lib/commonlib-shared")
 includes("xmake-rules.lua")
 
