@@ -54,7 +54,7 @@ namespace RE
 		BGSAudio::WwiseSoundHook         lockSound;        // 218
 		std::uint32_t                    unk248;           // 248
 		std::uint32_t                    unk24C;           // 24C
-		REX::EnumSet<Flag, std::uint8_t> flags;            // 250
+		REX::TEnumSet<Flag, std::uint8_t> flags;            // 250
 		BSTArray<TESForm*>               randomTeleports;  // 258
 	};
 	static_assert(sizeof(TESObjectDOOR) == 0x270);

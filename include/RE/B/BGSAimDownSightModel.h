@@ -53,7 +53,7 @@ namespace RE
 		float                               heightDelayADS;               // 28
 		bool                                depthEnabledADS;              // 2C
 		float                               depthDelayADS;                // 30
-		REX::EnumSet<OVERLAY, std::uint8_t> overlay;                      // 34
+		REX::TEnumSet<OVERLAY, std::uint8_t> overlay;                      // 34
 	};
 	static_assert(sizeof(AimDownSightData) == 0x38);
 

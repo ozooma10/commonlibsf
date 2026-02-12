@@ -13,7 +13,7 @@ namespace RE
 		~ConeProjectile() override;  // 00
 
 		// members
-		REX::Enum<ImpactResult, std::int32_t> impactResult;                  // 260
+		REX::TEnum<ImpactResult, std::int32_t> impactResult;                  // 260
 		float                                 environmentTimer;              // 264
 		float                                 coneSpreadTangent;             // 268
 		float                                 initialCollisionSphereRadius;  // 26C

@@ -25,7 +25,7 @@ namespace RE
 		// members
 		std::uint32_t                     collisionIdx;  // 30
 		std::uint32_t                     debugColor;    // 34
-		REX::EnumSet<Flag, std::uint32_t> flags;         // 38
+		REX::TEnumSet<Flag, std::uint32_t> flags;         // 38
 		BSFixedString                     name;          // 40
 		BSTArray<BGSCollisionLayer*>      collidesWith;  // 48
 	};

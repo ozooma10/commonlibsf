@@ -51,9 +51,9 @@ namespace RE
 			};
 
 			// members
-			REX::Enum<CAM_ACTION, std::int32_t> cameraAction;                // 00
-			REX::Enum<CAM_OBJECT, std::int32_t> location;                    // 04
-			REX::Enum<CAM_OBJECT, std::int32_t> target;                      // 08
+			REX::TEnum<CAM_ACTION, std::int32_t> cameraAction;                // 00
+			REX::TEnum<CAM_OBJECT, std::int32_t> location;                    // 04
+			REX::TEnum<CAM_OBJECT, std::int32_t> target;                      // 08
 			std::uint32_t                       flags;                       // 0C
 			float                               playerTimeMult;              // 10
 			float                               targetTimeMult;              // 14

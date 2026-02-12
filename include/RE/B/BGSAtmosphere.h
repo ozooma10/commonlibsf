@@ -93,7 +93,7 @@ namespace RE
 
 		struct MiscSettings
 		{
-			REX::Enum<ATMOSPHERE_TYPE, std::uint32_t> atmosphereType;      // 00
+			REX::TEnum<ATMOSPHERE_TYPE, std::uint32_t> atmosphereType;      // 00
 			BSTArray<BGSResource*>                    inorganicResources;  // 08
 			TESImageSpace*                            imageSpaceDay;       // 18
 			TESImageSpace*                            imageSpaceNight;     // 20

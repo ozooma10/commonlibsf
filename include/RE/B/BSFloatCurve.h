@@ -39,8 +39,8 @@ namespace RE
 		float                              maxValue;               // 2C
 		float                              minValue;               // 30
 		float                              defaultValue;           // 34
-		REX::Enum<CurveType, std::uint8_t> type;                   // 38
-		REX::Enum<Edge, std::uint8_t>      edge;                   // 39
+		REX::TEnum<CurveType, std::uint8_t> type;                   // 38
+		REX::TEnum<Edge, std::uint8_t>      edge;                   // 39
 		bool                               isSampleInterpolating;  // 3A
 	};
 	static_assert(sizeof(BSFloatCurve) == 0x40);

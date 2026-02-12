@@ -114,10 +114,10 @@ namespace RE
 		}
 
 		// members
-		REX::EnumSet<Flag, std::uint32_t>   cellFlags;       // 040
+		REX::TEnumSet<Flag, std::uint32_t>   cellFlags;       // 040
 		std::uint16_t                       cellGameFlags;   // 044
 		std::uint8_t                        unk04E;          // 046
-		REX::Enum<CELL_STATE, std::uint8_t> cellState;       // 047
+		REX::TEnum<CELL_STATE, std::uint8_t> cellState;       // 047
 		std::uint64_t                       unk050;          // 048
 		BSTSmartPointer<ExtraDataList>      extraDataList;   // 050
 		CellData                            cellData;        // 058

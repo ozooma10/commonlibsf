@@ -382,7 +382,7 @@ namespace RE
 		}
 
 		// members
-		REX::EnumSet<BOOL_BITS, std::uint32_t>           boolBits;                 // 208
+		REX::TEnumSet<BOOL_BITS, std::uint32_t>           boolBits;                 // 208
 		float                                            unk20C;                   // 20C
 		BSGuarded<BSTArray<void*>, BSSpinLock>           unk210;                   // 210 - BGSBody?
 		AIProcess*                                       currentProcess;           // 228
@@ -394,7 +394,7 @@ namespace RE
 		std::uint64_t                                    unk258;                   // 258
 		ActorValueStorage                                avStorage;                // 260
 		std::uint64_t                                    unk288;                   // 288
-		REX::EnumSet<ACTOR_CRITICAL_STAGE, std::int32_t> criticalStage;            // 290
+		REX::TEnumSet<ACTOR_CRITICAL_STAGE, std::int32_t> criticalStage;            // 290
 		std::uint32_t                                    dialogueItemTarget;       // 294 - TESPointerHandle
 		std::uint32_t                                    currentCombatTarget;      // 298 - TESPointerHandle
 		std::uint32_t                                    myKiller;                 // 29C - TESPointerHandle
@@ -428,8 +428,8 @@ namespace RE
 		std::uint32_t                                    unk368;                   // 368
 		mutable BSReadWriteLock                          perkArrayLock;            // 36C
 		std::uint32_t                                    unk374;                   // 374
-		REX::EnumSet<BOOL_FLAGS, std::uint32_t>          boolFlags;                // 378
-		REX::EnumSet<BOOL_FLAGS2, std::uint32_t>         boolFlags2;               // 37C
+		REX::TEnumSet<BOOL_FLAGS, std::uint32_t>          boolFlags;                // 378
+		REX::TEnumSet<BOOL_FLAGS2, std::uint32_t>         boolFlags2;               // 37C
 		std::uint64_t                                    unk380;                   // 380
 		std::uint64_t                                    unk388;                   // 388
 		std::uint64_t                                    unk390;                   // 390

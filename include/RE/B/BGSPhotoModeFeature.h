@@ -26,7 +26,7 @@ namespace RE
 
 		struct Feature
 		{
-			REX::Enum<TYPE, std::uint8_t> type;     // 00
+			REX::TEnum<TYPE, std::uint8_t> type;     // 00
 			float                         offsetX;  // 04
 			float                         offsetY;  // 08
 			float                         unk0C;    // 0C

@@ -26,10 +26,10 @@ namespace RE
 		{
 		public:
 			// members
-			REX::Enum<MagicSystem::SpellType, std::uint8_t>   spellType;     // 08
+			REX::TEnum<MagicSystem::SpellType, std::uint8_t>   spellType;     // 08
 			float                                             chargeTime;    // 0C
-			REX::Enum<MagicSystem::CastingType, std::uint8_t> castingType;   // 10
-			REX::Enum<MagicSystem::Delivery, std::uint8_t>    delivery;      // 11
+			REX::TEnum<MagicSystem::CastingType, std::uint8_t> castingType;   // 10
+			REX::TEnum<MagicSystem::Delivery, std::uint8_t>    delivery;      // 11
 			float                                             castDuration;  // 14
 			float                                             range;         // 18
 			BGSPerk*                                          castingPerk;   // 20

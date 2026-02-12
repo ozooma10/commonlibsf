@@ -45,8 +45,8 @@ namespace RE
 		MagicItem*                                          spell;                    // 60
 		AlchemyItem*                                        poison;                   // 68
 		BGSObjectInstanceT<TESObjectWEAP>                   fromWeapon;               // 70
-		REX::Enum<MagicSystem::CastingSource, std::uint8_t> castingSource;            // 80
-		REX::Enum<BGSBodyPartDefs::LIMB_ENUM, std::int32_t> targetLimbEnum;           // 84
+		REX::TEnum<MagicSystem::CastingSource, std::uint8_t> castingSource;            // 80
+		REX::TEnum<BGSBodyPartDefs::LIMB_ENUM, std::int32_t> targetLimbEnum;           // 84
 		void*                                               unk88;                    // 88 - smart ptr
 		BGSEquipIndex                                       equipIndex;               // 90
 		std::uint32_t                                       unk94;                    // 94
@@ -101,10 +101,10 @@ namespace RE
 			std::uint32_t                                       unk34;                   // 34
 			NiPointer<bhkNPCollisionObject>                     colObj;                  // 38
 			BGSMaterialType*                                    materialType;            // 40
-			REX::Enum<BGSBodyPartDefs::LIMB_ENUM, std::int32_t> damageLimb;              // 48
-			REX::Enum<COL_LAYER, std::int32_t>                  collisionLayer;          // 4C
+			REX::TEnum<BGSBodyPartDefs::LIMB_ENUM, std::int32_t> damageLimb;              // 48
+			REX::TEnum<COL_LAYER, std::int32_t>                  collisionLayer;          // 4C
 			std::uint64_t                                       unk50;                   // 50
-			REX::Enum<ImpactResult, std::int32_t>               resultOverride;          // 58
+			REX::TEnum<ImpactResult, std::int32_t>               resultOverride;          // 58
 			std::uint32_t                                       unk5C;                   // 5C
 			float                                               decalSize;               // 60
 			std::uint32_t                                       collisionShapeKey;       // 64
@@ -193,7 +193,7 @@ namespace RE
 		void*                                               unk1C8;               // 1C8 - smart ptr
 		std::uint64_t                                       unk1D0;               // 1D0
 		BGSEquipIndex                                       equipIndex;           // 1D8
-		REX::Enum<BGSBodyPartDefs::LIMB_ENUM, std::int32_t> targetLimbEnum;       // 1DC
+		REX::TEnum<BGSBodyPartDefs::LIMB_ENUM, std::int32_t> targetLimbEnum;       // 1DC
 		NiPointer<NiAVObject>                               targetLimbObj;        // 1E0
 		std::uint64_t                                       unk1E8;               // 1E8
 		BGSObjectInstanceT<TESObjectWEAP>                   weaponSource;         // 1F0
@@ -217,7 +217,7 @@ namespace RE
 		std::uint32_t                                       unk24C;               // 24C
 		std::uint32_t                                       unk250;               // 250
 		std::uint32_t                                       unk254;               // 254
-		REX::Enum<MagicSystem::CastingSource, std::uint8_t> castingSource;        // 258
+		REX::TEnum<MagicSystem::CastingSource, std::uint8_t> castingSource;        // 258
 		std::uint8_t                                        unk259;               // 259
 		bool                                                artRequested;         // 25A
 		bool                                                animationsLoaded;     // 25B

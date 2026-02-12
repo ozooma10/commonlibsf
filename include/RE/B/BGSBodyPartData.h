@@ -24,7 +24,7 @@ namespace RE
 		float                                               unk00;                   // 00
 		float                                               unk04;                   // 04
 		std::uint8_t                                        flags;                   // 08
-		REX::Enum<BGSBodyPartDefs::LIMB_ENUM, std::uint8_t> limbEnum;                // 09
+		REX::TEnum<BGSBodyPartDefs::LIMB_ENUM, std::uint8_t> limbEnum;                // 09
 		std::uint8_t                                        unk0A;                   // 0A
 		std::uint16_t                                       unk0C;                   // 0C
 		BGSDebris*                                          onCrippleDebris;         // 10

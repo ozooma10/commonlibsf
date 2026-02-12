@@ -37,7 +37,7 @@ namespace RE
 		~BGSInstanceNamingRules() override;  // 00
 
 		// members
-		REX::Enum<FormType, std::uint8_t>       type;          // 30
+		REX::TEnum<FormType, std::uint8_t>       type;          // 30
 		RuleSet                                 rules[10];     // 38
 		BSTArray<const BGSInstanceNamingRules*> mergeSources;  // D8
 	};

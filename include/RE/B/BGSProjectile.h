@@ -59,7 +59,7 @@ namespace RE
 		BGSTextureSet*                                  decalData;            // 30
 		BGSCollisionLayer*                              collisionLayer;       // 38
 		BGSProjectile*                                  vatsProjectile;       // 40
-		REX::EnumSet<BGSProjectileFlags, std::uint32_t> flags;                // 48
+		REX::TEnumSet<BGSProjectileFlags, std::uint32_t> flags;                // 48
 		float                                           gravity;              // 4C
 		float                                           speed;                // 50
 		float                                           range;                // 54
@@ -74,7 +74,7 @@ namespace RE
 		float                                           relaunchInterval;     // 78
 		float                                           unk7C;                // 7C
 		std::uint32_t                                   unk80;                // 80
-		REX::EnumSet<Type, std::uint8_t>                type;                 // 84
+		REX::TEnumSet<Type, std::uint8_t>                type;                 // 84
 		std::uint8_t                                    unk85;                // 85
 		float                                           unk88;                // 88
 		float                                           unk8C;                // 8C

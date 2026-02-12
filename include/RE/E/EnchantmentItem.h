@@ -17,10 +17,10 @@ namespace RE
 		{
 		public:
 			// members
-			REX::Enum<MagicSystem::CastingType, std::int32_t> castingType;       // 00
+			REX::TEnum<MagicSystem::CastingType, std::int32_t> castingType;       // 00
 			std::uint32_t                                     chargeOverride;    // 0C
-			REX::Enum<MagicSystem::Delivery, std::uint8_t>    delivery;          // 10
-			REX::Enum<MagicSystem::SpellType, std::uint8_t>   spellType;         // 11
+			REX::TEnum<MagicSystem::Delivery, std::uint8_t>    delivery;          // 10
+			REX::TEnum<MagicSystem::SpellType, std::uint8_t>   spellType;         // 11
 			float                                             chargeTime;        // 14
 			EnchantmentItem*                                  baseEnchantment;   // 18
 			BGSListForm*                                      wornRestrictions;  // 20

@@ -32,8 +32,8 @@ namespace RE
 		~BGSForceData() override;  // 00
 
 		// members
-		REX::Enum<BSForces::TYPE, std::uint32_t>    forceType;                     // 30
-		REX::Enum<BSForces::CHANNEL, std::uint32_t> forceChannel;                  // 34
+		REX::TEnum<BSForces::TYPE, std::uint32_t>    forceType;                     // 30
+		REX::TEnum<BSForces::CHANNEL, std::uint32_t> forceChannel;                  // 34
 		float                                       horizontalAngle;               // 38
 		float                                       verticalAngle;                 // 3C
 		float                                       speed;                         // 40

@@ -33,7 +33,7 @@ namespace RE
 		std::uint32_t                     materialID;          // 68
 		NiColor                           materialColor;       // 6C
 		float                             buoyancy;            // 78
-		REX::EnumSet<FLAG, std::uint32_t> flags;               // 7C
+		REX::TEnumSet<FLAG, std::uint32_t> flags;               // 7C
 	};
 	static_assert(sizeof(BGSMaterialType) == 0x88);
 }

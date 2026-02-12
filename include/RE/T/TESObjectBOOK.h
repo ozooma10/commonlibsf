@@ -42,7 +42,7 @@ namespace RE
 		static_assert(sizeof(Teaches) == 0x8);
 
 		// members
-		REX::EnumSet<Flag, std::uint8_t> flags;        // 00
+		REX::TEnumSet<Flag, std::uint8_t> flags;        // 00
 		Teaches                          teaches;      // 08
 		std::uint32_t                    textOffsetX;  // 10
 		std::uint32_t                    textOffsetY;  // 14

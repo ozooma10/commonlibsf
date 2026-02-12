@@ -77,7 +77,7 @@ namespace RE
 			RVA<TypeDescriptor>                    typeDescriptor;     // 00
 			std::uint32_t                          numContainedBases;  // 04
 			PMD                                    pmd;                // 08
-			REX::EnumSet<Attribute, std::uint32_t> attributes;         // 14
+			REX::TEnumSet<Attribute, std::uint32_t> attributes;         // 14
 		};
 
 		static_assert(sizeof(BaseClassDescriptor) == 0x18);
@@ -95,7 +95,7 @@ namespace RE
 
 			// members
 			std::uint32_t                          signature;       // 00
-			REX::EnumSet<Attribute, std::uint32_t> attributes;      // 04
+			REX::TEnumSet<Attribute, std::uint32_t> attributes;      // 04
 			std::uint32_t                          numBaseClasses;  // 08
 			RVA<BaseClassDescriptor>               baseClassArray;  // 0C
 		};

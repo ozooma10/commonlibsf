@@ -202,7 +202,7 @@ namespace RE::GameScript
 				kValue = 2,
 			};
 
-			REX::Enum<FormType, std::uint64_t> valueType;        // 00
+			REX::TEnum<FormType, std::uint64_t> valueType;        // 00
 			std::uint32_t                      threadId;         // 08
 			std::int32_t                       stackFrameIndex;  // 0C
 			RootType                           rootType;         // 10

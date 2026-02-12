@@ -58,7 +58,7 @@ namespace RE
 		BGSListForm*                           validRaces;         // 128
 		BSFixedString                          colorMapping;       // 130
 		BSFixedString                          mask;               // 138
-		REX::Enum<HeadPartType, std::uint32_t> type;               // 140
+		REX::TEnum<HeadPartType, std::uint32_t> type;               // 140
 		std::uint32_t                          unk144;             // 144
 	};
 	static_assert(sizeof(BGSHeadPart) == 0x150);

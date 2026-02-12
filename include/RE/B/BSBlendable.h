@@ -16,7 +16,7 @@ namespace RE::BSBlendable
 	{
 	public:
 		// members
-		REX::Enum<BlendOp, std::uint32_t> op;           // 00
+		REX::TEnum<BlendOp, std::uint32_t> op;           // 00
 		REX::W32::XMFLOAT4                value;        // 04
 		float                             blendAmount;  // 14
 	};
@@ -26,7 +26,7 @@ namespace RE::BSBlendable
 	{
 	public:
 		// members
-		REX::Enum<BlendOp, std::uint32_t> op;          // 0
+		REX::TEnum<BlendOp, std::uint32_t> op;          // 0
 		float                             value;       // 4
 		float                             blendValue;  // 8
 	};

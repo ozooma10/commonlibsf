@@ -78,7 +78,7 @@ namespace RE
 			};
 
 			BGSAudio::WwiseSoundHook            soundHook;  // 00
-			REX::Enum<SoundType, std::uint32_t> type;       // 30
+			REX::TEnum<SoundType, std::uint32_t> type;       // 30
 			float                               minDelay;   // 34
 			float                               maxDelay;   // 38
 		};

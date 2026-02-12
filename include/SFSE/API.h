@@ -1,6 +1,6 @@
 #pragma once
 
-#include "REX/REX/LOG.h"
+#include "REX/LOG.h"
 
 #include "SFSE/Interfaces.h"
 
@@ -17,9 +17,9 @@ namespace SFSE
 	{
 		bool log{ true };
 #ifndef NDEBUG
-		REX::LOG_LEVEL logLevel{ REX::LOG_LEVEL::DEBUG };
+		REX::ELogLevel logLevel{ REX::ELogLevel::Debug };
 #else
-		REX::LOG_LEVEL logLevel{ REX::LOG_LEVEL::INFO };
+		REX::ELogLevel logLevel{ REX::ELogLevel::Info };
 #endif
 		const char* logName{ nullptr };
 		const char* logPattern{ nullptr };
@@ -49,8 +49,6 @@ namespace SFSE
 
 namespace SFSE
 {
-	// DEPRECATED
-	void Init(const LoadInterface* a_intfc, bool a_log) noexcept;
-	// DEPRECATED
-	void AllocTrampoline(std::size_t a_size, bool a_trySFSEReserve = true) noexcept;
+	[[deprecated("Use F4SE::Init(..., {}) instead")]] void Init(const LoadInterface* a_intfc, bool a_log) noexcept;
+	[[deprecated("Use F4SE::Init(..., {}) instead")]] void AllocTrampoline(std::size_t a_size, bool a_trySFSEReserve = true) noexcept;
 }

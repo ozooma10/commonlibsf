@@ -93,10 +93,10 @@ namespace RE
 			float                                                   unkB4;                  // B4
 			float                                                   unkB8;                  // B8
 			std::uint32_t                                           minimumSkill;           // BC
-			REX::EnumSet<Flag, std::uint32_t>                       flags;                  // C0
-			REX::Enum<EffectArchetypes::ArchetypeID, std::uint32_t> archetype;              // C4
-			REX::Enum<MagicSystem::CastingType, std::uint8_t>       castingType;            // C8
-			REX::Enum<MagicSystem::Delivery, std::uint8_t>          deliveryType;           // C9
+			REX::TEnumSet<Flag, std::uint32_t>                       flags;                  // C0
+			REX::TEnum<EffectArchetypes::ArchetypeID, std::uint32_t> archetype;              // C4
+			REX::TEnum<MagicSystem::CastingType, std::uint8_t>       castingType;            // C8
+			REX::TEnum<MagicSystem::Delivery, std::uint8_t>          deliveryType;           // C9
 			std::uint32_t                                           unkCC;                  // CC
 		};
 		static_assert(sizeof(EffectSettingData) == 0xD0);

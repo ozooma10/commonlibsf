@@ -16,7 +16,7 @@ namespace RE
 		// members
 		BGSEditorID                       formEditorID;  // 30
 		TESForm*                          object;        // 40
-		REX::Enum<FormType, std::uint8_t> objectType;    // 48
+		REX::TEnum<FormType, std::uint8_t> objectType;    // 48
 	};
 	static_assert(sizeof(BGSDefaultObject) == 0x58);
 }

@@ -3887,7 +3887,7 @@ namespace RE
 		std::uint64_t                         unk78;           // 78
 		const TESAmmo*                        ammo;            // 80
 		std::byte                             pad88[0x5C];     // 88
-		REX::Enum<BGSBodyPartDefs::LIMB_ENUM> damageLimb;      // E4
+		REX::TEnum<BGSBodyPartDefs::LIMB_ENUM> damageLimb;      // E4
 		std::byte                             padE8[0x8];      // E8
 	};
 	static_assert(sizeof(HitData) == 0xF0);

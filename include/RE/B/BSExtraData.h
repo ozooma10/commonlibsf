@@ -23,7 +23,7 @@ namespace RE
 		// members
 		BSExtraData*                           next;   // 08
 		std::uint16_t                          flags;  // 10
-		REX::Enum<ExtraDataType, std::uint8_t> type;   // 12
+		REX::TEnum<ExtraDataType, std::uint8_t> type;   // 12
 	};
 	static_assert(sizeof(BSExtraData) == 0x18);
 }

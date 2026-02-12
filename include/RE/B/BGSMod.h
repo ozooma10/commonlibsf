@@ -50,7 +50,7 @@ namespace RE::BGSMod
 				{
 					BGSMod::Attachment::Mod*                 mod;
 					std::uint8_t                             level;
-					REX::EnumSet<IncludesFlag, std::uint8_t> flags;
+					REX::TEnumSet<IncludesFlag, std::uint8_t> flags;
 				};
 
 				static_assert(sizeof(Include) == 0x10);

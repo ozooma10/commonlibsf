@@ -20,7 +20,7 @@ namespace RE
 		NiPoint3                              unk290;                 // 290
 		std::uint32_t                         unk29C;                 // 29C
 		NiPointer<bhkNPCollisionObject>       modelCollision;         // 2A0
-		REX::Enum<ImpactResult, std::int32_t> impactResult;           // 2A8
+		REX::TEnum<ImpactResult, std::int32_t> impactResult;           // 2A8
 		bool                                  waitingToInitialize3D;  // 2AC
 		bool                                  unk2AD;                 // 2AD
 		bool                                  unk2AE;                 // 2AE

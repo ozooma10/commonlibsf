@@ -173,7 +173,7 @@ namespace RE
 		BSTArray<BGSRelationship*>*                                     relationships;    // 438
 		BGSLocalizedString                                              organization;     // 440 - faction?
 		BSTHashMap<BSFixedStringCS, float>*                             shapeBlendData;   // 448
-		REX::Enum<PRONOUN_TYPE, std::uint8_t>                           pronoun;          // 450
+		REX::TEnum<PRONOUN_TYPE, std::uint8_t>                           pronoun;          // 450
 	};
 	static_assert(sizeof(TESNPC) == 0x458);
 }

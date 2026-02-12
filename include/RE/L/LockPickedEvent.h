@@ -34,7 +34,7 @@ namespace RE
 		std::uint32_t                        numDigiPicksUsed;  // 18
 		float                                unk20;             // 20 - 0.0f
 		float                                unk24;             // 24 - 0.0f
-		REX::Enum<LOCK_LEVEL, std::uint32_t> lockLevel;         // 28
+		REX::TEnum<LOCK_LEVEL, std::uint32_t> lockLevel;         // 28
 		bool                                 succeeded;         // 2C
 		bool                                 isOffLimits;       // 2D
 	};

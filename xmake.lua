@@ -10,6 +10,7 @@ set_encodings("utf-8")
 
 -- add common rules
 add_rules("mode.debug", "mode.releasedbg")
+add_rules("plugin.vsxmake.autoupdate")
 
 -- include subprojects
 includes("lib/commonlib-shared")
@@ -39,37 +40,14 @@ target("commonlibsf")
     -- set precompiled header
     set_pcxxheader("include/SFSE/Impl/PCH.h")
 
-    -- add flags
-    add_cxxflags("/permissive-")
-
-    -- add flags (cl)
-    add_cxxflags(
-        "cl::/bigobj",
-        "cl::/cgthreads8",
-        "cl::/diagnostics:caret",
-        "cl::/external:W0",
-        "cl::/fp:contract",
-        "cl::/fp:except-",
-        "cl::/guard:cf-",
-        "cl::/Zc:enumTypes",
-        "cl::/Zc:preprocessor",
-        "cl::/Zc:templateScope"
-    )
-
-    -- add flags (cl: warnings -> errors)
-    add_cxxflags("cl::/we4715") -- `function` : not all control paths return a value
-
     -- add flags (cl: disable warnings)
     add_cxxflags(
         "cl::/wd4005", -- macro redefinition
         "cl::/wd4061", -- enumerator `identifier` in switch of enum `enumeration` is not explicitly handled by a case label
         "cl::/wd4068", -- unknown pragma 'clang'
-        "cl::/wd4200", -- nonstandard extension used : zero-sized array in struct/union
-        "cl::/wd4201", -- nonstandard extension used : nameless struct/union
         "cl::/wd4264", -- 'virtual_function' : no override available for virtual member function from base 'class'; function is hidden
         "cl::/wd4265", -- 'type': class has virtual functions, but its non-trivial destructor is not virtual; instances of this class may not be destructed correctly
         "cl::/wd4266", -- 'function' : no override available for virtual member function from base 'type'; function is hidden
-        "cl::/wd4324", -- 'struct_name' : structure was padded due to __declspec(align())
         "cl::/wd4371", -- 'classname': layout of class may have changed from a previous version of the compiler due to better packing of member 'member'
         "cl::/wd4514", -- 'function' : unreferenced inline function has been removed
         "cl::/wd4582", -- 'type': constructor is not implicitly called
@@ -89,27 +67,4 @@ target("commonlibsf")
         "cl::/wd5105", -- macro expansion producing 'defined' has undefined behavior (workaround for older msvc bug)
         "cl::/wd5204", -- 'type-name': class has virtual functions, but its trivial destructor is not virtual; instances of objects derived from this class may not be destructed correctly
         "cl::/wd5220"  -- 'member': a non-static data member with a volatile qualified type no longer implies that compiler generated copy / move constructors and copy / move assignment operators are not trivial
-    )
-
-    -- add flags (clang-cl)
-    add_cxxflags(
-        "clang_cl::-fms-compatibility",
-        "clang_cl::-fms-extensions",
-        { public = true }
-    )
-
-    -- add flags (clang-cl: disable warnings)
-    add_cxxflags(
-        "clang_cl::-Wno-delete-non-abstract-non-virtual-dtor",
-        "clang_cl::-Wno-deprecated-volatile",
-        "clang_cl::-Wno-ignored-qualifiers",
-        "clang_cl::-Wno-inconsistent-missing-override",
-        "clang_cl::-Wno-invalid-offsetof",
-        "clang_cl::-Wno-microsoft-include",
-        "clang_cl::-Wno-overloaded-virtual",
-        "clang_cl::-Wno-pragma-system-header-outside-header",
-        "clang_cl::-Wno-reinterpret-base-class",
-        "clang_cl::-Wno-switch",
-        "clang_cl::-Wno-unused-private-field",
-        { public = true }
     )

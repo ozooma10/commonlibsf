@@ -28,7 +28,7 @@ namespace RE
 		BGSEditorID                       formEditorID;         // 30
 		BSTArray<BGSEquipSlot*>           parentSlots;          // 40
 		ActorValueInfo*                   conditionActorValue;  // 50
-		REX::EnumSet<Flag, std::uint32_t> flags;                // 58
+		REX::TEnumSet<Flag, std::uint32_t> flags;                // 58
 	};
 	static_assert(sizeof(BGSEquipSlot) == 0x68);
 }

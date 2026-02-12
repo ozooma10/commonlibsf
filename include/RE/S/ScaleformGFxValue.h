@@ -744,7 +744,7 @@ namespace RE::Scaleform::GFx
 		Value*                                _prev{};                         // 00
 		Value*                                _next{};                         // 08
 		ObjectInterface*                      _objectInterface{};              // 10
-		REX::EnumSet<ValueType, std::int32_t> _type{ ValueType::kUndefined };  // 18
+		REX::TEnumSet<ValueType, std::int32_t> _type{ ValueType::kUndefined };  // 18
 		ValueUnion                            _value{};                        // 20
 		std::size_t                           _dataAux{};                      // 28
 	};

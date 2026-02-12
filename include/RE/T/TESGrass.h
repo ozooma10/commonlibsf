@@ -34,7 +34,7 @@ namespace RE
 			std::uint8_t                     density;     // 20
 			std::uint8_t                     minSlope;    // 21
 			std::uint8_t                     maxSlope;    // 22
-			REX::EnumSet<Flag, std::uint8_t> flags;       // 23
+			REX::TEnumSet<Flag, std::uint8_t> flags;       // 23
 			std::uint8_t                     unk24;       // 24
 			std::uint8_t                     unk25;       // 25
 		};
