@@ -741,12 +741,12 @@ namespace RE::Scaleform::GFx
 		}
 
 		// members
-		Value*                                _prev{};                         // 00
-		Value*                                _next{};                         // 08
-		ObjectInterface*                      _objectInterface{};              // 10
+		Value*                                 _prev{};                         // 00
+		Value*                                 _next{};                         // 08
+		ObjectInterface*                       _objectInterface{};              // 10
 		REX::TEnumSet<ValueType, std::int32_t> _type{ ValueType::kUndefined };  // 18
-		ValueUnion                            _value{};                        // 20
-		std::size_t                           _dataAux{};                      // 28
+		ValueUnion                             _value{};                        // 20
+		std::size_t                            _dataAux{};                      // 28
 	};
 	static_assert(sizeof(Value) == 0x30);
 }

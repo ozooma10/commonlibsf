@@ -394,11 +394,11 @@ namespace RE
 	{
 	public:
 		// members
-		const char*                                   name;           // 00
+		const char*                                    name;           // 00
 		REX::TEnum<FormType, std::uint8_t>             type;           // 08
-		char                                          uniqueID[4];    // 0C
+		char                                           uniqueID[4];    // 0C
 		REX::TEnum<DEFAULT_OBJECT_TYPE, std::uint32_t> doType;         // 10
-		const char*                                   newObjectName;  // 18
+		const char*                                    newObjectName;  // 18
 	};
 	static_assert(sizeof(DEFAULT_OBJECT_DATA) == 0x20);
 

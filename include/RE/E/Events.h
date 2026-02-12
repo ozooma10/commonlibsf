@@ -3876,19 +3876,19 @@ namespace RE
 	{
 	public:
 		// members
-		DamageImpactData                      impactData;      // 00
-		BSPointerHandle<Actor>                aggressor;       // 40
-		BSPointerHandle<Actor>                target;          // 44
-		BSPointerHandle<TESObjectREFR>        sourceRef;       // 48
-		std::uint64_t                         attackData;      // 50 - NiPointer<BGSAttackData>
-		BGSObjectInstanceT<TESObjectWEAP>     weapon;          // 58
-		SpellItem*                            criticalEffect;  // 68
-		SpellItem*                            hitEffect;       // 70
-		std::uint64_t                         unk78;           // 78
-		const TESAmmo*                        ammo;            // 80
-		std::byte                             pad88[0x5C];     // 88
+		DamageImpactData                       impactData;      // 00
+		BSPointerHandle<Actor>                 aggressor;       // 40
+		BSPointerHandle<Actor>                 target;          // 44
+		BSPointerHandle<TESObjectREFR>         sourceRef;       // 48
+		std::uint64_t                          attackData;      // 50 - NiPointer<BGSAttackData>
+		BGSObjectInstanceT<TESObjectWEAP>      weapon;          // 58
+		SpellItem*                             criticalEffect;  // 68
+		SpellItem*                             hitEffect;       // 70
+		std::uint64_t                          unk78;           // 78
+		const TESAmmo*                         ammo;            // 80
+		std::byte                              pad88[0x5C];     // 88
 		REX::TEnum<BGSBodyPartDefs::LIMB_ENUM> damageLimb;      // E4
-		std::byte                             padE8[0x8];      // E8
+		std::byte                              padE8[0x8];      // E8
 	};
 	static_assert(sizeof(HitData) == 0xF0);
 

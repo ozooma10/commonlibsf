@@ -74,9 +74,9 @@ namespace RE
 			};
 
 			// members
-			RVA<TypeDescriptor>                    typeDescriptor;     // 00
-			std::uint32_t                          numContainedBases;  // 04
-			PMD                                    pmd;                // 08
+			RVA<TypeDescriptor>                     typeDescriptor;     // 00
+			std::uint32_t                           numContainedBases;  // 04
+			PMD                                     pmd;                // 08
 			REX::TEnumSet<Attribute, std::uint32_t> attributes;         // 14
 		};
 
@@ -94,10 +94,10 @@ namespace RE
 			};
 
 			// members
-			std::uint32_t                          signature;       // 00
+			std::uint32_t                           signature;       // 00
 			REX::TEnumSet<Attribute, std::uint32_t> attributes;      // 04
-			std::uint32_t                          numBaseClasses;  // 08
-			RVA<BaseClassDescriptor>               baseClassArray;  // 0C
+			std::uint32_t                           numBaseClasses;  // 08
+			RVA<BaseClassDescriptor>                baseClassArray;  // 0C
 		};
 
 		static_assert(sizeof(ClassHierarchyDescriptor) == 0x10);

@@ -200,7 +200,7 @@ namespace RE
 		std::uint64_t                            saveGameListBuildID;         // 040
 		std::uint32_t                            currentAutoSaveNumber;       // 048
 		std::byte                                pad04C[0x004];               // 04C
-		REX::TEnumSet<QueuedTask>                 queuedTasks;                 // 050
+		REX::TEnumSet<QueuedTask>                queuedTasks;                 // 050
 		std::byte                                pad054[0x004];               // 054
 		BGSSaveLoadFileEntry*                    queuedEntryToLoad;           // 058
 		std::byte                                pad060[0x010];               // 060

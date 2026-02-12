@@ -30,7 +30,7 @@ namespace RE
 			std::uint32_t color;
 			float         remappingIndex;
 		};  // 40
-		TESCondition                      conditions;  // 48
+		TESCondition                       conditions;  // 48
 		REX::TEnumSet<Flag, std::uint32_t> flags;       // 58
 	};
 	static_assert(sizeof(BGSColorForm) == 0x68);

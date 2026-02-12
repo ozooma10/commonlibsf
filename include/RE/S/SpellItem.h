@@ -27,12 +27,12 @@ namespace RE
 		public:
 			// members
 			REX::TEnum<MagicSystem::SpellType, std::uint8_t>   spellType;     // 08
-			float                                             chargeTime;    // 0C
+			float                                              chargeTime;    // 0C
 			REX::TEnum<MagicSystem::CastingType, std::uint8_t> castingType;   // 10
 			REX::TEnum<MagicSystem::Delivery, std::uint8_t>    delivery;      // 11
-			float                                             castDuration;  // 14
-			float                                             range;         // 18
-			BGSPerk*                                          castingPerk;   // 20
+			float                                              castDuration;  // 14
+			float                                              range;         // 18
+			BGSPerk*                                           castingPerk;   // 20
 		};
 		static_assert(sizeof(Data) == 0x28);
 

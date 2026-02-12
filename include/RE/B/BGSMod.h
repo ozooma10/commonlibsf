@@ -48,8 +48,8 @@ namespace RE::BGSMod
 
 				struct Include
 				{
-					BGSMod::Attachment::Mod*                 mod;
-					std::uint8_t                             level;
+					BGSMod::Attachment::Mod*                  mod;
+					std::uint8_t                              level;
 					REX::TEnumSet<IncludesFlag, std::uint8_t> flags;
 				};
 

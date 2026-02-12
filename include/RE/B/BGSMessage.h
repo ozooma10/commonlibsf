@@ -43,14 +43,14 @@ namespace RE
 		~BGSMessage() override;  // 00
 
 		// members
-		TESQuest*                                ownerQuest;   // 58
-		BSTArray<MESSAGEBOX_BUTTON*>             menuButtons;  // 60
-		BSFixedStringCS                          unk70;        // 70
-		BGSLocalizedString                       shortName;    // 78
+		TESQuest*                                 ownerQuest;   // 58
+		BSTArray<MESSAGEBOX_BUTTON*>              menuButtons;  // 60
+		BSFixedStringCS                           unk70;        // 70
+		BGSLocalizedString                        shortName;    // 78
 		REX::TEnumSet<MessageFlag, std::uint32_t> flags;        // 80
-		std::uint32_t                            displayTime;  // 84
-		std::int32_t                             unk88;        // 88
-		BSFixedStringCS                          unk90;        // 90
+		std::uint32_t                             displayTime;  // 84
+		std::int32_t                              unk88;        // 88
+		BSFixedStringCS                           unk90;        // 90
 	};
 	static_assert(sizeof(BGSMessage) == 0xA0);
 }

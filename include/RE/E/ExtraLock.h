@@ -54,10 +54,10 @@ namespace RE
 		}
 
 		// members
-		TESKey*                          key;        // 00
-		std::uint32_t                    numTries;   // 08
+		TESKey*                           key;        // 00
+		std::uint32_t                     numTries;   // 08
 		REX::TEnumSet<Flag, std::uint8_t> flags;      // 0C
-		std::int8_t                      baseLevel;  // 0D
+		std::int8_t                       baseLevel;  // 0D
 	};
 	static_assert(sizeof(REFR_LOCK) == 0x10);
 

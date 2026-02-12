@@ -155,7 +155,7 @@ namespace RE::BSScript
 			~D() noexcept { complexTypeInfo = nullptr; }
 
 			REX::TEnumSet<RawType, std::uintptr_t> rawType;
-			IComplexType*                         complexTypeInfo;
+			IComplexType*                          complexTypeInfo;
 		} data;  // 0
 	};
 	static_assert(sizeof(TypeInfo) == 0x8);

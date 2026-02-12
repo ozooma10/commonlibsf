@@ -37,11 +37,11 @@ namespace RE
 				kNoDecalData = 1 << 0
 			};
 
-			float                                 effectDuration;   // 00
+			float                                  effectDuration;   // 00
 			REX::TEnum<ORIENTATION, std::uint32_t> orient;           // 04
-			float                                 angleThreshold;   // 08
-			float                                 placementRadius;  // 0C
-			std::uint32_t                         soundLevel;       // 10
+			float                                  angleThreshold;   // 08
+			float                                  placementRadius;  // 0C
+			std::uint32_t                          soundLevel;       // 10
 			REX::TEnumSet<Flag, std::uint8_t>      flags;            // 14
 			REX::TEnum<ImpactResult, std::uint8_t> resultOverride;   // 15
 		};
