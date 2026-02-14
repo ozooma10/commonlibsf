@@ -33,15 +33,15 @@ namespace RE
 		~BGSConstructibleObject() override;  // 00
 
 		// members
-		std::vector<BGSKeyword*>                                                        category;     // 148 - std::vector<BGSKeyword*, BSTHeapSTLAllocator<BGSKeyword, 2>
-		TESBoundObject*                                                                 unk160;       // 160
-		BGSCurveForm*                                                                   unk168;       // 168
-		TESGlobal*                                                                      buildLimit;   // 170
-		BSTArray<BSTTuple3<TESForm*, BGSCurveForm*, BGSTypedFormValuePair::SharedVal>>* unk178;       // 178
-		REX::TEnum<LEARN_METHOD, std::uint8_t>                                          learnMethod;  // 180
-		TESGlobal*                                                                      unk188;       // 188
-		BGSKeyword*                                                                     unk190;       // 190
-		std::uint32_t                                                                   unk198;       // 198
+		std::byte                                                                       category[0x18];  // 148 - std::vector<BGSKeyword*, BSTHeapSTLAllocator<BGSKeyword, 2>
+		TESBoundObject*                                                                 unk160;          // 160
+		BGSCurveForm*                                                                   unk168;          // 168
+		TESGlobal*                                                                      buildLimit;      // 170
+		BSTArray<BSTTuple3<TESForm*, BGSCurveForm*, BGSTypedFormValuePair::SharedVal>>* unk178;          // 178
+		REX::TEnum<LEARN_METHOD, std::uint8_t>                                          learnMethod;     // 180
+		TESGlobal*                                                                      unk188;          // 188
+		BGSKeyword*                                                                     unk190;          // 190
+		std::uint32_t                                                                   unk198;          // 198
 	};
 	static_assert(sizeof(BGSConstructibleObject) == 0x1A8);
 }

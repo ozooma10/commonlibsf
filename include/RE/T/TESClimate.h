@@ -57,9 +57,9 @@ namespace RE
 		~TESClimate() override;  // 00
 
 		// members
-		std::vector<WeatherEntry*>     weatherTypes;     // 30
-		BSSimpleList<WeatherSettings*> weatherSettings;  // 48
-		Timing                         timing;           // 58
+		std::byte                      weatherTypes[0x18];  // 30 - std::vector<WeatherEntry*>
+		BSSimpleList<WeatherSettings*> weatherSettings;     // 48
+		Timing                         timing;              // 58
 	};
 	static_assert(sizeof(TESClimate) == 0x68);
 }

@@ -4,9 +4,9 @@
 #include "RE/B/BSLog.h"
 #include "RE/F/FormTypes.h"
 
-static_assert(sizeof(std::string) == 0x20);  // If this fails, _ITERATOR_DEBUG_LEVEL is greater than 0
-static_assert(sizeof(std::vector<int>) == 0x18);
-static_assert(sizeof(std::vector<std::string>) == 0x18);
+//static_assert(sizeof(std::string) == 0x20);  // If this fails, _ITERATOR_DEBUG_LEVEL is greater than 0
+//static_assert(sizeof(std::vector<int>) == 0x18);
+//static_assert(sizeof(std::vector<std::string>) == 0x18);
 
 namespace Json
 {
@@ -29,9 +29,9 @@ namespace RE::GameScript
 			virtual void Serialize(const Json::Value& a_val) = 0;                               // 01
 			virtual void HandleMessage(const RemoteDebugger& a_debugger, const BSLog& logger);  // 02
 
-			int           seq;    // 08
-			std::uint32_t gap_C;  // 0C
-			std::string   type;   // 10 - "request", "response", "event"
+			int           seq;         // 08
+			std::uint32_t gap_C;       // 0C
+			std::byte     type[0x20];  // 10 - std::string ("request", "response", "event")
 		};
 		static_assert(sizeof(ProtocolMessage) == 0x30);
 
@@ -48,7 +48,7 @@ namespace RE::GameScript
 			virtual void DeserializeArgs(const Json::Value& a_val, const BSLog& logger);  // 04
 
 			// members
-			std::string command;  // 30
+			std::byte command[0x20];  // 30 - std::string
 		};
 		static_assert(sizeof(Request) == 0x50);
 
@@ -64,10 +64,10 @@ namespace RE::GameScript
 			virtual void SerializeBody(Json::Value& r_val);  // 03 - { r_val.Value(0); return; }
 
 			// members
-			std::string command;      // 30
-			std::string message;      // 50
-			int         request_seq;  // 70
-			bool        success;      // 74
+			std::byte   command[0x20];  // 30 - std::string
+			std::byte   message[0x20];  // 50 - std::string
+			int         request_seq;    // 70
+			bool        success;        // 74
 		};
 		static_assert(sizeof(Response) == 0x78);
 
@@ -84,7 +84,7 @@ namespace RE::GameScript
 			virtual void SerializeBody(Json::Value& r_val);  // 03 - { r_val.Value(0); return; }
 
 			// members
-			std::string event;  // 30
+			std::byte event[0x20];  // 30 - std::string
 		};
 		static_assert(sizeof(Event) == 0x50);
 
@@ -101,8 +101,8 @@ namespace RE::GameScript
 			virtual void DeserializeArgs(const Json::Value& a_val, const BSLog& logger) override;        // 04
 
 			// members
-			std::string      source;  // 50
-			std::vector<int> lines;   // 70
+			std::byte source[0x20];  // 50 - std::string
+			std::byte lines[0x18];   // 70 - std::vector<std::int32_t>
 		};
 		static_assert(sizeof(SetBreakpointsRequest) == 0x88);
 
@@ -189,7 +189,7 @@ namespace RE::GameScript
 			virtual void DeserializeArgs(const Json::Value& a_val, const BSLog& logger) override;        // 04
 
 			// members
-			int threadId;
+			std::int32_t threadId;
 		};
 		static_assert(sizeof(StackTraceRequest) == 0x58);
 
@@ -209,12 +209,12 @@ namespace RE::GameScript
 		};
 		static_assert(sizeof(Root) == 0x18);
 
-		struct Variable
+		struct alignas(8) Variable
 		{
-			std::string name;      // 00
-			std::string value;     // 20
-			std::string type;      // 40
-			bool        compound;  // 60
+			std::byte name[0x20];   // 00 - std::string
+			std::byte value[0x20];  // 20 - std::string
+			std::byte type[0x20];   // 40 - std::string
+			bool      compound;     // 60
 		};
 		static_assert(sizeof(Variable) == 0x68);
 
@@ -229,8 +229,8 @@ namespace RE::GameScript
 			virtual void DeserializeArgs(const Json::Value& a_val, const BSLog& logger) override;        // 04
 
 			// members
-			std::vector<std::string> path;  // 50
-			Root                     root;  // 68
+			std::byte path[0x18];  // 50 - std::vector<std::string>
+			Root      root;        // 68
 		};
 		static_assert(sizeof(ValueRequest) == 0x80);
 
@@ -245,8 +245,8 @@ namespace RE::GameScript
 			virtual void DeserializeArgs(const Json::Value& a_val, const BSLog& logger) override;        // 04
 
 			// members
-			std::vector<std::string> path;  // 50
-			Root                     root;  // 68
+			std::byte path[0x18];  // 50 - std::vector<std::string>
+			Root      root;        // 68
 		};
 		static_assert(sizeof(VariablesRequest) == 0x80);
 
@@ -263,13 +263,13 @@ namespace RE::GameScript
 
 			struct Breakpoint
 			{
-				std::string source;
-				int         line;
-				bool        verified;
+				std::byte    source[0x20]; // std::string
+				std::int32_t line;
+				bool         verified;
 			};
 
 			// members
-			std::vector<Breakpoint> breakpoints;  // 78
+			std::byte breakpoints[0x18];  // 78 - std::vector<Breakpoint>
 		};
 		static_assert(sizeof(SetBreakpointsResponse) == 0x90);
 
@@ -278,10 +278,10 @@ namespace RE::GameScript
 			SF_RTTI_VTABLE(GameScript__DebuggerMessages__StackTraceResponse);
 			struct StackFrame
 			{
-				std::string name;
-				std::string object;
-				std::string source;
-				int         line;
+				std::byte    name[0x20];    // std::string
+				std::byte    object[0x20];  // std::string
+				std::byte    source[0x20];  // std::string
+				std::int32_t line;
 			};
 
 			~StackTraceResponse();  // 00
@@ -290,7 +290,7 @@ namespace RE::GameScript
 			virtual void SerializeBody(Json::Value& r_val) override;  // 03
 
 			// members
-			std::vector<StackFrame> stackFrames;
+			std::byte stackFrames[0x18];  // std::vector<StackFrame>
 		};
 		static_assert(sizeof(StackTraceResponse) == 0x90);
 
@@ -302,15 +302,15 @@ namespace RE::GameScript
 
 			struct Thread
 			{
-				std::string name;
-				int         id;
+				std::byte    name[0x20];  // std::string
+				std::int32_t id;
 			};
 
 			// override Response
 			virtual void SerializeBody(Json::Value& r_val) override;  // 03
 
 			// members
-			std::vector<Thread> threads;  // 78
+			std::byte threads[0x18];  // 78 - std::vector<Thread>
 		};
 		static_assert(sizeof(ThreadsResponse) == 0x90);
 
@@ -324,9 +324,9 @@ namespace RE::GameScript
 			virtual void SerializeBody(Json::Value& r_val) override;  // 03
 
 			// members
-			std::string value;     // 78
-			std::string type;      // 98
-			bool        compound;  // B8
+			std::byte value[0x20];  // 78 - std::string
+			std::byte type[0x20];   // 98 - std::string
+			bool      compound;     // B8
 		};
 		static_assert(sizeof(ValueResponse) == 0xC0);
 
@@ -340,7 +340,7 @@ namespace RE::GameScript
 			virtual void SerializeBody(Json::Value& r_val) override;  // 03
 
 			// members
-			std::vector<Variable> variables;  // 78
+			std::byte variables[0x18];  // 78 - std::vector<Variable>
 		};
 		static_assert(sizeof(VariablesResponse) == 0x90);
 
@@ -372,8 +372,8 @@ namespace RE::GameScript
 			virtual void SerializeBody(Json::Value& r_val) override;  // 03
 
 			// members
-			int threadId;  // 50
-			int stepped;   // 54
+			std::int32_t threadId;  // 50
+			std::int32_t stepped;   // 54
 		};
 		static_assert(sizeof(StoppedEvent) == 0x58);
 
@@ -387,8 +387,8 @@ namespace RE::GameScript
 			virtual void SerializeBody(Json::Value& r_val) override;  // 03
 
 			// members
-			int  threadId;
-			bool exited;
+			std::int32_t threadId;
+			bool         exited;
 		};
 		static_assert(sizeof(ThreadEvent) == 0x58);
 

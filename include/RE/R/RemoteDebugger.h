@@ -28,9 +28,9 @@ namespace RE::GameScript
 		struct StackFramePointer
 		{
 			std::uint32_t threadId;
-			int           stackFrameIndex;
+			std::int32_t  stackFrameIndex;
 			std::uint32_t lineNumber;
-			int           instructionPointer;
+			std::int32_t  instructionPointer;
 			StepKind      stepKind;
 		};
 
@@ -52,13 +52,13 @@ namespace RE::GameScript
 
 		struct State
 		{
-			msvc::unique_ptr<DebuggerMessages::ProtocolMessage> PauseResponse;       // 00
-			msvc::unique_ptr<DebuggerMessages::ProtocolMessage> ContinueResponse;    // 08
-			msvc::unique_ptr<DebuggerMessages::ProtocolMessage> StoppedEvent;        // 10
-			std::vector<Breakpoint>                             breakpoints;         // 18 -- TODO: use BSTHeapSTLAllocator
-			std::vector<StackFramePointer>                      stackFramePointers;  // 30 -- TODO: use BSTHeapSTLAllocator
-			bool                                                paused;              // 48
-			BSReadWriteLock                                     lock;                // 50
+			msvc::unique_ptr<DebuggerMessages::ProtocolMessage> PauseResponse;             // 00
+			msvc::unique_ptr<DebuggerMessages::ProtocolMessage> ContinueResponse;          // 08
+			msvc::unique_ptr<DebuggerMessages::ProtocolMessage> StoppedEvent;              // 10
+			std::byte                                           breakpoints[0x18];         // 18 - std::vector<Breakpoint> (TODO: use BSTHeapSTLAllocator)
+			std::byte                                           stackFramePointers[0x18];  // 30 - std::vector<StackFramePointer> (TODO: use BSTHeapSTLAllocator)
+			bool                                                paused;                    // 48
+			BSReadWriteLock                                     lock;                      // 50
 		};
 		static_assert(sizeof(State) == 0x58);
 

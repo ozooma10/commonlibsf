@@ -18,7 +18,7 @@ namespace RE
 		~BGSParticleSystemDefineCollection() override;  // 00
 
 		// members
-		std::vector<ParticleSystemDefine*> defines;  // 30
+		std::byte defines[0x18];  // 30 - std::vector<ParticleSystemDefine*>
 	};
 	static_assert(sizeof(BGSParticleSystemDefineCollection) == 0x50);
 }

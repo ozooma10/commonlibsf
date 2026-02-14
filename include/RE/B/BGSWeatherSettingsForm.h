@@ -86,12 +86,12 @@ namespace RE
 
 		struct SoundEffectSettings
 		{
-			BGSArtObject*             visualEffect;           // 00
-			BSBlendable::FloatValue   beginVisualEffect;      // 08
-			BSBlendable::FloatValue   endVisualEffect;        // 14
-			MagicEffect               lightningStrikeEffect;  // 20
-			MagicEffect               weatherActivateEffect;  // 30
-			std::vector<WeatherSound> sounds;                 // 40
+			BGSArtObject*           visualEffect;           // 00
+			BSBlendable::FloatValue beginVisualEffect;      // 08
+			BSBlendable::FloatValue endVisualEffect;        // 14
+			MagicEffect             lightningStrikeEffect;  // 20
+			MagicEffect             weatherActivateEffect;  // 30
+			std::byte               sounds[0x18];           // 40 - std::vector<WeatherSound>
 		};
 		static_assert(sizeof(SoundEffectSettings) == 0x58);
 
@@ -103,10 +103,10 @@ namespace RE
 		};
 		static_assert(sizeof(SpellEffect) == 0x18);
 
-		struct SpellSettings
+		struct alignas(8) SpellSettings
 		{
-			float                    transitionThreshold;  // 00
-			std::vector<SpellEffect> spellItems;           // 08
+			float     transitionThreshold;  // 00
+			std::byte spellItems[0x18];     // 08 - std::vector<SpellEffect>
 		};
 		static_assert(sizeof(SpellSettings) == 0x20);
 

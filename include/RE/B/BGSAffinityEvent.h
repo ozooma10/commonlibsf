@@ -28,15 +28,15 @@ namespace RE
 		~BGSAffinityEvent() override;  // 00
 
 		// members
-		ActorValueInfo*            actorValue;     // 30
-		TESGlobal*                 eventSize;      // 38
-		TESGlobal*                 eventDistance;  // 40
-		TESGlobal*                 eventCooldown;  // 48
-		TESFaction*                faction;        // 50
-		std::uint32_t              flags;          // 58
-		std::uint32_t              unk5C;          // 5C
-		std::vector<ReactionData*> reactionData;   // 60
-		std::uint32_t              unk78;          // 78
+		ActorValueInfo* actorValue;          // 30
+		TESGlobal*      eventSize;           // 38
+		TESGlobal*      eventDistance;       // 40
+		TESGlobal*      eventCooldown;       // 48
+		TESFaction*     faction;             // 50
+		std::uint32_t   flags;               // 58
+		std::uint32_t   unk5C;               // 5C
+		std::byte       reactionData[0x18];  // 60 - std::vector<ReactionData*>
+		std::uint32_t   unk78;               // 78
 	};
 	static_assert(sizeof(BGSAffinityEvent) == 0x88);
 }

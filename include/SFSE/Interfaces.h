@@ -348,6 +348,3 @@ namespace SFSE
 #define SFSE_PLUGIN_PRELOAD(...) SFSE_EXPORT bool SFSEPlugin_Preload(__VA_ARGS__)
 #define SFSE_PLUGIN_LOAD(...) SFSE_EXPORT bool SFSEPlugin_Load(__VA_ARGS__)
 #define SFSE_PLUGIN_VERSION SFSE_EXPORT constinit SFSE::PluginVersionData SFSEPlugin_Version
-#define SFSEPluginPreload SFSE_PLUGIN_PRELOAD
-#define SFSEPluginLoad SFSE_PLUGIN_LOAD
-#define SFSEPluginVersion SFSE_PLUGIN_VERSION

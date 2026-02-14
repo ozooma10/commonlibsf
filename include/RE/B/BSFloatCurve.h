@@ -32,7 +32,7 @@ namespace RE
 
 		// members
 		std::uint64_t                       unk00;                  // 00
-		std::vector<Control>                controls;               // 08 - std::vector<BSFloatCurve::Control, BSTHeapAllocator<BSFloatCurve::Control, 2>>
+		std::byte                           controls[0x18];         // 08 - std::vector<BSFloatCurve::Control, BSTHeapAllocator<BSFloatCurve::Control, 2>>
 		float                               maxInput;               // 20
 		float                               minInput;               // 24
 		float                               inputDistance;          // 28
