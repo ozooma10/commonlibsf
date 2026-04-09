@@ -40,7 +40,7 @@ namespace RE
 		std::int32_t                                                               value;                // 40
 		std::uint32_t                                                              health;               // 44
 		std::uint32_t                                                              unk48;                // 48
-		std::uint32_t                                                              unk4C;                // 4C
+		std::uint32_t                                                              rating;               // 4C
 		std::uint16_t                                                              unk50;                // 50
 		std::uint16_t                                                              unk52;                // 52
 		BSTArray<void*>                                                            unk58;                // 58
