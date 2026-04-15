@@ -16,9 +16,6 @@ namespace RE
 		// override (BaseFormComponent)
 		const BSFixedString& GetFormComponentType() const override;  // 01 - { return "BGSInstanceNamingRulesForm_Component"; }
 		void                 InitializeDataComponent() override;     // 02 - { return; }
-
-		// members
-		BGSInstanceNamingRules* instanceNamingRules;  // 08
 	};
-	static_assert(sizeof(BGSInstanceNamingRulesForm) == 0x10);
+	static_assert(sizeof(BGSInstanceNamingRulesForm) == 0x08);
 }
