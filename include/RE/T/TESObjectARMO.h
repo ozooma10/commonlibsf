@@ -88,9 +88,9 @@ namespace RE
 		// members
 		BGSEditorID                            formEditorID;   // 278
 		BSTOptional<TESObjectARMOInstanceData> instanceData;   // 288
-		BSTArray<ArmorAddon>                   modelArray;     // 308
-		BGSAttachParentArray                   attachParents;  // 318
-		std::uint64_t                          unk338;         // 338
+		std::uint64_t                          unk308;         // 308
+		BSTArray<ArmorAddon>                   modelArray;     // 310
+		BGSAttachParentArray                   attachParents;  // 320
 		std::uint64_t                          unk340;         // 340
 		std::uint64_t                          unk348;         // 348
 		std::uint64_t                          unk350;         // 350

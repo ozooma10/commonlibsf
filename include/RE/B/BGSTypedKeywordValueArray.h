@@ -46,21 +46,33 @@ namespace RE
 	class BGSTypedKeywordValueArray
 	{
 	public:
+		[[nodiscard]] std::uint32_t size() const
+		{
+			return _end && _begin ? static_cast<std::uint32_t>(_end - _begin) : 0;
+		}
+
 		[[nodiscard]] bool HasKeyword(BGSKeyword* a_keyword)
 		{
-			for (std::uint32_t i = 0; i < size; ++i) {
-				const auto kywd = detail::BGSKeywordGetTypedKeywordByIndex(TYPE, array[i].keywordIndex);
-				if (kywd == a_keyword) {
+			for (auto it = _begin; it != _end; ++it) {
+				if (*it == a_keyword) {
 					return true;
 				}
 			}
 			return false;
 		}
 
+		[[nodiscard]] BGSKeyword* operator[](std::uint32_t a_index) const
+		{
+			return _begin[a_index];
+		}
+
+		[[nodiscard]] BGSKeyword** begin() const { return _begin; }
+		[[nodiscard]] BGSKeyword** end() const { return _end; }
+
 		// members
-		BGSTypedKeywordValue<TYPE>* array;  // 00
-		std::uint32_t               size;   // 08
-		std::uint64_t               unk10;  // 10
+		BGSKeyword** _begin;        // 00 - pointer to first BGSKeyword*
+		BGSKeyword** _end;          // 08 - one-past-last BGSKeyword*
+		BGSKeyword** _capacityEnd;  // 10 - end of allocated storage
 	};
 	static_assert(sizeof(BGSTypedKeywordValueArray<KeywordType::kNone>) == 0x18);
 }
