@@ -380,6 +380,7 @@ namespace RE
 		[[nodiscard]] TESObjectREFR*                  GetSpaceshipParentDock();
 		[[nodiscard]] Actor*                          GetSpaceshipPilot();
 		[[nodiscard]] std::int32_t                    GetValue();
+		void                                          AddKeyword(BGSKeyword* a_keyword);
 		[[nodiscard]] bool                            HasKeyword(BGSKeyword* a_keyword);
 		[[nodiscard]] bool                            IsCrimeToActivate();
 		[[nodiscard]] bool                            IsInSpace(bool a_arg1);

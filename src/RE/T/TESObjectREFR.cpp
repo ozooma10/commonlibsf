@@ -99,6 +99,13 @@ namespace RE
 		return func(this);
 	}
 
+	void TESObjectREFR::AddKeyword(BGSKeyword* a_keyword)
+	{
+		using func_t = decltype(&TESObjectREFR::AddKeyword);
+		static REL::Relocation<func_t> func{ ID::TESObjectREFR::AddKeyword };
+		return func(this, a_keyword);
+	}
+
 	bool TESObjectREFR::HasKeyword(BGSKeyword* a_keyword)
 	{
 		using func_t = decltype(&TESObjectREFR::HasKeyword);
