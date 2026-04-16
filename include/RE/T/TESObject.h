@@ -25,7 +25,8 @@ namespace RE
 		virtual void Unk_6B();                      // 6B
 
 		// members
-		BGSSnapTemplateComponent snapTemplate;  // 030
+		BGSSnapTemplateComponent snapTemplate;  // 038
 	};
+	static_assert(offsetof(TESObject, snapTemplate) == 0x38);
 	static_assert(sizeof(TESObject) == 0x50);
 }
