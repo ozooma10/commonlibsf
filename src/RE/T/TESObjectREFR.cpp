@@ -153,6 +153,19 @@ namespace RE
 		return func(this);
 	}
 
+	void TESObjectREFR::RemoveKeyword(BGSKeyword* a_keyword)
+	{
+		// Replicates the Papyrus ObjectReference.RemoveKeyword live-REFR path:
+		// FUN_140533B00(ref+0xC8, 0, keyword, 0) + FUN_140B434B0(ref)
+		using remove_t = void(void*, void*, BGSKeyword*, std::uint32_t);
+		static REL::Relocation<remove_t*> removeImpl{ ID::TESObjectREFR::RemoveKeyword_Impl };
+		using dirty_t = void(TESObjectREFR*);
+		static REL::Relocation<dirty_t*> markDirty{ ID::TESObjectREFR::MarkKeywordsDirty };
+
+		removeImpl(&extraDataList, nullptr, a_keyword, 0);
+		markDirty(this);
+	}
+
 	bool TESObjectREFR::WornHasKeyword(BGSKeyword* a_keyword)
 	{
 		using func_t = decltype(&TESObjectREFR::WornHasKeyword);

@@ -383,6 +383,7 @@ namespace RE
 		void                                          AddKeyword(BGSKeyword* a_keyword);
 		[[nodiscard]] bool                            HasKeyword(BGSKeyword* a_keyword);
 		[[nodiscard]] bool                            IsCrimeToActivate();
+		void                                          RemoveKeyword(BGSKeyword* a_keyword);
 		[[nodiscard]] bool                            IsInSpace(bool a_arg1);
 		[[nodiscard]] bool                            IsLocked() const;
 		[[nodiscard]] bool                            IsObjectEquipped(TESBoundObject* a_object);

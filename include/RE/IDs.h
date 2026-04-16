@@ -2320,6 +2320,8 @@ namespace RE::ID
 		inline constexpr REL::ID GetValue{ 0 };                // 107605
 		inline constexpr REL::ID AddKeyword{ 63342 };
 		inline constexpr REL::ID HasKeyword{ 42794 };
+		inline constexpr REL::ID RemoveKeyword_Impl{ 45132 };
+		inline constexpr REL::ID MarkKeywordsDirty{ 63345 };
 		inline constexpr REL::ID IsCrimeToActivate{ 0 };  // 106755
 		inline constexpr REL::ID IsInSpace{ 63482 };
 		inline constexpr REL::ID IsInSpaceship{ 119881 };
