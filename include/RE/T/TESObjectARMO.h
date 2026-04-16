@@ -1,6 +1,6 @@
 #pragma once
 
-#include "RE/B/BGSAttachParentArray.h"
+#include "RE/B/BGSTypedKeywordValueArray.h"
 #include "RE/B/BGSBipedObjectForm.h"
 #include "RE/B/BGSBlockBashData.h"
 #include "RE/B/BGSDestructibleObjectForm.h"
@@ -88,9 +88,9 @@ namespace RE
 		// members
 		BGSEditorID                            formEditorID;   // 278
 		BSTOptional<TESObjectARMOInstanceData> instanceData;   // 288
-		BSTArray<ArmorAddon>                   modelArray;     // 308
-		BGSAttachParentArray                   attachParents;  // 318
-		std::uint64_t                          unk338;         // 338
+		std::uint64_t                          unk308;         // 308
+		BSTArray<ArmorAddon>                   modelArray;     // 310
+		BGSTypedKeywordValueArray<KeywordType::kAttachPoint> attachParents;  // 328
 		std::uint64_t                          unk340;         // 340
 		std::uint64_t                          unk348;         // 348
 		std::uint64_t                          unk350;         // 350
@@ -99,5 +99,10 @@ namespace RE
 		std::uint64_t                          unk368;         // 368
 		std::uint64_t                          unk370;         // 370
 	};
-	static_assert(sizeof(TESObjectARMO) == 0x380);
+	static_assert(offsetof(TESObjectARMO, formEditorID) == 0x280);
+	static_assert(offsetof(TESObjectARMO, instanceData) == 0x290);
+	static_assert(offsetof(TESObjectARMO, unk308) == 0x310);
+	static_assert(offsetof(TESObjectARMO, modelArray) == 0x318);
+	static_assert(offsetof(TESObjectARMO, attachParents) == 0x328);
+	static_assert(sizeof(TESObjectARMO) == 0x378);
 }

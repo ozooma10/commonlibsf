@@ -32,7 +32,6 @@ namespace RE
 	class BGSObjectInstance;
 	class BGSScene;
 	class BSAnimationGraphEvent;
-	class BSTransformDeltaEvent;
 	class NiAVObject;
 	class TESModel;
 	class TESObjectCELL;
@@ -134,14 +133,13 @@ namespace RE
 
 	class TESObjectREFR :
 		public TESHandleForm,                                                    // 00
-		public BSTEventSink<BSTransformDeltaEvent>,                              // 30
 		public IMovementProcessMessageInterface,                                 // 38
 		public IPostAnimationChannelUpdateFunctor,                               // 40
 		public BSTEventSink<BSAnimationGraphEvent>,                              // 48
 		public BSTEventSink<BGSInventoryListEvent::Event>,                       // 50
 		public IAnimationGraphManagerHolder,                                     // 58
-		public IKeywordFormBase,                                                 // 60
-		public ActorValueOwner,                                                  // 68
+		public ActorValueOwner,                                                  // 60
+		public IKeywordFormBase,                                                 // 68
 		public BSTEventSourceLazyInit<ActorValueEvents::ActorValueChangedEvent>  // 70
 	{
 	public:
@@ -394,6 +392,7 @@ namespace RE
 		[[nodiscard]] bool                            WornHasKeyword(BGSKeyword* a_keyword);
 
 		// members
+		std::uint64_t                                 unk78;          // 78
 		OBJ_REFR                                      data;           // 80
 		BSGuarded<BGSInventoryList*, BSReadWriteLock> inventoryList;  // A0
 		TESObjectCELL*                                parentCell;     // B0
