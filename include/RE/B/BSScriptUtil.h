@@ -502,9 +502,11 @@ namespace RE::BSScript
 		const auto success = [&]() {
 			const auto                      game = GameVM::GetSingleton();
 			const auto                      vm = game ? game->GetVM() : nullptr;
+			const auto                      vmInt = Internal::VirtualMachine::GetSingleton();
 			BSTSmartPointer<ObjectTypeInfo> typeInfo;
 			if (!vm ||
 				!vm->GetScriptObjectType(GetVMTypeID<T>(), typeInfo) ||
+				!vmInt ||
 				!typeInfo) {
 				return false;
 			}
@@ -522,8 +524,7 @@ namespace RE::BSScript
 			if (!vm->FindBoundObject(handle, typeInfo->name.c_str(), false, object, false) &&
 				vm->CreateObject(typeInfo->name, object) &&
 				object) {
-				auto& binding = vm->GetObjectBindPolicy();
-				binding.BindObject(object, handle);
+				vmInt->BindObject(object, handle, false);
 			}
 
 			if (!object) {
