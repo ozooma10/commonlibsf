@@ -337,8 +337,18 @@ namespace RE
 
 		~ScrapHeap();  // 00
 
-		void* Allocate(std::size_t a_size, std::uint32_t a_alignment) override;  // 0A
-		void  Deallocate(void* a_mem, std::uint32_t) override;                   // 0B
+		void* Allocate(std::size_t a_size, std::uint32_t a_alignment) override  // 0A
+		{
+			using func_t = decltype(&ScrapHeap::Allocate);
+			static REL::Relocation<func_t> func{ ID::ScrapHeap::Allocate };
+			return func(this, a_size, a_alignment);
+		};
+		void Deallocate(void* a_mem, std::uint32_t a_arg2) override  // 0B
+		{
+			using func_t = decltype(&ScrapHeap::Deallocate);
+			static REL::Relocation<func_t> func{ ID::ScrapHeap::Deallocate };
+			return func(this, a_mem, a_arg2);
+		};
 
 		// members
 		std::uint64_t  unk_410;      // 410
