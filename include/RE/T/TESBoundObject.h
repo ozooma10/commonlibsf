@@ -44,12 +44,17 @@ namespace RE
 		virtual void          Unk_81();                                                             // 81
 
 		// members
-		NiPoint3                   boundMin;           // 048
-		NiPoint3                   boundMax;           // 054
-		BGSMod::Template::Items    templateItems;      // 060
-		BGSPreviewTransform        previewTransform;   // 080
-		BGSObjectPlacementDefaults placementDefaults;  // 0C8
-		std::uint32_t              unk0D8;             // 0D8
+		NiPoint3                   boundMin;           // 050
+		NiPoint3                   boundMax;           // 05C
+		BGSMod::Template::Items    templateItems;      // 068
+		BGSPreviewTransform        previewTransform;   // 088
+		BGSObjectPlacementDefaults placementDefaults;  // 0D0
+		std::uint32_t              unk0E0;             // 0E0
 	};
+	static_assert(offsetof(TESBoundObject, boundMin) == 0x50);
+	static_assert(offsetof(TESBoundObject, boundMax) == 0x5C);
+	static_assert(offsetof(TESBoundObject, templateItems) == 0x68);
+	static_assert(offsetof(TESBoundObject, previewTransform) == 0x88);
+	static_assert(offsetof(TESBoundObject, placementDefaults) == 0xD0);
 	static_assert(sizeof(TESBoundObject) == 0xE8);
 }
