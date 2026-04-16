@@ -22,9 +22,13 @@ namespace RE
 		const BSFixedString& GetFormComponentType() const override;  // 01 - { return "BGSKeywordForm_Component"; }
 		void                 InitializeDataComponent() override;     // 02 - { return; }
 
+		// override (IKeywordFormBase)
+		void CollectAllKeywords(void* /* BSScrapArray<const BGSKeyword> */ a_refOutKeywordA, const TBO_InstanceData* a_data) override;
+
 		// add
 		virtual BGSKeyword* GetDefaultKeyword() const;  // 0B
 
+		void                        CollectAllKeywordsToArray(BSTArray<const BGSKeyword*>& a_outKeywords, const TBO_InstanceData* a_data = nullptr);
 		[[nodiscard]] bool          ContainsKeywordString(std::string_view a_editorID);
 		void                        ForEachKeyword(std::function<BSContainer::ForEachResult(BGSKeyword*)> a_callback);
 		[[nodiscard]] std::uint32_t GetNumKeywords() const;

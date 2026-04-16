@@ -245,6 +245,8 @@
 #include "RE/E/Events.h"
 #include "RE/E/ExtraDataList.h"
 #include "RE/E/ExtraDataTypes.h"
+#include "RE/E/ExtraInstanceData.h"
+#include "RE/E/ExtraKeywords.h"
 #include "RE/E/ExtraLock.h"
 #include "RE/F/FORM_ENUM_STRING.h"
 #include "RE/F/FactionRank.h"
