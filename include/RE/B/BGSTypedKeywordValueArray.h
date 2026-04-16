@@ -66,7 +66,6 @@ namespace RE
 		[[nodiscard]] bool AddKeyword(BGSKeyword* a_keyword)
 		{
 			if (!a_keyword) {
-				REX::WARN("AddKeyword: a_keyword is null");
 				return false;
 			}
 
@@ -75,7 +74,6 @@ namespace RE
 
 			for (auto it = first; it != last; ++it) {
 				if (*it && (*it)->formID == a_keyword->formID) {
-					REX::DEBUG("AddKeyword: keyword already exists {:08X}", a_keyword->formID);
 					return false;
 				}
 			}
@@ -87,7 +85,6 @@ namespace RE
 				RE::MemoryManager::GetSingleton()->Allocate(sizeof(BGSKeyword*) * newSize, 0, false));
 
 			if (!newData) {
-				REX::WARN("AddKeyword: allocation failed for keyword {:08X}", a_keyword->formID);
 				return false;
 			}
 
@@ -96,7 +93,6 @@ namespace RE
 			}
 
 			newData[oldSize] = a_keyword;
-
 			auto oldFirst = first;
 			auto oldLast = last;
 			auto oldCap = reinterpret_cast<BGSKeyword**>(capacityEnd);
@@ -104,16 +100,6 @@ namespace RE
 			begin = reinterpret_cast<BGSTypedKeywordValue<TYPE>*>(newData);
 			end = reinterpret_cast<BGSTypedKeywordValue<TYPE>*>(newData + newSize);
 			capacityEnd = reinterpret_cast<BGSTypedKeywordValue<TYPE>*>(newData + newSize);
-
-			REX::DEBUG(
-				"AddKeyword: reallocated array for keyword {:08X}, oldBegin={} oldEnd={} oldCap={}, newBegin={} newEnd={}",
-				a_keyword->formID,
-				static_cast<const void*>(oldFirst),
-				static_cast<const void*>(oldLast),
-				static_cast<const void*>(oldCap),
-				static_cast<const void*>(begin),
-				static_cast<const void*>(end));
-
 			return true;
 		}
 
