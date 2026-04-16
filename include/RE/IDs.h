@@ -1653,8 +1653,8 @@ namespace RE::ID
 
 	namespace ScrapHeap
 	{
-		inline constexpr REL::ID Allocate{ 0 };    // 34432
-		inline constexpr REL::ID Deallocate{ 0 };  // 37624
+		inline constexpr REL::ID Allocate{ 123845 };    // 0x22CDBD0
+		inline constexpr REL::ID Deallocate{ 123846 };  // 0x22CDD10
 	}
 
 	namespace Script
