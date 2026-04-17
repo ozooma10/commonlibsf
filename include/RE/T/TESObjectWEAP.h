@@ -10,6 +10,7 @@
 #include "RE/B/BGSModelMaterialSwap.h"
 #include "RE/B/BGSPickupPutdownSounds.h"
 #include "RE/B/BGSPreloadable.h"
+#include "RE/B/BGSQualityUpgradeFormComponent.h"
 #include "RE/B/BSTSmartPointer.h"
 #include "RE/T/TESBoundObject.h"
 #include "RE/T/TESDescription.h"
@@ -264,6 +265,27 @@ namespace RE
 		SF_FORMTYPE(WEAP);
 
 		~TESObjectWEAP() override;  // 00
+
+		[[nodiscard]] const BGSQualityUpgradeFormComponent* GetQualityUpgradeComponent() const
+		{
+			// the upgrade component is fetched through the generic form-component lookup path. Doesnt seem to be inline on WEAP member.
+			//Not sure about the surrounding structure of this
+			using func_t = BGSQualityUpgradeFormComponent* (*)(const TESObjectWEAP*, std::uint32_t, const BSFixedString&, std::uint64_t);
+			static REL::Relocation<func_t> func{ ID::FormComponentLookup::GetForReference };
+			static const BSFixedString     componentName{ "BGSQualityUpgrade_Component" };
+			return func(this, 6, componentName, 0);
+		}
+
+		[[nodiscard]] BGSMod::Attachment::Mod* GetQualityUpgrade(std::size_t a_index) const noexcept
+		{
+			const auto* component = GetQualityUpgradeComponent();
+			using size_type = BSTArray<BGSQualityUpgradeFormComponent::BGSQualityUpgrade_Type>::size_type;
+			if (!component || a_index >= component->qualityUpgrades.size()) {
+				return nullptr;
+			}
+
+			return QualityUpgradeDetail{ component->qualityUpgrades[static_cast<size_type>(a_index)] }.AsMod();
+		}
 
 		// members
 		BGSEditorID                                formEditorID;       // 238

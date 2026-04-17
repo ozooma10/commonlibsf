@@ -200,6 +200,12 @@ namespace RE::ID
 		inline constexpr REL::ID GetEventSource{ 0 };  // 131237
 	}
 
+	//No RTTI for this, not sure what BGS Subsystem this likely belongs to? but lets us get a formcomponent
+	namespace FormComponentLookup
+	{
+		inline constexpr REL::ID GetForReference{ 47393 };  // generic form-component lookup helper
+	}
+
 	namespace BooksRead::Event
 	{
 		inline constexpr REL::ID GetEventSource{ 0 };  // 103540
