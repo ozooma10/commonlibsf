@@ -10,6 +10,7 @@
 #include "RE/B/BGSModelMaterialSwap.h"
 #include "RE/B/BGSPickupPutdownSounds.h"
 #include "RE/B/BGSPreloadable.h"
+#include "RE/B/BGSQualityUpgradeFormComponent.h"
 #include "RE/B/BSTSmartPointer.h"
 #include "RE/T/TESBoundObject.h"
 #include "RE/T/TESDescription.h"
@@ -265,12 +266,22 @@ namespace RE
 
 		~TESObjectWEAP() override;  // 00
 
+		[[nodiscard]] const BGSQualityUpgradeFormComponent* GetQualityUpgradeComponent() const
+		{
+			return BGSQualityUpgradeFormComponent::LookupFor(this);
+		}
+
 		// members
-		BGSEditorID                                formEditorID;       // 230
-		BSTSmartPointer<TESObjectWEAPInstanceData> weaponData;         // 240
-		BGSAttachParentArray                       attachParents;      // 248
-		BGSMod::Attachment::Mod*                   embeddedWeaponMod;  // 268
-		std::uint8_t                               unk270;             // 270
+		BGSEditorID                                formEditorID;       // 238
+		BSTSmartPointer<TESObjectWEAPInstanceData> weaponData;         // 248
+		BGSAttachParentArray                       attachParents;      // 250
+		BGSMod::Attachment::Mod*                   embeddedWeaponMod;  // 270
+		std::uint8_t                               unk278;             // 278
 	};
+	static_assert(offsetof(TESObjectWEAP, formEditorID) == 0x238);
+	static_assert(offsetof(TESObjectWEAP, weaponData) == 0x248);
+	static_assert(offsetof(TESObjectWEAP, attachParents) == 0x250);
+	static_assert(offsetof(TESObjectWEAP, embeddedWeaponMod) == 0x270);
+	static_assert(offsetof(TESObjectWEAP, unk278) == 0x278);
 	static_assert(sizeof(TESObjectWEAP) == 0x280);
 }

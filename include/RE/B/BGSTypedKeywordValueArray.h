@@ -1,6 +1,7 @@
 #pragma once
 
 #include "RE/B/BGSKeyword.h"
+#include "RE/M/MemoryManager.h"
 
 namespace RE
 {
@@ -39,11 +40,9 @@ namespace RE
 	};
 	static_assert(sizeof(BGSTypedKeywordValue<KeywordType::kNone>) == 0x8);
 
-	namespace detail
-	{
-		[[nodiscard]] BGSKeyword* BGSKeywordGetTypedKeywordByIndex(KeywordType a_type, std::uint16_t a_index);
-	}
-
+	// Best-fit model: BGSTypedKeywordValueArray<KeywordType::kAttachPoint> may be
+	// BSComponentDB2-backed index records during preload/finalize, while loaded
+	// ARMO/WEAP attachParents runtime data is a contiguous BGSKeyword* buffer.
 	template <KeywordType TYPE>
 	class BGSTypedKeywordValueArray
 	{
@@ -55,8 +54,7 @@ namespace RE
 			}
 
 			for (auto it = begin; it != end; ++it) {
-				const auto kywd = detail::BGSKeywordGetTypedKeywordByIndex(TYPE, it->keywordIndex);
-				if (kywd == a_keyword) {
+				if (*it == a_keyword) {
 					return true;
 				}
 			}
@@ -69,16 +67,13 @@ namespace RE
 				return false;
 			}
 
-			auto first = reinterpret_cast<BGSKeyword**>(begin);
-			auto last = reinterpret_cast<BGSKeyword**>(end);
-
-			for (auto it = first; it != last; ++it) {
+			for (auto it = begin; it != end; ++it) {
 				if (*it && (*it)->formID == a_keyword->formID) {
 					return false;
 				}
 			}
 
-			const auto oldSize = static_cast<std::size_t>(last - first);
+			const auto oldSize = static_cast<std::size_t>(end - begin);
 			const auto newSize = oldSize + 1;
 
 			auto* newData = static_cast<BGSKeyword**>(
@@ -89,17 +84,13 @@ namespace RE
 			}
 
 			for (std::size_t i = 0; i < oldSize; ++i) {
-				newData[i] = first[i];
+				newData[i] = begin[i];
 			}
 
 			newData[oldSize] = a_keyword;
-			auto oldFirst = first;
-			auto oldLast = last;
-			auto oldCap = reinterpret_cast<BGSKeyword**>(capacityEnd);
-
-			begin = reinterpret_cast<BGSTypedKeywordValue<TYPE>*>(newData);
-			end = reinterpret_cast<BGSTypedKeywordValue<TYPE>*>(newData + newSize);
-			capacityEnd = reinterpret_cast<BGSTypedKeywordValue<TYPE>*>(newData + newSize);
+			begin = newData;
+			end = newData + newSize;
+			capacityEnd = newData + newSize;
 			return true;
 		}
 
@@ -108,25 +99,22 @@ namespace RE
 			if (!a_keyword) {
 				return false;
 			}
-			auto first = reinterpret_cast<BGSKeyword**>(begin);
-			auto last = reinterpret_cast<BGSKeyword**>(end);
-			for (auto it = first; it != last; ++it) {
+			for (auto it = begin; it != end; ++it) {
 				if (*it && (*it)->formID == a_keyword->formID) {
-					for (auto jt = it; jt + 1 != last; ++jt) {
+					for (auto jt = it; jt + 1 != end; ++jt) {
 						*jt = *(jt + 1);
 					}
-					--last;
-					*last = nullptr;
-					end = reinterpret_cast<BGSTypedKeywordValue<TYPE>*>(last);
+					--end;
+					*end = nullptr;
 					return true;
 				}
 			}
 			return false;
 		}
 
-		BGSTypedKeywordValue<TYPE>* begin;        // 00
-		BGSTypedKeywordValue<TYPE>* end;          // 08
-		BGSTypedKeywordValue<TYPE>* capacityEnd;  // 10
+		BGSKeyword** begin;        // 00
+		BGSKeyword** end;          // 08
+		BGSKeyword** capacityEnd;  // 10
 	};
 	static_assert(sizeof(BGSTypedKeywordValueArray<KeywordType::kNone>) == 0x18);
 }
