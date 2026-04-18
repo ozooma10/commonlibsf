@@ -137,6 +137,7 @@
 #include "RE/B/BGSProjectedDecal.h"
 #include "RE/B/BGSProjectile.h"
 #include "RE/B/BGSPropertySheet.h"
+#include "RE/B/BGSQualityUpgradeFormComponent.h"
 #include "RE/B/BGSReferenceGroup.h"
 #include "RE/B/BGSReflectedForm.h"
 #include "RE/B/BGSResearchProjectForm.h"

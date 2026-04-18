@@ -88,9 +88,8 @@ namespace RE
 		// members
 		BGSEditorID                            formEditorID;   // 278
 		BSTOptional<TESObjectARMOInstanceData> instanceData;   // 288
-		BSTArray<ArmorAddon>                   modelArray;     // 308
-		BGSAttachParentArray                   attachParents;  // 318
-		std::uint64_t                          unk338;         // 338
+		BSTArray<ArmorAddon>                   modelArray;     // 310
+		BGSAttachParentArray                   attachParents;  // 320
 		std::uint64_t                          unk340;         // 340
 		std::uint64_t                          unk348;         // 348
 		std::uint64_t                          unk350;         // 350
@@ -99,5 +98,9 @@ namespace RE
 		std::uint64_t                          unk368;         // 368
 		std::uint64_t                          unk370;         // 370
 	};
-	static_assert(sizeof(TESObjectARMO) == 0x380);
+	static_assert(offsetof(TESObjectARMO, formEditorID) == 0x280);
+	static_assert(offsetof(TESObjectARMO, instanceData) == 0x290);
+	static_assert(offsetof(TESObjectARMO, modelArray) == 0x310);
+	static_assert(offsetof(TESObjectARMO, attachParents) == 0x320);
+	static_assert(sizeof(TESObjectARMO) == 0x378);
 }
