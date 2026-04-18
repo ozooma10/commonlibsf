@@ -182,6 +182,7 @@ namespace RE
 			for (const auto& i : a_rhs) {
 				emplace_back(i);
 			}
+			return *this;
 		}
 
 		BSTArray& operator=(BSTArray&& a_rhs)
