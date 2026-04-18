@@ -4,7 +4,7 @@
 
 namespace RE
 {
-	bool RE::BGSKeywordForm::AddKeyword(RE::BGSKeyword* keyword)
+	bool BGSKeywordForm::AddKeyword(RE::BGSKeyword* keyword)
 	{
 		if (!keyword) {
 			return false;
