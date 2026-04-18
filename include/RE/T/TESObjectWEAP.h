@@ -10,6 +10,7 @@
 #include "RE/B/BGSModelMaterialSwap.h"
 #include "RE/B/BGSPickupPutdownSounds.h"
 #include "RE/B/BGSPreloadable.h"
+#include "RE/B/BGSQualityUpgradeFormComponent.h"
 #include "RE/B/BSTSmartPointer.h"
 #include "RE/T/TESBoundObject.h"
 #include "RE/T/TESDescription.h"
@@ -264,6 +265,11 @@ namespace RE
 		SF_FORMTYPE(WEAP);
 
 		~TESObjectWEAP() override;  // 00
+
+		[[nodiscard]] const BGSQualityUpgradeFormComponent* GetQualityUpgradeComponent() const
+		{
+			return BGSQualityUpgradeFormComponent::LookupFor(this);
+		}
 
 		// members
 		BGSEditorID                                formEditorID;       // 238
