@@ -4,7 +4,7 @@
 
 namespace RE
 {
-	bool RE::BGSKeywordForm::AddKeyword(RE::BGSKeyword* keyword)
+	bool BGSKeywordForm::AddKeyword(BGSKeyword* keyword)
 	{
 		if (!keyword) {
 			return false;
@@ -55,7 +55,7 @@ namespace RE
 		return keywords.size();
 	}
 
-	bool RE::BGSKeywordForm::HasKeyword(BGSKeyword* keyword) const
+	bool BGSKeywordForm::HasKeyword(BGSKeyword* keyword) const
 	{
 		if (!keyword) {
 			return false;
@@ -94,7 +94,7 @@ namespace RE
 		return result;
 	}
 
-	bool RE::BGSKeywordForm::RemoveKeyword(RE::BGSKeyword* keyword)
+	bool BGSKeywordForm::RemoveKeyword(BGSKeyword* keyword)
 	{
 		if (!keyword) {
 			return false;

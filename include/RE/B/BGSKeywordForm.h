@@ -24,13 +24,13 @@ namespace RE
 
 		// add
 		virtual BGSKeyword*         GetDefaultKeyword() const;  // 0B
-		bool                        AddKeyword(RE::BGSKeyword* keyword);
+		bool                        AddKeyword(BGSKeyword* keyword);
 		[[nodiscard]] bool          ContainsKeywordString(std::string_view a_editorID);
 		void                        ForEachKeyword(std::function<BSContainer::ForEachResult(BGSKeyword*)> a_callback);
 		[[nodiscard]] std::uint32_t GetNumKeywords() const;
 		[[nodiscard]] bool          HasKeyword(BGSKeyword* keyword) const;
 		[[nodiscard]] bool          HasKeywordString(std::string_view a_editorID);
-		bool                        RemoveKeyword(RE::BGSKeyword* keyword);
+		bool                        RemoveKeyword(BGSKeyword* keyword);
 
 		// members
 		BSTArray<BGSFormFolderKeywordList*> formFolderKeywordLists;  // 10
