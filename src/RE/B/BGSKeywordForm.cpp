@@ -55,7 +55,7 @@ namespace RE
 		return keywords.size();
 	}
 
-	bool RE::BGSKeywordForm::HasKeyword(BGSKeyword* keyword) const
+	bool BGSKeywordForm::HasKeyword(BGSKeyword* keyword) const
 	{
 		if (!keyword) {
 			return false;
