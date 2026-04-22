@@ -64,6 +64,10 @@ namespace RE
 			return false;
 		}
 
+		// Typed-keyword arrays appear to keep capacity tightly matched to live
+		// size after engine-driven adds. Reserve exactly size() + 1 here before
+		// appending so the generic vector stays vector-like, while this wrapper preserves the
+		// tighter capacityEnd post-condition that callers may observe on these fields.
 		[[nodiscard]] bool AddKeyword(BGSKeyword* a_keyword)
 		{
 			if (!a_keyword) {
@@ -74,7 +78,8 @@ namespace RE
 					return false;
 				}
 			}
-			push_back(a_keyword);
+			this->reserve_exact(this->size() + 1);
+			this->push_back(a_keyword);
 			return true;
 		}
 

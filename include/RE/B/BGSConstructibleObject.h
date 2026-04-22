@@ -34,11 +34,9 @@ namespace RE
 		~BGSConstructibleObject() override;  // 00
 
 		// members
-		// category models the engine's typed keyword array for the RecipeFilter
-		// keyword type; same 0x18-byte begin/end/capacityEnd layout as
-		// BGSAttachParentArray but tagged for a different kind of keyword.
-		// Use category.HasKeyword() / AddKeyword() / RemoveKeyword() to query or
-		// mutate it at runtime. CK field name: RecipeFilters.
+		// recipeFilters models the engine's typed keyword array
+		// Use recipeFilters.HasKeyword() / AddKeyword() / RemoveKeyword() to
+		// query or mutate it at runtime.
 		BGSTypedKeywordValueArray<KeywordType::kRecipeFilter>                           recipeFilters;          // 150 - CK RecipeFilters (prev. "category")
 		TESBoundObject*                                                                 learnedFrom;            // 168 - CK LearnedFrom (any TESBoundObject)
 		BGSCurveForm*                                                                   baseReturnScaleTable;   // 170 - CK BaseReturnScaleTable
