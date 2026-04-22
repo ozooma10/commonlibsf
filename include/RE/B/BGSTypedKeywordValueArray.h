@@ -51,13 +51,17 @@ namespace RE
 	class BGSTypedKeywordValueArray : public BSTHeapSTLVector<BGSKeyword*>
 	{
 	public:
+		// Membership test uses formID equality (not pointer equality) so that
+		// callers holding a BGSKeyword* from any lookup path — including forms
+		// rebuilt across load cycles — see the same answer as AddKeyword and
+		// RemoveKeyword, which also compare by formID.
 		[[nodiscard]] bool HasKeyword(BGSKeyword* a_keyword)
 		{
 			if (!a_keyword) {
 				return false;
 			}
 			for (auto* kw : *this) {
-				if (kw == a_keyword) {
+				if (kw && kw->formID == a_keyword->formID) {
 					return true;
 				}
 			}
