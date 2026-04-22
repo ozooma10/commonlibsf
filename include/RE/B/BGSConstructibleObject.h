@@ -34,9 +34,45 @@ namespace RE
 
 		~BGSConstructibleObject() override;  // 00
 
+		// Runtime bulk-patching of the CK RecipeFilters keyword list (the
+		// `category` member). Safe on any COBJ regardless of which mod authored
+		// it; mutates via MemoryManager so the engine can free the buffer on
+		// shutdown. Call from the main thread at a stable time (e.g. OnDataLoaded
+		// or a script callback); not thread-safe.
+		[[nodiscard]] bool HasCategoryKeyword(const BGSKeyword* a_keyword) const noexcept
+		{
+			if (!a_keyword) {
+				return false;
+			}
+			for (const auto* kw : category) {
+				if (kw == a_keyword) {
+					return true;
+				}
+			}
+			return false;
+		}
+
+		bool AddCategoryKeyword(BGSKeyword* a_keyword)
+		{
+			if (!a_keyword || HasCategoryKeyword(a_keyword)) {
+				return false;
+			}
+			category.push_back(a_keyword);
+			return true;
+		}
+
+		bool RemoveCategoryKeyword(const BGSKeyword* a_keyword)
+		{
+			if (!a_keyword) {
+				return false;
+			}
+			return category.erase_value(const_cast<BGSKeyword*>(a_keyword));
+		}
+
 		// members
 		// category models the engine's `std::vector<BGSKeyword*, BSTHeapSTLAllocator<BGSKeyword, 2>>`.
-		// Modeled as BSTHeapSTLVector (read-only; writing would corrupt the game heap).
+		// Modeled as BSTHeapSTLVector so we can safely read and mutate via the
+		// game's MemoryManager. CK field name: RecipeFilters.
 		BSTHeapSTLVector<BGSKeyword*>                                                   category;               // 150 - CK RecipeFilters
 		TESBoundObject*                                                                 learnedFrom;            // 168 - CK LearnedFrom (any TESBoundObject)
 		BGSCurveForm*                                                                   baseReturnScaleTable;   // 170 - CK BaseReturnScaleTable
