@@ -31,10 +31,6 @@ namespace RE
 		TESCondition                                                                    conditions;     // 68
 		BSTArray<BSTTuple3<TESForm*, BGSCurveForm*, BGSTypedFormValuePair::SharedVal>>* components;     // 78 - CK RequiredItemList
 		BSTArray<BSTTuple3<TESForm*, BGSCurveForm*, BGSTypedFormValuePair::SharedVal>>* requiredPerks;  // 80
-		// createdObject is the CK "CreatedObject" field. Runtime evidence (2931 base-game
-		// COBJs) shows 16 distinct formTypes here, including kOMOD (1147), kFLST (478),
-		// kMSTT (568), kMISC (202), kCONT (174), kIDLE (86), kFURN (81), kSTAT (63), etc.
-		// Do NOT assume this is a TESBoundObject; the field is generic TESForm*.
 		TESForm*                                                                        createdObject;  // 88 - CK CreatedObject (arbitrary TESForm, not just TESBoundObject)
 		std::uint8_t                                                                    unk90;          // 90 - heatmap: 2911/3091 populated, values ~1 (CreatedObjectCount candidate)
 		float                                                                           menuSortOrder;  // 94 - CK MenuPriorityOrder
