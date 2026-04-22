@@ -212,6 +212,7 @@
 #include "RE/B/BSTArray.h"
 #include "RE/B/BSTEvent.h"
 #include "RE/B/BSTFreeList.h"
+#include "RE/B/BSTHeapSTLVector.h"
 #include "RE/B/BSTList.h"
 #include "RE/B/BSTObjectArena.h"
 #include "RE/B/BSTOptional.h"
