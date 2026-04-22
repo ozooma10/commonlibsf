@@ -20,8 +20,8 @@ namespace RE
 	// same global heap Bethesda's BSTHeapSTLAllocator ultimately delegates to. Buffers
 	// allocated by the game can be freed by us and vice-versa without cross-heap
 	// corruption. The raw BSTHeapSTLAllocatorBase REL::IDs (34039/34440) are NOT
-	// plain allocators — calling 34039 with (bytes, align) returns an image-space
-	// pointer, not a heap buffer, so we avoid them.
+	// plain allocators - calling 34039 with (bytes, align) returns an image-space
+	// pointer, not a heap buffer. Probably just wrong offset ids and needs to be further RE'd
 	//
 	// Threading: no internal locking. Callers must ensure no other thread is
 	// iterating or mutating the same vector. Safe during OnDataLoaded / main-thread
@@ -159,8 +159,8 @@ namespace RE
 		}
 
 		// members
-		T* _begin{ nullptr };       // 00
-		T* _end{ nullptr };         // 08
+		T* _begin{ nullptr };        // 00
+		T* _end{ nullptr };          // 08
 		T* _capacityEnd{ nullptr };  // 10
 	};
 	static_assert(sizeof(BSTHeapSTLVector<void*>) == 0x18);

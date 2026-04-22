@@ -39,7 +39,7 @@ namespace RE
 		// BGSAttachParentArray but tagged for a different kind of keyword.
 		// Use category.HasKeyword() / AddKeyword() / RemoveKeyword() to query or
 		// mutate it at runtime. CK field name: RecipeFilters.
-		BGSTypedKeywordValueArray<KeywordType::kRecipeFilter>                           category;               // 150 - CK RecipeFilters
+		BGSTypedKeywordValueArray<KeywordType::kRecipeFilter>                           recipeFilters;          // 150 - CK RecipeFilters (prev. "category")
 		TESBoundObject*                                                                 learnedFrom;            // 168 - CK LearnedFrom (any TESBoundObject)
 		BGSCurveForm*                                                                   baseReturnScaleTable;   // 170 - CK BaseReturnScaleTable
 		TESGlobal*                                                                      maxBuildCount;          // 178 - CK MaxBuildCount
@@ -53,5 +53,5 @@ namespace RE
 	static_assert(offsetof(BGSConstructibleObject, pickupSound) == 0xA8);        // BGSPickupPutdownSounds base @ +0x0A0
 	static_assert(offsetof(BGSConstructibleObject, value) == 0x110);             // TESValueForm base @ +0x108
 	static_assert(offsetof(BGSConstructibleObject, craftingUseSound) == 0x120);  // BGSCraftingUseSound base @ +0x118
-	static_assert(offsetof(BGSConstructibleObject, category) == 0x150);          // first derived member
+	static_assert(offsetof(BGSConstructibleObject, recipeFilters) == 0x150);     // first derived member
 }
