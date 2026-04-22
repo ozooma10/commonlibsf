@@ -73,11 +73,33 @@ namespace RE
 				}
 			}
 
+			// Fast path: existing buffer has spare capacity. Avoids heap churn
+			// when the field was grown previously.
+			if (end < capacityEnd) {
+				*end = a_keyword;
+				++end;
+				return true;
+			}
+
+			// Slow path: allocate a new buffer (with headroom), copy the old
+			// contents, release the old buffer so we don't leak on repeated
+			// mutation. Freeing via MemoryManager is proven compatible with the
+			// engine's BSTHeapSTLAllocator (same global heap).
 			const auto oldSize = static_cast<std::size_t>(end - begin);
 			const auto newSize = oldSize + 1;
+			// Double-and-min-4 growth matches our BSTHeapSTLVector policy and
+			// keeps amortized cost down for bulk-patch scenarios.
+			const auto oldCapacity = static_cast<std::size_t>(capacityEnd - begin);
+			auto       newCapacity = oldCapacity * 2;
+			if (newCapacity < 4) {
+				newCapacity = 4;
+			}
+			if (newCapacity < newSize) {
+				newCapacity = newSize;
+			}
 
 			auto* newData = static_cast<BGSKeyword**>(
-				RE::MemoryManager::GetSingleton()->Allocate(sizeof(BGSKeyword*) * newSize, 0, false));
+				RE::MemoryManager::GetSingleton()->Allocate(sizeof(BGSKeyword*) * newCapacity, 0, false));
 
 			if (!newData) {
 				return false;
@@ -88,9 +110,12 @@ namespace RE
 			}
 
 			newData[oldSize] = a_keyword;
+			if (begin) {
+				RE::MemoryManager::GetSingleton()->Free(begin, false);
+			}
 			begin = newData;
 			end = newData + newSize;
-			capacityEnd = newData + newSize;
+			capacityEnd = newData + newCapacity;
 			return true;
 		}
 
