@@ -3,6 +3,7 @@
 #include "RE/M/MemoryManager.h"
 
 #include <algorithm>
+#include <cassert>
 #include <cstddef>
 #include <cstring>
 
@@ -40,45 +41,45 @@ namespace RE
 		using size_type = std::size_t;
 		using difference_type = std::ptrdiff_t;
 
-		[[nodiscard]] iterator       begin() noexcept { return _begin; }
-		[[nodiscard]] const_iterator begin() const noexcept { return _begin; }
-		[[nodiscard]] const_iterator cbegin() const noexcept { return _begin; }
+		[[nodiscard]] constexpr iterator       begin() noexcept { return _begin; }
+		[[nodiscard]] constexpr const_iterator begin() const noexcept { return _begin; }
+		[[nodiscard]] constexpr const_iterator cbegin() const noexcept { return _begin; }
 
-		[[nodiscard]] iterator       end() noexcept { return _end; }
-		[[nodiscard]] const_iterator end() const noexcept { return _end; }
-		[[nodiscard]] const_iterator cend() const noexcept { return _end; }
+		[[nodiscard]] constexpr iterator       end() noexcept { return _end; }
+		[[nodiscard]] constexpr const_iterator end() const noexcept { return _end; }
+		[[nodiscard]] constexpr const_iterator cend() const noexcept { return _end; }
 
-		[[nodiscard]] pointer       data() noexcept { return _begin; }
-		[[nodiscard]] const_pointer data() const noexcept { return _begin; }
+		[[nodiscard]] constexpr pointer       data() noexcept { return _begin; }
+		[[nodiscard]] constexpr const_pointer data() const noexcept { return _begin; }
 
-		[[nodiscard]] size_type size() const noexcept
+		[[nodiscard]] constexpr size_type size() const noexcept
 		{
 			return static_cast<size_type>(_end - _begin);
 		}
 
-		[[nodiscard]] size_type capacity() const noexcept
+		[[nodiscard]] constexpr size_type capacity() const noexcept
 		{
 			return static_cast<size_type>(_capacityEnd - _begin);
 		}
 
-		[[nodiscard]] bool empty() const noexcept { return _begin == _end; }
+		[[nodiscard]] constexpr bool empty() const noexcept { return _begin == _end; }
 
-		[[nodiscard]] reference       operator[](size_type a_index) noexcept { return _begin[a_index]; }
-		[[nodiscard]] const_reference operator[](size_type a_index) const noexcept { return _begin[a_index]; }
+		[[nodiscard]] constexpr reference       operator[](size_type a_index) noexcept { return _begin[a_index]; }
+		[[nodiscard]] constexpr const_reference operator[](size_type a_index) const noexcept { return _begin[a_index]; }
 
-		[[nodiscard]] reference       front() noexcept { return *_begin; }
-		[[nodiscard]] const_reference front() const noexcept { return *_begin; }
-		[[nodiscard]] reference       back() noexcept { return _end[-1]; }
-		[[nodiscard]] const_reference back() const noexcept { return _end[-1]; }
+		[[nodiscard]] constexpr reference       front() noexcept { return *_begin; }
+		[[nodiscard]] constexpr const_reference front() const noexcept { return *_begin; }
+		[[nodiscard]] constexpr reference       back() noexcept { return _end[-1]; }
+		[[nodiscard]] constexpr const_reference back() const noexcept { return _end[-1]; }
 
 		// Mutation -----------------------------------------------------------------
 
-		// Appends a copy of a_value. Grows the buffer (doubling, minimum 4) via the
-		// game's allocator when capacity is exhausted. Preserves existing elements.
+		// Appends a copy of a_value. Grows the buffer via the same automatic
+		// reserve policy used by BSTArray when capacity is exhausted.
 		void push_back(T a_value)
 		{
 			if (_end == _capacityEnd) {
-				Grow(size() + 1);
+				reserve_auto(size() + 1);
 			}
 			*_end = a_value;
 			++_end;
@@ -117,7 +118,16 @@ namespace RE
 		void reserve(size_type a_min)
 		{
 			if (a_min > capacity()) {
-				Grow(a_min);
+				reserve_exact(a_min);
+			}
+		}
+
+		void shrink_to_fit() { reserve_exact(size()); }
+
+		void pop_back()
+		{
+			if (!empty()) {
+				--_end;
 			}
 		}
 
@@ -133,20 +143,26 @@ namespace RE
 			_capacityEnd = nullptr;
 		}
 
-	private:
-		// Ensures capacity >= a_min, copying existing content. Sets _end correctly.
-		void Grow(size_type a_min)
+	protected:
+		void reserve_exact(size_type a_capacity)
 		{
-			const auto oldSize = size();
-			const auto oldCapacity = capacity();
-			auto       newCapacity = std::max<size_type>(4, oldCapacity * 2);
-			while (newCapacity < a_min) {
-				newCapacity *= 2;
+			assert(a_capacity >= size());
+			if (a_capacity == capacity()) {
+				return;
+			}
+			if (a_capacity == 0) {
+				release_buffer();
+				return;
 			}
 
-			const auto bytes = newCapacity * sizeof(T);
+			const auto oldSize = size();
+			const auto bytes = a_capacity * sizeof(T);
 			const auto alignRequired = alignof(T) > alignof(std::max_align_t);
 			auto*      newBuffer = static_cast<T*>(RE::malloc(bytes, alignRequired ? alignof(T) : 0));
+			if (!newBuffer) {
+				REX::FAIL("out of memory");
+			}
+			std::memset(newBuffer, 0, bytes);
 			if (oldSize > 0) {
 				std::memcpy(newBuffer, _begin, oldSize * sizeof(T));
 			}
@@ -155,7 +171,16 @@ namespace RE
 			}
 			_begin = newBuffer;
 			_end = newBuffer + oldSize;
-			_capacityEnd = newBuffer + newCapacity;
+			_capacityEnd = newBuffer + a_capacity;
+		}
+
+	private:
+		void reserve_auto(size_type a_capacity)
+		{
+			if (a_capacity > capacity()) {
+				const auto grow = std::max(a_capacity, capacity() * 2);
+				reserve_exact(grow);
+			}
 		}
 
 		// members
