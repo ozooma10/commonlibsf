@@ -96,6 +96,7 @@ namespace RE
 				p[0] = p[1];
 			}
 			--_end;
+			*_end = value_type{};
 		}
 
 		// Removes the first element equal to a_value and returns whether any slot
