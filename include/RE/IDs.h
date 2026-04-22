@@ -1670,8 +1670,8 @@ namespace RE::ID
 
 	namespace Script
 	{
-		inline constexpr REL::ID GetConsoleCommands{ 0 };  // 841465
-		inline constexpr REL::ID GetScriptCommands{ 0 };   // 841467
+		inline constexpr REL::ID GetConsoleCommands{ 896666 };
+		inline constexpr REL::ID GetScriptCommands{ 896669 };
 	}
 
 	namespace SecurityMenu_BackOutKey
