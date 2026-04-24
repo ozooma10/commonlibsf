@@ -205,6 +205,11 @@ namespace RE::ID
 		inline constexpr REL::ID GetEventSource{ 0 };  // 131237
 	}
 
+	namespace BlurEvent
+	{
+		inline constexpr REL::ID EventSource{ 940149 };
+	}
+
 	namespace BooksRead::Event
 	{
 		inline constexpr REL::ID GetEventSource{ 0 };  // 103540
@@ -2399,6 +2404,13 @@ namespace RE::ID
 		inline constexpr REL::ID Singleton{ 937580 };
 		inline constexpr REL::ID IsMenuOpen{ 130475 };
 		inline constexpr REL::ID RegisterMenu{ 0 };  // 80375
+	}
+
+	namespace UIBlurManager
+	{
+		inline constexpr REL::ID Singleton{ 949563 };
+		inline constexpr REL::ID ProcessDefaultObjectsReadyEvent{ 114425 };
+		inline constexpr REL::ID ProcessBlurEvent{ 114426 };
 	}
 
 	namespace UIMenuChargenMenuDisablePaperdoll

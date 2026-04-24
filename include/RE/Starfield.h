@@ -458,6 +458,7 @@
 #include "RE/T/TLS.h"
 #include "RE/T/TypeInfo.h"
 #include "RE/U/UI.h"
+#include "RE/U/UIBlurManager.h"
 #include "RE/U/UICellRenderer.h"
 #include "RE/U/UIMessageQueue.h"
 #include "RE/V/Variable.h"
