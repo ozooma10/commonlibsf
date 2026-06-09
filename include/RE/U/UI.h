@@ -25,18 +25,39 @@ namespace RE
 	struct MenuPauseCounterChangeEvent;
 	struct TutorialEvent;
 
+	// EXE RTTI (2026-06-09, UILayoutProbe RTTI walk of the live singleton): the
+	// binary's BaseClassArray for UI enumerates, with member offsets (mdisp):
+	//   +0x00  BSTSingletonSDM<UI, BSTSingletonSDMOpStaticBuffer>
+	//   +0x08    BSTSingletonSDMBase<BSTSDMTraits<UI, BSTSingletonSDMOpStaticBuffer<UI>>>
+	//   +0x09    BSTSingletonSDMOpStaticBuffer<UI>
+	//   +0x10  BSInputEventReceiver
+	//   +0x20  BSTEventSource band, 0x28 stride (event order matches below)
+	// So in Starfield, BSTSingletonSDM is polymorphic — a vtable was observed at
+	// UI+0x00 and the SDM's own bases land at +0x08/+0x09 — making it a 0x10
+	// subobject. CommonLibSF's BSTSingletonSDM template (BSTSingleton.h) is an
+	// empty, non-polymorphic placeholder, so it cannot be used as the base here
+	// without collapsing the layout; this opaque stand-in models the compiled
+	// subobject for UI only. Do not generalize to other BSTSingletonSDM users
+	// without per-class proof.
+	struct BSTSingletonSDM_UI
+	{
+		virtual ~BSTSingletonSDM_UI() = default;  // 00 — vtable observed at UI+0x00
+		std::uint8_t sdm08[8];                    // 08 — SDM bases per RTTI (+0x08/+0x09), padded
+	};
+	static_assert(sizeof(BSTSingletonSDM_UI) == 0x10);
+
 	class UI :
-		//public BSTSingletonSDM<UI>,
-		public BSInputEventReceiver,                             // 000
-		public BSTEventSource<MenuOpenCloseEvent>,               // 010
-		public BSTEventSource<MenuModeChangeEvent>,              // 038
-		public BSTEventSource<MenuPauseChangeEvent>,             // 060
-		public BSTEventSource<MenuPauseCounterChangeEvent>,      // 088
-		public BSTEventSource<TutorialEvent>,                    // 0B0
-		public BSTEventSource<BSCursorTypeChange>,               // 0D8
-		public BSTEventSource<BSCursorRotationChange>,           // 100
-		public BSTEventSource<BIUIMenuVisiblePausedBeginEvent>,  // 128
-		public BSTEventSource<BIUIMenuVisiblePausedEndEvent>     // 150
+		public BSTSingletonSDM_UI,                               // 000  exe RTTI: BSTSingletonSDM<UI, BSTSingletonSDMOpStaticBuffer>
+		public BSInputEventReceiver,                             // 010  exe RTTI: mdisp 0x10
+		public BSTEventSource<MenuOpenCloseEvent>,               // 020
+		public BSTEventSource<MenuModeChangeEvent>,              // 048
+		public BSTEventSource<MenuPauseChangeEvent>,             // 070
+		public BSTEventSource<MenuPauseCounterChangeEvent>,      // 098
+		public BSTEventSource<TutorialEvent>,                    // 0C0
+		public BSTEventSource<BSCursorTypeChange>,               // 0E8
+		public BSTEventSource<BSCursorRotationChange>,           // 110
+		public BSTEventSource<BIUIMenuVisiblePausedBeginEvent>,  // 138
+		public BSTEventSource<BIUIMenuVisiblePausedEndEvent>     // 160
 	{
 	public:
 		SF_RTTI_VTABLE(UI);
@@ -64,6 +85,13 @@ namespace RE
 			return *singleton;
 		}
 
+		// NOTE (2026-06-09): these name-keyed helpers depended on a `menuMap`
+		// BSTHashMap that the previous header placed at UI+0x430. UILayoutProbe
+		// proved 0x430 is actually a BSTArray of active menus (see `menuArray`
+		// below), and no name->menu hashmap offset has been confirmed yet, so
+		// GetMenu/GetMenuMovie/IsMenuRegistered/RegisterMenu are disabled rather
+		// than left pointing at a wrong offset. Restore once menuMap is located.
+#if 0
 		Scaleform::Ptr<IMenu> GetMenu(const BSFixedString& a_menuName) const
 		{
 			auto it = menuMap.find(a_menuName);
@@ -75,6 +103,7 @@ namespace RE
 			auto menu = GetMenu(a_menuName);
 			return menu ? menu->uiMovie : nullptr;
 		}
+#endif
 
 		bool IsMenuOpen(const BSFixedString& a_name) const
 		{
@@ -83,16 +112,19 @@ namespace RE
 			return func(this, a_name);
 		}
 
+#if 0  // see note above — depends on the unlocated menuMap
 		bool IsMenuRegistered(const BSFixedString& a_name) const
 		{
 			return menuMap.contains(a_name);
 		}
+#endif
 
 		bool IsMenusVisible() const
 		{
 			return menusVisible;
 		}
 
+#if 0  // see note above — depends on the unlocated menuMap
 		template <class T>
 			requires(std::derived_from<T, IMenu>)
 		bool RegisterMenu(const BSFixedString& a_name)
@@ -111,6 +143,7 @@ namespace RE
 			menuMap[a_name].initFunc = RegisterMenuImpl;
 			return true;
 		}
+#endif
 
 		template <class T>
 		void RegisterSink(BSTEventSink<T>* a_sink)
@@ -124,18 +157,27 @@ namespace RE
 			GetEventSource<T>()->UnregisterSink(a_sink);
 		}
 
-		std::uint8_t                           pad178[0x278];  // 178
-		BSTArray<Scaleform::Ptr<IMenu>>        menuStack;      // 3F0
-		std::uint8_t                           pad02[0x18];    // 400
-		uint64_t                               unk418;         // 418
-		uint64_t                               unk420;         // 420
-		uint64_t                               unk428;         // 428
-		BSTHashMap<BSFixedString, UIMenuEntry> menuMap;        // 430
-		void*                                  unk468[18];     // 468
-		uint16_t                               unk4F8;         // 4F8
-		bool                                   menusVisible;   // 4FA
+		// The base subobjects above now end at 0x188 (was 0x178 before the
+		// UIInputRouterBase fix), so the first opaque member starts at 0x188.
+		std::uint8_t                    pad188[0x268];  // 188
+		BSTArray<Scaleform::Ptr<IMenu>> menuStack;      // 3F0  (empty in the probe snapshot)
+		std::uint8_t                    pad400[0x18];   // 400
+		uint64_t                        unk418;         // 418
+		uint64_t                        unk420;         // 420
+		uint64_t                        unk428;         // 428
+		// RUNTIME (UILayoutProbe): the previous header declared a BSTHashMap
+		// `menuMap` here, but the live object holds a BSTArray of active menus —
+		// count/capacity at +0x430, data ptr at +0x438, with every entry's first
+		// qword resolving to an in-module IMenu vtable. This also matches the
+		// Ghidra UI_DispatchTranslatedInputToChildReceivers / UI_FindActiveMenuEntryByPointer findings.
+		BSTArray<Scaleform::Ptr<IMenu>> menuArray;      // 430
+		// 0x440 holds a second BSTArray header (count=0/cap=4 in the snapshot)
+		// plus further unmapped fields; left opaque until reverse-engineered.
+		std::uint8_t                    pad440[0xB8];   // 440
+		uint16_t                        unk4F8;         // 4F8
+		bool                            menusVisible;   // 4FA
 	};
 	static_assert(offsetof(UI, menuStack) == 0x3F0);
-	static_assert(offsetof(UI, menuMap) == 0x430);
+	static_assert(offsetof(UI, menuArray) == 0x430);
 	static_assert(offsetof(UI, menusVisible) == 0x4FA);
 }
