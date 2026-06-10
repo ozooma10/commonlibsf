@@ -34,7 +34,7 @@ namespace RE
 
 	class alignas(0x08) BGSInventoryInterface :
 		BSTSingletonSDM<BGSInventoryInterface>,                   // 00
-		BSTEventSource<InventoryInterface::FavoriteChangedEvent>  // 08
+		BSTEventSource<InventoryInterface::FavoriteChangedEvent>  // 10
 	{
 	public:
 		struct Agent
@@ -77,8 +77,8 @@ namespace RE
 		virtual ~BGSInventoryInterface();  // 00
 
 		// members
-		std::uint64_t   unk30;       // 30
 		BSTArray<Agent> agentArray;  // 38
 	};
+	static_assert(offsetof(BGSInventoryInterface, agentArray) == 0x38);
 	//static_assert(sizeof(BGSInventoryInterface) == 0x48);
 }

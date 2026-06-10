@@ -9,8 +9,8 @@ namespace RE
 	struct ConsoleLogAddEvent;
 
 	class __declspec(novtable) ConsoleLog :
-		public BSTSingletonSDM<ConsoleLog>,
-		public BSTEventSource<ConsoleLogAddEvent>
+		public BSTSingletonSDM<ConsoleLog>,        // 00
+		public BSTEventSource<ConsoleLogAddEvent>  // 10
 	{
 	public:
 		SF_RTTI_VTABLE(ConsoleLog);
@@ -64,5 +64,6 @@ namespace RE
 		BSStringT<char> buffer;             // 38
 		bool            useConsoleOverlay;  // 48
 	};
-	static_assert(sizeof(ConsoleLog) == 0x48);
+	static_assert(offsetof(ConsoleLog, buffer) == 0x38);
+	static_assert(sizeof(ConsoleLog) == 0x50);
 }
