@@ -48,32 +48,15 @@ namespace RE
 			func(this, a_enable);
 		}
 
-		// members
-		std::byte                        pad018[0x8];                   // 018
-		std::int32_t                     numberHighActors;              // 020
-		std::int32_t                     numberFullyEnabledHighActors;  // 024
-		std::byte                        pad028[0x1C];                  // 028
-		bool                             runDetection;                  // 044
-		std::byte                        unk045;                        // 045
-		bool                             processHigh;                   // 046
-		bool                             processLow;                    // 047
-		bool                             processMiddleHigh;             // 048
-		bool                             processMiddleLow;              // 049
-		bool                             processSchedules;              // 04A
-		bool                             showSubtitles;                 // 04B
-		std::byte                        pad04C[0x6];                   // 04C
-		BSTArray<BSPointerHandle<Actor>> highActorHandles;              // 058
-		BSTArray<BSPointerHandle<Actor>> lowActorHandles;               // 068
-		BSTArray<BSPointerHandle<Actor>> middleHighActorHandles;        // 078
-		BSTArray<BSPointerHandle<Actor>> middleLowActorHandles;         // 088
-		std::byte                        pad098[0x154];                 // 098
-		bool                             runSchedules;                  // 1EC
-		bool                             runMovement;                   // 1ED
-		bool                             runAnimations;                 // 1EE
+		// members — the previous member block (numberHighActors@0x20,
+		// process flags@0x44, four handle arrays from 0x58, run flags@0x1EC)
+		// was carried over from Fallout 4 and is DISPROVEN for Starfield: a
+		// live peek (2026-06-10, in gameplay) found churning floats at +0x20
+		// and a BSTArray<handle-sized> at +0x30 (size=1108/cap=2048, heap
+		// data at +0x38), with self-referential list pointers around
+		// +0x60..0x78. The real Starfield member map needs its own
+		// investigation; until then the block is opaque.
+		std::byte pad018[0x1D8];  // 018 — UNMAPPED for Starfield
 	};
-	static_assert(offsetof(ProcessLists, numberHighActors) == 0x20);
-	static_assert(offsetof(ProcessLists, runDetection) == 0x44);
-	static_assert(offsetof(ProcessLists, showSubtitles) == 0x4B);
-	static_assert(offsetof(ProcessLists, highActorHandles) == 0x58);
-	static_assert(offsetof(ProcessLists, runSchedules) == 0x1EC);
+	static_assert(sizeof(ProcessLists) == 0x1F0);
 }

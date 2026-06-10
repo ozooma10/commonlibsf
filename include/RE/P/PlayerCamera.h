@@ -116,13 +116,15 @@ namespace RE
 			return (currentState == cameraStates[a_cameraState]);
 		}
 
-		// members — shifted +8 by the 2026-06-09 SDM fix (the old empty-SDM
-		// math started members at 0x98; the audit proved 0xA0); cameraStates'
-		// individual offset carried over accordingly, not re-proven.
-		std::byte unkA0[0x190 - 0xA0];                // 0A0
-		void*     cameraStates[CameraState::kTotal];  // 190
+		// members — start at 0xA0 (RTTI: SDM spans 0x90..0xA0). cameraStates
+		// RUNTIME-PROVEN at 0x188 (live peek 2026-06-10): TESCamera::
+		// currentState matched cameraStates[kThirdPerson] (index 20) and,
+		// after the idle vanity cam engaged, cameraStates[kAutoVanity]
+		// (index 1) — both against an array based at +0x188.
+		std::byte unkA0[0x188 - 0xA0];                // 0A0
+		void*     cameraStates[CameraState::kTotal];  // 188
 
 		// ...
 	};
-	static_assert(offsetof(PlayerCamera, cameraStates) == 0x190);
+	static_assert(offsetof(PlayerCamera, cameraStates) == 0x188);
 }

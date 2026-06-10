@@ -34,8 +34,7 @@ namespace RE
 
 	// EXE RTTI (2026-06-09, SingletonSdmAuditProbe): BSTSingletonSDM at mdisp
 	// 0x0 (0x10, polymorphic), the FavoriteChangedEvent source at mdisp 0x10
-	// (old empty-SDM math put it at 0x08). Members below shifted +8
-	// accordingly (carried over, not independently re-proven).
+	// (old empty-SDM math put it at 0x08).
 	class alignas(0x08) BGSInventoryInterface :
 		BSTSingletonSDM<BGSInventoryInterface>,                   // 00
 		BSTEventSource<InventoryInterface::FavoriteChangedEvent>  // 10 — exe RTTI mdisp
@@ -80,10 +79,12 @@ namespace RE
 
 		virtual ~BGSInventoryInterface();  // 00
 
-		// members
-		std::uint64_t   unk38;       // 38
-		BSTArray<Agent> agentArray;  // 40
+		// members — RUNTIME-PROVEN (live peek 2026-06-10): the event source
+		// ends at 0x38 and a BSTArray header sits there directly (live
+		// size=4/cap=0x400 with a heap data ptr at +0x40); the old header's
+		// unk30 qword never existed.
+		BSTArray<Agent> agentArray;  // 38
 	};
-	static_assert(offsetof(BGSInventoryInterface, agentArray) == 0x40);
-	//static_assert(sizeof(BGSInventoryInterface) == 0x50);
+	static_assert(offsetof(BGSInventoryInterface, agentArray) == 0x38);
+	//static_assert(sizeof(BGSInventoryInterface) == 0x48);
 }
