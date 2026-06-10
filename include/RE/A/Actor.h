@@ -16,6 +16,7 @@ namespace RE
 	class BGSPerk;
 	class CombatController;
 	class CombatGroup;
+	class MovementControllerNPC;
 	class MovementMessageUpdateRequestImmediate;
 	class TESFaction;
 	class TESRace;
@@ -163,6 +164,7 @@ namespace RE
 		{
 			kNone = 0,
 			kHasChargenSkeleton = 1 << 5,
+			kAnimationDriven = 1 << 19,
 		};
 
 		~Actor() override;  // 00
@@ -388,7 +390,7 @@ namespace RE
 		AIProcess*                                        currentProcess;           // 228
 		std::uint64_t                                     unk230;                   // 230
 		std::uint64_t                                     unk238;                   // 238
-		std::uint64_t                                     unk240;                   // 240
+		MovementControllerNPC*                            movementController;       // 240
 		std::uint64_t                                     unk248;                   // 248
 		CombatController*                                 combatController;         // 250
 		std::uint64_t                                     unk258;                   // 258
