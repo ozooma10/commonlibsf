@@ -89,7 +89,7 @@ namespace RE
 		{
 			kNone = 0,
 			kDelayUpdateScenegraph = 1 << 0,
-			kProcessMe = 1 << 1,
+			kProcessMe = 1 << 1,  // AI enabled - gated by TAI/SetAIEnabled, clearing it also halts the animation pipeline
 			kMurderAlarm = 1 << 2,
 			kHasSceneExtra = 1 << 3,
 			kHeadingFixed = 1 << 4,
@@ -175,7 +175,7 @@ namespace RE
 		virtual void         Unk_134();                                                                              // 134
 		virtual void         Unk_135();                                                                              // 135
 		virtual void         DrawWeaponMagicHands(bool a_draw);                                                      // 136
-		virtual void         SetPosition(const NiPoint3& a_pos, bool a_updateCharController);                        // 137
+		virtual void         SetPosition(const NiPoint3& a_pos, bool a_updateCharController);                        // 137 - immediate mutation, call from the game thread only
 		virtual void         Unk_138();                                                                              // 138
 		virtual void         Resurrect(bool a_resetInventory, bool a_attach3D);                                      // 139
 		virtual void         Unk_13A();                                                                              // 13A
