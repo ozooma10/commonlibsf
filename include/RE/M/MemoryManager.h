@@ -1,5 +1,7 @@
 #pragma once
 
+#include "REX/W32/KERNEL32.h"
+
 namespace RE
 {
 	class ScrapHeap;
@@ -63,11 +65,24 @@ namespace RE
 
 		ScrapHeap* GetThreadScrapHeap()
 		{
-			using func_t = decltype(&MemoryManager::GetThreadScrapHeap);
-			static const REL::Relocation<func_t> func{ ID::MemoryManager::GetThreadScrapHeap };
-			return func(this);
+			// 1.16.242 has no standalone engine function for this; the getter is inlined at every engine call site as:
+			//   heap = TlsGetValue(g_scrapHeapTlsIndex);
+			//   if (!heap) { heap = CreateThreadScrapHeap(&singleton->threadScrapHeaps); TlsSetValue(idx, heap); }
+			static const REL::Relocation<std::uint32_t*> tlsIndex{ ID::MemoryManager::ScrapHeapTlsIndex };
+			auto                                         heap = static_cast<ScrapHeap*>(REX::W32::TlsGetValue(*tlsIndex));
+			if (!heap) {
+				using create_t = ScrapHeap* (*)(ScrapHeap**);
+				static const REL::Relocation<create_t> create{ ID::MemoryManager::CreateThreadScrapHeap };
+				heap = create(&threadScrapHeaps);
+				REX::W32::TlsSetValue(*tlsIndex, heap);
+			}
+			return heap;
 		}
+
+		std::byte  pad000[0x460];     // 000
+		ScrapHeap* threadScrapHeaps;  // 460
 	};
+	static_assert(offsetof(MemoryManager, threadScrapHeaps) == 0x460);
 
 	[[nodiscard]] inline void* malloc(std::size_t a_size, std::size_t a_alignment = 0)
 	{
