@@ -6,7 +6,7 @@
 namespace RE
 {
 	class Calendar :
-		public BSTSingletonSDM<Calendar>
+		public BSTSingletonSDM<Calendar>  // 00
 	{
 	public:
 		[[nodiscard]] static auto GetSingleton()
@@ -61,14 +61,14 @@ namespace RE
 		}
 
 		// members
-		TESGlobal*    gameYear;         // 08
-		TESGlobal*    gameMonth;        // 10
-		TESGlobal*    gameDay;          // 18
-		TESGlobal*    gameHour;         // 20
-		TESGlobal*    gameDaysPassed;   // 28
-		TESGlobal*    timeScale;        // 30
-		std::uint32_t midnightsPassed;  // 38
-		float         rawDaysPassed;    // 3C
+		TESGlobal*    gameYear;         // 10
+		TESGlobal*    gameMonth;        // 18
+		TESGlobal*    gameDay;          // 20
+		TESGlobal*    gameHour;         // 28
+		TESGlobal*    gameDaysPassed;   // 30
+		TESGlobal*    timeScale;        // 38
+		std::uint32_t midnightsPassed;  // 40
+		float         rawDaysPassed;    // 44
 	};
-	static_assert(sizeof(Calendar) == 0x40);
+	static_assert(sizeof(Calendar) == 0x48);
 }

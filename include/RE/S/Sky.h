@@ -4,22 +4,24 @@
 
 namespace RE
 {
-	class IExternalEmittanceManager
+	class ILightEmittanceManager
+	{
+	public:
+		SF_RTTI(ILightEmittanceManager);
+
+		virtual ~ILightEmittanceManager() = default;  // 00 - remaining virtuals unmapped
+	};
+
+	class IExternalEmittanceManager :
+		public ILightEmittanceManager
 	{
 	public:
 		SF_RTTI(IExternalEmittanceManager);
 	};
 
-	class ILightEmittanceManager
-	{
-	public:
-		SF_RTTI(ILightEmittanceManager);
-	};
-
 	class __declspec(novtable) Sky :
-		public BSTSingletonSDM<Sky>,
-		public IExternalEmittanceManager,
-		public ILightEmittanceManager
+		public BSTSingletonSDM<Sky>,      // 00
+		public IExternalEmittanceManager  // 10
 	{
 	public:
 		SF_RTTI_VTABLE(Sky);
@@ -27,8 +29,8 @@ namespace RE
 		virtual ~Sky();  // 00
 
 		// members
-		std::byte pad[0xEB8];  // 00?
-		float     windSpeed;   // EC4
+		std::byte pad[0xEC4 - 0x18];  // 18
+		float     windSpeed;          // EC4
 	};
 	static_assert(offsetof(Sky, windSpeed) == 0xEC4);
 }

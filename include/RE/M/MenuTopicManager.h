@@ -10,8 +10,8 @@ namespace RE
 
 	class MenuTopicManager :
 		public BSTSingletonSDM<MenuTopicManager>,  // 00
-		public BSTEventSink<MenuOpenCloseEvent>,   // 08
-		public BSTEventSink<PositionPlayerEvent>   // 10
+		public BSTEventSink<MenuOpenCloseEvent>,   // 10
+		public BSTEventSink<PositionPlayerEvent>   // 18
 	{
 	public:
 		[[nodiscard]] static MenuTopicManager* GetSingleton()
@@ -21,6 +21,6 @@ namespace RE
 		}
 
 		// members
-		BSPointerHandle<TESObjectREFR> speaker;  // 14
+		BSPointerHandle<TESObjectREFR> speaker;  // 20
 	};
 }
