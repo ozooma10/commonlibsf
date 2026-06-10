@@ -62,7 +62,7 @@ namespace RE
 		public BSTEventSink<Spaceship::DockEvent>,       // 78
 		public BSTEventSink<Spaceship::LandedSetEvent>,  // 80
 		public BSTEventSink<BSWorldOriginShiftEvent>,    // 88
-		public BSTSingletonSDM<PlayerCamera>             // 90
+		public BSTSingletonSDM<PlayerCamera>             // 90 — exe RTTI mdisp; spans 0x90..0xA0 (polymorphic, 2026-06-09 audit), so members start at 0xA0
 	{
 	public:
 		SF_RTTI_VTABLE(PlayerCamera);
@@ -116,11 +116,13 @@ namespace RE
 			return (currentState == cameraStates[a_cameraState]);
 		}
 
-		// members
-		std::byte unk98[0x188 - 0x98];                // 098
-		void*     cameraStates[CameraState::kTotal];  // 188
+		// members — shifted +8 by the 2026-06-09 SDM fix (the old empty-SDM
+		// math started members at 0x98; the audit proved 0xA0); cameraStates'
+		// individual offset carried over accordingly, not re-proven.
+		std::byte unkA0[0x190 - 0xA0];                // 0A0
+		void*     cameraStates[CameraState::kTotal];  // 190
 
 		// ...
 	};
-	static_assert(offsetof(PlayerCamera, cameraStates) == 0x188);
+	static_assert(offsetof(PlayerCamera, cameraStates) == 0x190);
 }

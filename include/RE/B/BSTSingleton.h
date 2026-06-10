@@ -38,29 +38,25 @@ namespace RE
 		using value_type = T;
 	};
 
-	// WARNING — PROVEN WRONG FOR STARFIELD (2026-06-09, exe 1.16.242): the
-	// compiled BSTSingletonSDM is POLYMORPHIC. Exe RTTI (BaseClassArray of all
-	// 7 audited singletons: UI, GameVM, ActorEquipManager, ConsoleLog,
-	// PlayerCamera, BGSInventoryInterface, ChargenDataModel) shows the same
-	// hierarchy as below but with a vptr at +0x00 and the SDM's own bases at
-	// mdisp +0x08/+0x09 — a 0x10-byte subobject. Static vtable analysis of UI
-	// (primary vtable 0x144D824B8 = exactly ONE slot = the scalar deleting
-	// destructor) proves the SDM declares exactly one virtual: the destructor.
-	// The correct definition is this template plus
-	//     virtual ~BSTSingletonSDM() = default;
-	// (see EngineShapeSDM_Mirror in src/Test/UILayoutTests.cpp for the layout
-	// proof). NOT applied here yet because every deriving header's member
-	// offsets were authored against the empty 0-byte base — apply the fix and
-	// re-pad the deriving classes together, with per-class proof for the
-	// not-yet-audited ones. Until then, UI models it locally
-	// (BSTSingletonSDM_UI in RE/U/UI.h).
+	// FIXED FOR STARFIELD (2026-06-09, exe 1.16.242): the compiled
+	// BSTSingletonSDM is POLYMORPHIC — a 0x10 subobject with a vptr at +0x00
+	// and its own bases at +0x08/+0x09. Exe RTTI proved this across all 7
+	// audited singletons (UI, GameVM, ActorEquipManager, ConsoleLog,
+	// PlayerCamera, BGSInventoryInterface, ChargenDataModel), and static
+	// vtable analysis of UI (primary vtable 0x144D824B8 = exactly ONE slot =
+	// the scalar deleting destructor) proved the SDM declares exactly one
+	// virtual: the destructor. EngineShapeSDM_Mirror in
+	// src/Test/UILayoutTests.cpp static_asserts that this shape is 0x10 under
+	// MSVC; SdmLayoutTests verifies the deriving headers' base offsets against
+	// the RTTI-proven maps at runtime. Deriving headers were re-padded with
+	// this change — see each class for its per-class proof status.
 #ifdef __EDG__
 
 	template <class T, template <class> class Buffer = BSTSingletonSDMOpStaticBuffer>
 	struct BSTSingletonSDM
 	{
 	public:
-		std::uint8_t padding;
+		std::uint8_t padding[0x10];
 	};
 
 #else
@@ -71,7 +67,11 @@ namespace RE
 	{
 	public:
 		using value_type = T;
+
+		virtual ~BSTSingletonSDM() = default;  // 00 — the engine SDM's single virtual
 	};
+
+	static_assert(sizeof(BSTSingletonSDM<void*>) == 0x10);
 
 #endif
 }

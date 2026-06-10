@@ -32,9 +32,13 @@ namespace RE
 		static_assert(sizeof(Handle) == 0x4);
 	}
 
+	// EXE RTTI (2026-06-09, SingletonSdmAuditProbe): BSTSingletonSDM at mdisp
+	// 0x0 (0x10, polymorphic), the FavoriteChangedEvent source at mdisp 0x10
+	// (old empty-SDM math put it at 0x08). Members below shifted +8
+	// accordingly (carried over, not independently re-proven).
 	class alignas(0x08) BGSInventoryInterface :
 		BSTSingletonSDM<BGSInventoryInterface>,                   // 00
-		BSTEventSource<InventoryInterface::FavoriteChangedEvent>  // 08
+		BSTEventSource<InventoryInterface::FavoriteChangedEvent>  // 10 — exe RTTI mdisp
 	{
 	public:
 		struct Agent
@@ -77,8 +81,9 @@ namespace RE
 		virtual ~BGSInventoryInterface();  // 00
 
 		// members
-		std::uint64_t   unk30;       // 30
-		BSTArray<Agent> agentArray;  // 38
+		std::uint64_t   unk38;       // 38
+		BSTArray<Agent> agentArray;  // 40
 	};
-	//static_assert(sizeof(BGSInventoryInterface) == 0x48);
+	static_assert(offsetof(BGSInventoryInterface, agentArray) == 0x40);
+	//static_assert(sizeof(BGSInventoryInterface) == 0x50);
 }

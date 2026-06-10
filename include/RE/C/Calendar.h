@@ -5,8 +5,14 @@
 
 namespace RE
 {
+	// CAUTION (2026-06-09): NOT audited — ID::Calendar::Singleton is 0, so the
+	// RTTI audit could not run (REL::ID(0) hard-aborts). The SDM base is now
+	// the proven polymorphic 0x10 shape, shifting members +8 vs the old
+	// header; the member offsets below are UNPROVEN for this class. Re-prove
+	// before relying on them (fill the singleton ID, then re-run
+	// SingletonSdmAuditProbe).
 	class Calendar :
-		public BSTSingletonSDM<Calendar>
+		public BSTSingletonSDM<Calendar>  // 00
 	{
 	public:
 		[[nodiscard]] static auto GetSingleton()
@@ -60,15 +66,15 @@ namespace RE
 			return gameYear ? static_cast<std::uint32_t>(gameYear->value) : 77u;
 		}
 
-		// members
-		TESGlobal*    gameYear;         // 08
-		TESGlobal*    gameMonth;        // 10
-		TESGlobal*    gameDay;          // 18
-		TESGlobal*    gameHour;         // 20
-		TESGlobal*    gameDaysPassed;   // 28
-		TESGlobal*    timeScale;        // 30
-		std::uint32_t midnightsPassed;  // 38
-		float         rawDaysPassed;    // 3C
+		// members — shifted +8 by the SDM fix; UNPROVEN (see class comment)
+		TESGlobal*    gameYear;         // 10
+		TESGlobal*    gameMonth;        // 18
+		TESGlobal*    gameDay;          // 20
+		TESGlobal*    gameHour;         // 28
+		TESGlobal*    gameDaysPassed;   // 30
+		TESGlobal*    timeScale;        // 38
+		std::uint32_t midnightsPassed;  // 40
+		float         rawDaysPassed;    // 44
 	};
-	static_assert(sizeof(Calendar) == 0x40);
+	static_assert(sizeof(Calendar) == 0x48);
 }

@@ -1,6 +1,7 @@
 #pragma once
 #include "RE/B/BSFixedString.h"
 #include "RE/B/BSInputEventReceiver.h"
+#include "RE/B/BSTSingleton.h"
 #include "RE/B/BSTArray.h"
 #include "RE/B/BSTEvent.h"
 #include "RE/B/BSTScatterTable.h"
@@ -35,29 +36,15 @@ namespace RE
 	//   +0x20  BSTEventSource band, 0x28 stride (event order matches below)
 	// So in Starfield, BSTSingletonSDM is polymorphic — a vtable was observed at
 	// UI+0x00 and the SDM's own bases land at +0x08/+0x09 — making it a 0x10
-	// subobject.
-	//
-	// FOLLOW-UP (2026-06-09, session 2, static vtable analysis): this stand-in
-	// IS the compiled BSTSingletonSDM<UI, BSTSingletonSDMOpStaticBuffer> — the
-	// engine's class hierarchy is identical to CommonLibSF's template nesting;
-	// the ONLY difference is that the engine's BSTSingletonSDM declares exactly
-	// one virtual: the destructor. Proof: UI's primary (offset-0) vtable at
-	// 0x144D824B8 has exactly ONE slot (the next COL begins at +0x08), and that
-	// slot is UI's scalar deleting destructor (0x142540b10 -> calls UI::~UI
-	// 0x142540b60, then free(this, 0x540, 0x40)). CommonLibSF's template
-	// (BSTSingleton.h) merely lacks `virtual ~BSTSingletonSDM() = default;`.
-	// EngineShapeSDM_Mirror in src/Test/UILayoutTests.cpp proves the corrected
-	// template reproduces this 0x10 layout under MSVC. This stand-in stays until
-	// the global template fix + re-pad of all deriving headers is done.
-	struct BSTSingletonSDM_UI
-	{
-		virtual ~BSTSingletonSDM_UI() = default;  // 00 — the SDM's single virtual (slot 0 = deleting dtor)
-		std::uint8_t sdm08[8];                    // 08 — SDM bases per RTTI (+0x08/+0x09), padded
-	};
-	static_assert(sizeof(BSTSingletonSDM_UI) == 0x10);
+	// subobject. Session-2 static vtable analysis proved the SDM declares
+	// exactly one virtual (the destructor): UI's primary (offset-0) vtable at
+	// 0x144D824B8 has exactly ONE slot, the scalar deleting destructor
+	// (0x142540b10 -> UI::~UI 0x142540b60 -> free(this, 0x540, 0x40)).
+	// The global BSTSingletonSDM template fix (BSTSingleton.h) now models this,
+	// so the former UI-local stand-in (BSTSingletonSDM_UI) was retired.
 
 	class UI :
-		public BSTSingletonSDM_UI,                               // 000  exe RTTI: BSTSingletonSDM<UI, BSTSingletonSDMOpStaticBuffer>
+		public BSTSingletonSDM<UI>,                              // 000  exe RTTI: BSTSingletonSDM<UI, BSTSingletonSDMOpStaticBuffer>
 		public BSInputEventReceiver,                             // 010  exe RTTI: mdisp 0x10
 		public BSTEventSource<MenuOpenCloseEvent>,               // 020
 		public BSTEventSource<MenuModeChangeEvent>,              // 048

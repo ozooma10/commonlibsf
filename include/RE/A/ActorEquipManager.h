@@ -16,10 +16,13 @@ namespace RE
 		struct SpellEvent;
 	}
 
+	// EXE RTTI (2026-06-09, SingletonSdmAuditProbe): ActorEquipManager's
+	// BaseClassArray has only the class + the BSTSingletonSDM internals — the
+	// two BSTEventSources are NOT bases. They are standalone complete objects
+	// at +0x10 and +0x38 (their vtable COLs carry offset 0 with their own type
+	// names), i.e. members. The old header modeled them as bases at 0x08/0x30.
 	class ActorEquipManager :
-		public BSTSingletonSDM<ActorEquipManager>,                 // 00
-		public BSTEventSource<ActorEquipManagerEvent::Event>,      // 08
-		public BSTEventSource<ActorEquipManagerEvent::SpellEvent>  // 30
+		public BSTSingletonSDM<ActorEquipManager>  // 00 — exe RTTI mdisp 0x0, 0x10 bytes
 	{
 	public:
 		[[nodiscard]] static ActorEquipManager* GetSingleton()
@@ -41,6 +44,13 @@ namespace RE
 			static REL::Relocation<func_t> func{ ID::ActorEquipManager::UnequipObject };
 			return func(this, a_actor, a_object, a_slot, a_queueUnequip, a_forceUnequip, a_playSounds, a_applyNow, a_slotBeingReplaced);
 		}
+
+		// members — runtime-proven positions (standalone event-source objects,
+		// see class comment); anything past 0x60 is unmapped.
+		BSTEventSource<ActorEquipManagerEvent::Event>      equipEventSource;  // 10
+		BSTEventSource<ActorEquipManagerEvent::SpellEvent> spellEventSource;  // 38
 	};
-	static_assert(sizeof(ActorEquipManager) == 0x58);
+	static_assert(offsetof(ActorEquipManager, equipEventSource) == 0x10);
+	static_assert(offsetof(ActorEquipManager, spellEventSource) == 0x38);
+	static_assert(sizeof(ActorEquipManager) == 0x60);
 }
