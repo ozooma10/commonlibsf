@@ -2403,7 +2403,7 @@ namespace RE::ID
 	{
 		inline constexpr REL::ID Singleton{ 937580 };
 		inline constexpr REL::ID IsMenuOpen{ 130475 };
-		inline constexpr REL::ID RegisterMenu{ 0 };  // 80375
+		inline constexpr REL::ID RegisterMenu{ 130463 };  // 80375
 	}
 
 	namespace UIBlurManager
