@@ -773,7 +773,10 @@ namespace RE::BSScript
 	[[nodiscard]] T UnpackVariable(const Variable& a_var)
 	{
 		if (!a_var.is<Array>()) {
-			assert(false);
+			// a none array variable is typed as an array but holds a null
+			// pointer, making it neither none nor a valid array - treat it
+			// as an empty array
+			assert(a_var.GetType().IsArray());
 			return T();
 		}
 
@@ -797,10 +800,19 @@ namespace RE::BSScript
 	{
 		if (a_var.is<std::nullptr_t>()) {
 			return T();
-		} else {
-			using value_type = typename T::value_type;
-			return T(detail::UnpackVariable<value_type>(a_var));
 		}
+
+		if constexpr (detail::array<typename T::value_type>) {
+			// a none array variable is typed as an array but holds a null
+			// pointer - map it to an empty nullable instead of an engaged
+			// empty array
+			if (a_var.GetType().IsArray() && !a_var.is<Array>()) {
+				return T();
+			}
+		}
+
+		using value_type = typename T::value_type;
+		return T(detail::UnpackVariable<value_type>(a_var));
 	}
 
 	namespace detail
