@@ -38,13 +38,16 @@ namespace RE
 		using value_type = T;
 	};
 
+	// the compiled BSTSingletonSDM is polymorphic: a 0x10 subobject with a
+	// vptr at +0x00 (its single virtual is the destructor) and its own bases
+	// at +0x08/+0x09
 #ifdef __EDG__
 
 	template <class T, template <class> class Buffer = BSTSingletonSDMOpStaticBuffer>
 	struct BSTSingletonSDM
 	{
 	public:
-		std::uint8_t padding;
+		std::uint8_t padding[0x10];
 	};
 
 #else
@@ -55,7 +58,11 @@ namespace RE
 	{
 	public:
 		using value_type = T;
+
+		virtual ~BSTSingletonSDM() = default;  // 00
 	};
+
+	static_assert(sizeof(BSTSingletonSDM<void*>) == 0x10);
 
 #endif
 }

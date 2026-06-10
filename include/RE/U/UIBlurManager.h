@@ -10,15 +10,6 @@ namespace RE
 	class TESImageSpaceModifier;
 	class UIBlurManager;
 
-	template <>
-	struct BSTSingletonSDM<UIBlurManager, BSTSingletonSDMOpStaticBuffer> :
-		public BSTSingletonSDMBase<BSTSDMTraits<UIBlurManager, BSTSingletonSDMOpStaticBuffer<UIBlurManager>>>
-	{
-	public:
-		using value_type = UIBlurManager;
-
-		virtual ~BSTSingletonSDM();  // 00
-	};
 	static_assert(sizeof(BSTSingletonSDM<UIBlurManager>) == 0x10);
 
 	struct DefaultObjectsReadyEvent
