@@ -17,9 +17,7 @@ namespace RE
 	}
 
 	class ActorEquipManager :
-		public BSTSingletonSDM<ActorEquipManager>,                 // 00
-		public BSTEventSource<ActorEquipManagerEvent::Event>,      // 08
-		public BSTEventSource<ActorEquipManagerEvent::SpellEvent>  // 30
+		public BSTSingletonSDM<ActorEquipManager>  // 00
 	{
 	public:
 		[[nodiscard]] static ActorEquipManager* GetSingleton()
@@ -41,6 +39,12 @@ namespace RE
 			static REL::Relocation<func_t> func{ ID::ActorEquipManager::UnequipObject };
 			return func(this, a_actor, a_object, a_slot, a_queueUnequip, a_forceUnequip, a_playSounds, a_applyNow, a_slotBeingReplaced);
 		}
+
+		// members
+		BSTEventSource<ActorEquipManagerEvent::Event>      equipEventSource;  // 10
+		BSTEventSource<ActorEquipManagerEvent::SpellEvent> spellEventSource;  // 38
 	};
-	static_assert(sizeof(ActorEquipManager) == 0x58);
+	static_assert(offsetof(ActorEquipManager, equipEventSource) == 0x10);
+	static_assert(offsetof(ActorEquipManager, spellEventSource) == 0x38);
+	static_assert(sizeof(ActorEquipManager) == 0x60);
 }
