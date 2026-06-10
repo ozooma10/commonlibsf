@@ -401,7 +401,7 @@ namespace RE::ID
 
 	namespace Calendar
 	{
-		inline constexpr REL::ID Singleton{ 0 };  // 878435
+		inline constexpr REL::ID Singleton{ 937673 };  // was 0 // 878435 — filled 2026-06-09: Calendar* global at RVA 0x5FE4D28, found via the magic-static accessor 0x14059b7e0 (static instance 0x145C1CA28)
 	}
 
 	namespace CellAttachDetachEvent
@@ -1170,7 +1170,7 @@ namespace RE::ID
 
 	namespace MenuTopicManager
 	{
-		inline constexpr REL::ID Singleton{ 0 };  // 879316
+		inline constexpr REL::ID Singleton{ 938421 };  // was 0 // 879316 — filled 2026-06-09: MenuTopicManager* global at RVA 0x61EA280, stored by the ctor 0x141792b90
 	}
 
 	namespace MessageBoxMenu_OnBackOut
@@ -1542,7 +1542,7 @@ namespace RE::ID
 	namespace ProcessLists
 	{
 		inline constexpr REL::ID AreHostileActorsNear{ 0 };  // 154040
-		inline constexpr REL::ID Singleton{ 0 };             // 878338
+		inline constexpr REL::ID Singleton{ 937584 };        // was 0 // 878338 — filled 2026-06-09: ProcessLists* global at RVA 0x5FE1AC8, stored by the ctor 0x141a8b790
 		inline constexpr REL::ID ToggleAI{ 0 };              // 154056
 	}
 
@@ -2403,7 +2403,7 @@ namespace RE::ID
 	{
 		inline constexpr REL::ID Singleton{ 937580 };
 		inline constexpr REL::ID IsMenuOpen{ 130475 };
-		inline constexpr REL::ID RegisterMenu{ 0 };  // 80375
+		inline constexpr REL::ID RegisterMenu{ 130463 };  // was 0 // 80375 — filled 2026-06-09: proven fn at RVA 0x2546020 (1.16.242), reverse-looked-up via tools/re/addrlib_query.py
 	}
 
 	namespace UIBlurManager

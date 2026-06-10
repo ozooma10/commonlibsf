@@ -4,26 +4,34 @@
 
 namespace RE
 {
-	class IExternalEmittanceManager
+	// EXE RTTI (2026-06-09, exe_query `vtable Sky --bases`): Sky's
+	// BaseClassArray proves IExternalEmittanceManager DERIVES
+	// ILightEmittanceManager (same mdisp 0x10, contained), and the subobject
+	// at Sky+0x10 is POLYMORPHIC with a >=4-slot vtable (0x144BE1978) — the
+	// old model of two empty sibling interfaces was wrong. The exact virtual
+	// list is unmapped; only the dtor is declared here as the vptr carrier.
+	class ILightEmittanceManager
+	{
+	public:
+		SF_RTTI(ILightEmittanceManager);
+
+		virtual ~ILightEmittanceManager() = default;  // 00 — vtable has >=4 slots; remaining virtuals unmapped
+	};
+
+	class IExternalEmittanceManager :
+		public ILightEmittanceManager
 	{
 	public:
 		SF_RTTI(IExternalEmittanceManager);
 	};
 
-	class ILightEmittanceManager
-	{
-	public:
-		SF_RTTI(ILightEmittanceManager);
-	};
-
-	// CAUTION (2026-06-09): NOT audited — CommonLibSF has no Sky::GetSingleton,
-	// so the RTTI audit could not run. SDM is now the proven polymorphic 0x10
-	// shape (vptr lives in it); the leading pad was resized to PRESERVE the
-	// windSpeed@0xEC4 anchor. Base order/positions are UNPROVEN for this class.
+	// EXE RTTI (2026-06-09): BSTSingletonSDM at mdisp 0x0 (1-slot vtable
+	// 0x144BE1968), IExternalEmittanceManager at mdisp 0x10 — members start at
+	// 0x18; the pad preserves the windSpeed@0xEC4 anchor. No singleton
+	// accessor is known in CommonLibSF yet.
 	class __declspec(novtable) Sky :
-		public BSTSingletonSDM<Sky>,      // 00
-		public IExternalEmittanceManager,
-		public ILightEmittanceManager
+		public BSTSingletonSDM<Sky>,      // 00 — exe RTTI mdisp
+		public IExternalEmittanceManager  // 10 — exe RTTI mdisp
 	{
 	public:
 		SF_RTTI_VTABLE(Sky);
@@ -31,8 +39,8 @@ namespace RE
 		virtual ~Sky();  // 00
 
 		// members
-		std::byte pad[0xEB2];  // 12?
-		float     windSpeed;   // EC4
+		std::byte pad[0xEC4 - 0x18];  // 18
+		float     windSpeed;          // EC4
 	};
 	static_assert(offsetof(Sky, windSpeed) == 0xEC4);
 }

@@ -9,16 +9,16 @@ namespace RE
 {
 	struct PositionPlayerEvent;
 
-	// CAUTION (2026-06-09): NOT audited — ID::ProcessLists::Singleton is 0, so
-	// the RTTI audit could not run. With the proven polymorphic 0x10 SDM the
-	// old base order (sink first, SDM at 0x08) cannot precede the 0x20-anchored
-	// members, so the bases were reordered SDM-first (the dominant pattern in
-	// the 7 audited singletons) and the leading pad resized to PRESERVE the
-	// member anchors (0x20/0x44/0x58/0x1EC). Base order is a marked guess;
-	// re-prove via SingletonSdmAuditProbe once the singleton ID is filled.
+	// EXE RTTI (2026-06-09, exe_query `vtable ProcessLists --bases`): the
+	// BaseClassArray proves BSTEventSink<PositionPlayerEvent> at mdisp 0x0
+	// (2-slot vtable 0x144CC4228) and BSTSingletonSDM at mdisp 0x8 (1-slot
+	// vtable 0x144CC4240) — the original sink-first order, with bases ending
+	// at 0x18; the 0x20/0x44/0x58/0x1EC member anchors are preserved by
+	// pad018. The ctor (0x141a8b790) stores the singleton at RVA 0x5FE1AC8
+	// (ID 937584).
 	class __declspec(novtable) ProcessLists :
-		public BSTSingletonSDM<ProcessLists>,      // 000 — UNPROVEN order
-		public BSTEventSink<PositionPlayerEvent>   // 010
+		public BSTEventSink<PositionPlayerEvent>,  // 000 — exe RTTI mdisp
+		public BSTSingletonSDM<ProcessLists>       // 008 — exe RTTI mdisp
 	{
 	public:
 		SF_RTTI_VTABLE(ProcessLists);

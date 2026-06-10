@@ -182,19 +182,18 @@ namespace RE
 			return menusVisible;
 		}
 
-#if 0  // ID::UI::RegisterMenu is still 0 (unfilled). The engine function is
-		// proven at RVA 0x2546020 in 1.16.242: UI::RegisterMenu(this,
-		// const char* name, bool flag, factory) inserts into menuMap and fills
-		// the slot (see UIMenuEntry). Restore via the ID once it is filled —
-		// do NOT mutate the map inline; inserts take the engine's global lock
-		// and its grow path.
-		template <class T>
-			requires(std::derived_from<T, IMenu>)
-		bool RegisterMenu(const BSFixedString& a_name)
+		// RESTORED (2026-06-09): ID::UI::RegisterMenu = 130463 (reverse-looked
+		// up from the proven fn at RVA 0x2546020). Signature from the disasm:
+		// rcx=this, rdx=const char* name, r8b=bool flag, r9=factory. It interns
+		// the name, inserts into menuMap under the engine's global lock, and
+		// fills the slot {name, menu=null, factory, 0, flag, 0} (see
+		// UIMenuEntry). Never mutate menuMap inline — always go through this.
+		void RegisterMenu(const char* a_name, UIMenuEntry::Create_t* a_create, bool a_flag = true)
 		{
-			...
+			using func_t = void (*)(UI*, const char*, bool, UIMenuEntry::Create_t*);
+			static REL::Relocation<func_t> func{ ID::UI::RegisterMenu };
+			func(this, a_name, a_flag, a_create);
 		}
-#endif
 
 		template <class T>
 		void RegisterSink(BSTEventSink<T>* a_sink)
