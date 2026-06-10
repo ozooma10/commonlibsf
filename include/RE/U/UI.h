@@ -1,4 +1,5 @@
 #pragma once
+#include "RE/B/BSFixedString.h"
 #include "RE/B/BSInputEventReceiver.h"
 #include "RE/B/BSTArray.h"
 #include "RE/B/BSTEvent.h"
@@ -62,16 +63,79 @@ namespace RE
 	public:
 		SF_RTTI_VTABLE(UI);
 
+		// RUNTIME-PROVEN (2026-06-09, MenuMapProbe + exe disasm of
+		// UI::RegisterMenu 0x142546020 / UI::GetMenu 0x142544560 in 1.16.242):
+		// the value part of a registration-map slot. RegisterMenu fills it as
+		// { menu=null, initFunc=factory, unk10=0, flag (byte, usually 1), unk20=0 }.
 		struct UIMenuEntry
 		{
 			using Create_t = Scaleform::Ptr<IMenu>*(Scaleform::Ptr<IMenu>*);
 
-			Scaleform::Ptr<IMenu> menu;
-			Create_t*             initFunc;
-			void*                 unk18 = nullptr;
-			uint64_t              unk20 = 1;
-			uint64_t              unk28 = 0;
+			Scaleform::Ptr<IMenu> menu;         // 00 — null until the menu is opened
+			Create_t*             initFunc;     // 08 — per-menu factory passed to RegisterMenu
+			void*                 unk10 = nullptr;  // 10
+			uint64_t              flag = 1;     // 18 — byte; RegisterMenu's bool param (0 for e.g. ScopeMenu/TestMenu)
+			uint64_t              unk20 = 0;    // 20 — refcounted object once live (released by GetMenu's copy path)
 		};
+		static_assert(sizeof(UIMenuEntry) == 0x28);
+
+		// One slot of the name->menu registration map: the compiled shape of
+		// BSTScatterTableEntry<BSFixedString, UIMenuEntry>.
+		// nextIndex: -1 = empty slot; == bucketCount = end of chain; else the
+		// next slot index in the collision chain. homeIndex = the bucket the
+		// key hashes to (written on insert).
+		struct UIMenuEntrySlot
+		{
+			BSFixedString name;       // 00 — interned key
+			UIMenuEntry   entry;      // 08
+			std::int32_t  nextIndex;  // 30
+			std::int32_t  homeIndex;  // 34
+		};
+		static_assert(sizeof(UIMenuEntrySlot) == 0x38);
+
+		// RUNTIME-PROVEN (2026-06-09): the registration map at UI+0x450. The
+		// engine's hash is a 32-bit xor-fold of the interned char* ADDRESS
+		// (string-pool identity, not characters), masked by (bucketCount - 1);
+		// MenuMapProbe replayed the algorithm against the live table and found
+		// "PauseMenu" at its home bucket. Header fields differ from CommonLibSF's
+		// generic BSTScatterTable (entries at +0x38 here, not +0x18), so this is
+		// a UI-local model of the compiled container, not the template.
+		// NOTE: the engine guards access with a global reader/writer lock
+		// (see UI::GetMenu 0x142544560); Find() reads locklessly, which is safe
+		// after startup because registration happens during UI construction.
+		struct UIMenuNameMap
+		{
+			[[nodiscard]] const UIMenuEntrySlot* Find(const BSFixedString& a_name) const
+			{
+				if (!entries || !bucketCount) {
+					return nullptr;
+				}
+				const auto chars = reinterpret_cast<std::uintptr_t>(a_name.c_str());
+				const auto hash = static_cast<std::uint32_t>(chars) ^ static_cast<std::uint32_t>(chars >> 32);
+				auto idx = static_cast<std::uint64_t>(hash) & (bucketCount - 1);
+				for (std::uint64_t hops = 0; hops < bucketCount; ++hops) {
+					const auto& slot = entries[idx];
+					if (slot.nextIndex == -1) {
+						return nullptr;  // empty home slot
+					}
+					if (slot.name == a_name) {
+						return &slot;
+					}
+					if (static_cast<std::uint64_t>(slot.nextIndex) == bucketCount) {
+						return nullptr;  // end of chain
+					}
+					idx = static_cast<std::uint64_t>(slot.nextIndex);
+				}
+				return nullptr;
+			}
+
+			std::uint64_t    unk00[7];       // 00 — all zero in the live snapshot; allocator/lock state
+			UIMenuEntrySlot* entries;        // 38 — dense slot array, bucketCount slots
+			std::uint64_t    bucketCount;    // 40 — power of two (512 live); also the chain-end sentinel
+			std::uint64_t    freeCount;      // 48 — bucketCount - registered menus (446 live -> 66 menus)
+			std::uint64_t    freeScanIndex;  // 50 — free-slot scan cursor (name unproven)
+		};
+		static_assert(sizeof(UIMenuNameMap) == 0x58);
 
 		template <class T>
 		[[nodiscard]] auto GetEventSource()
@@ -85,25 +149,25 @@ namespace RE
 			return *singleton;
 		}
 
-		// NOTE (2026-06-09): these name-keyed helpers depended on a `menuMap`
-		// BSTHashMap that the previous header placed at UI+0x430. UILayoutProbe
-		// proved 0x430 is actually a BSTArray of active menus (see `menuArray`
-		// below), and no name->menu hashmap offset has been confirmed yet, so
-		// GetMenu/GetMenuMovie/IsMenuRegistered/RegisterMenu are disabled rather
-		// than left pointing at a wrong offset. Restore once menuMap is located.
-#if 0
-		Scaleform::Ptr<IMenu> GetMenu(const BSFixedString& a_menuName) const
+		// RESTORED (2026-06-09): the name->menu registration map was located at
+		// UI+0x450 (see UIMenuNameMap above) and proven live by MenuMapProbe, so
+		// the read-only name-keyed helpers are back with the proven layout.
+		[[nodiscard]] const UIMenuEntrySlot* GetMenuEntry(const BSFixedString& a_menuName) const
 		{
-			auto it = menuMap.find(a_menuName);
-			return it != menuMap.end() ? it->value.menu : nullptr;
+			return menuMap.Find(a_menuName);
 		}
 
-		Scaleform::Ptr<Scaleform::GFx::Movie> GetMenuMovie(const BSFixedString& a_menuName) const
+		[[nodiscard]] Scaleform::Ptr<IMenu> GetMenu(const BSFixedString& a_menuName) const
+		{
+			const auto* slot = menuMap.Find(a_menuName);
+			return slot ? slot->entry.menu : nullptr;
+		}
+
+		[[nodiscard]] Scaleform::Ptr<Scaleform::GFx::Movie> GetMenuMovie(const BSFixedString& a_menuName) const
 		{
 			auto menu = GetMenu(a_menuName);
 			return menu ? menu->uiMovie : nullptr;
 		}
-#endif
 
 		bool IsMenuOpen(const BSFixedString& a_name) const
 		{
@@ -112,36 +176,27 @@ namespace RE
 			return func(this, a_name);
 		}
 
-#if 0  // see note above — depends on the unlocated menuMap
-		bool IsMenuRegistered(const BSFixedString& a_name) const
+		[[nodiscard]] bool IsMenuRegistered(const BSFixedString& a_name) const
 		{
-			return menuMap.contains(a_name);
+			return menuMap.Find(a_name) != nullptr;
 		}
-#endif
 
 		bool IsMenusVisible() const
 		{
 			return menusVisible;
 		}
 
-#if 0  // see note above — depends on the unlocated menuMap
+#if 0  // ID::UI::RegisterMenu is still 0 (unfilled). The engine function is
+		// proven at RVA 0x2546020 in 1.16.242: UI::RegisterMenu(this,
+		// const char* name, bool flag, factory) inserts into menuMap and fills
+		// the slot (see UIMenuEntry). Restore via the ID once it is filled —
+		// do NOT mutate the map inline; inserts take the engine's global lock
+		// and its grow path.
 		template <class T>
 			requires(std::derived_from<T, IMenu>)
 		bool RegisterMenu(const BSFixedString& a_name)
 		{
-			if (menuMap.contains(a_name)) {
-				return false;
-			}
-
-			auto RegisterMenuImpl = [](Scaleform::Ptr<IMenu>* a_menu) {
-				using func_t = Scaleform::Ptr<IMenu>*(Scaleform::Ptr<IMenu>*, T*);
-				static REL::Relocation<func_t> func{ ID::UI::RegisterMenu };
-				func(a_menu, new T());
-				return a_menu;
-			};
-
-			menuMap[a_name].initFunc = RegisterMenuImpl;
-			return true;
+			...
 		}
 #endif
 
@@ -171,13 +226,21 @@ namespace RE
 		// qword resolving to an in-module IMenu vtable. This also matches the
 		// Ghidra UI_DispatchTranslatedInputToChildReceivers / UI_FindActiveMenuEntryByPointer findings.
 		BSTArray<Scaleform::Ptr<IMenu>> menuArray;      // 430
-		// 0x440 holds a second BSTArray header (count=0/cap=4 in the snapshot)
-		// plus further unmapped fields; left opaque until reverse-engineered.
-		std::uint8_t                    pad440[0xB8];   // 440
+		// Second BSTArray (count=0, cap=4 with live heap data in both probe
+		// snapshots); element type not yet identified.
+		BSTArray<void*>                 unkArray440;    // 440
+		// RUNTIME-PROVEN (MenuMapProbe, 2026-06-09): name->menu registration
+		// map. Lookup base UI+0x450 (UI::GetMenu 0x142544560), insert base
+		// UI+0x458 (UI::RegisterMenu 0x142546020 -> 0x142548940); entries at
+		// UI+0x488, bucket count at UI+0x490, free count at UI+0x498.
+		UIMenuNameMap                   menuMap;        // 450
+		std::uint8_t                    pad4A8[0x50];   // 4A8
 		uint16_t                        unk4F8;         // 4F8
 		bool                            menusVisible;   // 4FA
 	};
 	static_assert(offsetof(UI, menuStack) == 0x3F0);
 	static_assert(offsetof(UI, menuArray) == 0x430);
+	static_assert(offsetof(UI, menuMap) == 0x450);
+	static_assert(offsetof(UI, menuMap) + offsetof(UI::UIMenuNameMap, entries) == 0x488);
 	static_assert(offsetof(UI, menusVisible) == 0x4FA);
 }
