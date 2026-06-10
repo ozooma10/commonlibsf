@@ -35,14 +35,23 @@ namespace RE
 	//   +0x20  BSTEventSource band, 0x28 stride (event order matches below)
 	// So in Starfield, BSTSingletonSDM is polymorphic — a vtable was observed at
 	// UI+0x00 and the SDM's own bases land at +0x08/+0x09 — making it a 0x10
-	// subobject. CommonLibSF's BSTSingletonSDM template (BSTSingleton.h) is an
-	// empty, non-polymorphic placeholder, so it cannot be used as the base here
-	// without collapsing the layout; this opaque stand-in models the compiled
-	// subobject for UI only. Do not generalize to other BSTSingletonSDM users
-	// without per-class proof.
+	// subobject.
+	//
+	// FOLLOW-UP (2026-06-09, session 2, static vtable analysis): this stand-in
+	// IS the compiled BSTSingletonSDM<UI, BSTSingletonSDMOpStaticBuffer> — the
+	// engine's class hierarchy is identical to CommonLibSF's template nesting;
+	// the ONLY difference is that the engine's BSTSingletonSDM declares exactly
+	// one virtual: the destructor. Proof: UI's primary (offset-0) vtable at
+	// 0x144D824B8 has exactly ONE slot (the next COL begins at +0x08), and that
+	// slot is UI's scalar deleting destructor (0x142540b10 -> calls UI::~UI
+	// 0x142540b60, then free(this, 0x540, 0x40)). CommonLibSF's template
+	// (BSTSingleton.h) merely lacks `virtual ~BSTSingletonSDM() = default;`.
+	// EngineShapeSDM_Mirror in src/Test/UILayoutTests.cpp proves the corrected
+	// template reproduces this 0x10 layout under MSVC. This stand-in stays until
+	// the global template fix + re-pad of all deriving headers is done.
 	struct BSTSingletonSDM_UI
 	{
-		virtual ~BSTSingletonSDM_UI() = default;  // 00 — vtable observed at UI+0x00
+		virtual ~BSTSingletonSDM_UI() = default;  // 00 — the SDM's single virtual (slot 0 = deleting dtor)
 		std::uint8_t sdm08[8];                    // 08 — SDM bases per RTTI (+0x08/+0x09), padded
 	};
 	static_assert(sizeof(BSTSingletonSDM_UI) == 0x10);
@@ -226,21 +235,46 @@ namespace RE
 		// qword resolving to an in-module IMenu vtable. This also matches the
 		// Ghidra UI_DispatchTranslatedInputToChildReceivers / UI_FindActiveMenuEntryByPointer findings.
 		BSTArray<Scaleform::Ptr<IMenu>> menuArray;      // 430
-		// Second BSTArray (count=0, cap=4 with live heap data in both probe
-		// snapshots); element type not yet identified.
-		BSTArray<void*>                 unkArray440;    // 440
+		// RUNTIME-PROVEN (MenusToAdvanceProbe worker-thread race, 2026-06-09):
+		// transient per-tick list of menus whose movies get advanced. The
+		// per-frame update (0x142544860) filters menuArray by IMenu flags
+		// (+0xC0) / priority (+0x110), appends survivors here (Scaleform
+		// AddRef), then iterates calling 0x142556050(menu, advanceDelta) which
+		// works on menu->uiMovie; entries are released and the array emptied
+		// within the same tick, so same-thread reads always see count == 0.
+		// Live capture: all entries pointer-identical to menuArray members.
+		BSTArray<Scaleform::Ptr<IMenu>> menusToAdvance;  // 440
 		// RUNTIME-PROVEN (MenuMapProbe, 2026-06-09): name->menu registration
 		// map. Lookup base UI+0x450 (UI::GetMenu 0x142544560), insert base
 		// UI+0x458 (UI::RegisterMenu 0x142546020 -> 0x142548940); entries at
 		// UI+0x488, bucket count at UI+0x490, free count at UI+0x498.
 		UIMenuNameMap                   menuMap;        // 450
-		std::uint8_t                    pad4A8[0x50];   // 4A8
+		std::uint8_t                    pad4A8[0x38];   // 4A8
+		// Fields below observed live + in the per-frame update (0x142544860):
+		std::uint64_t                   unk4E0;         // 4E0 — QPC timestamp of the previous update tick
+		std::uint64_t                   unk4E8;         // 4E8
+		float                           unk4F0;         // 4F0 — same value as advanceDelta in every observation
+		float                           advanceDelta;   // 4F4 — dt (seconds) passed to the per-menu movie advance
 		uint16_t                        unk4F8;         // 4F8
 		bool                            menusVisible;   // 4FA
+		// EXE-PROVEN (2026-06-09): UI's scalar deleting destructor (vtable slot
+		// 0, 0x142540b10) frees with free(this, 0x540, 0x40) — the engine
+		// object is 0x540 bytes, 0x40-aligned.
+		std::uint8_t                    pad4FB[5];      // 4FB
+		std::uint64_t                   unk500;         // 500 — ms uptime counter; passed (with advanceDelta) into IMenu vfunc +0x58
+		std::uint64_t                   unk508;         // 508 — ms counter (same value as unk500 in observations)
+		std::uint8_t                    pad510[0x28];   // 510
+		std::uint8_t                    unk538;         // 538 — busy/guard byte xchg'd around the advance loop
+		std::uint8_t                    pad539[7];      // 539
 	};
 	static_assert(offsetof(UI, menuStack) == 0x3F0);
 	static_assert(offsetof(UI, menuArray) == 0x430);
+	static_assert(offsetof(UI, menusToAdvance) == 0x440);
 	static_assert(offsetof(UI, menuMap) == 0x450);
+	static_assert(offsetof(UI, advanceDelta) == 0x4F4);
+	static_assert(offsetof(UI, unk500) == 0x500);
+	static_assert(offsetof(UI, unk538) == 0x538);
 	static_assert(offsetof(UI, menuMap) + offsetof(UI::UIMenuNameMap, entries) == 0x488);
 	static_assert(offsetof(UI, menusVisible) == 0x4FA);
+	static_assert(sizeof(UI) == 0x540);
 }
