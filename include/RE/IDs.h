@@ -338,6 +338,12 @@ namespace RE::ID
 		}
 	}
 
+	namespace BSService::TaskQueue
+	{
+		inline constexpr REL::ID Singleton{ 883606 };  // 0x5E796A8 g_TaskQueueHolder: ptr -> stream holder ([holder] = command stream at Main+0x40)
+		inline constexpr REL::ID QueueTask{ 100121 };  // 0x18CD0D0 (holder, QueuedDelegate**) - steals the ref when it enqueues
+	}
+
 	namespace BSSpinLock
 	{
 		inline constexpr REL::ID Lock{ 123819 };

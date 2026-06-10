@@ -210,6 +210,7 @@
 #include "RE/B/BSReflection.h"
 #include "RE/B/BSResourceEnums.h"
 #include "RE/B/BSScriptUtil.h"
+#include "RE/B/BSService.h"
 #include "RE/B/BSStorage.h"
 #include "RE/B/BSStringPool.h"
 #include "RE/B/BSStringT.h"
