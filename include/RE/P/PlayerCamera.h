@@ -117,7 +117,7 @@ namespace RE
 		}
 
 		// members
-		std::byte unk98[0x188 - 0x98];                // 098
+		std::byte unkA0[0x188 - 0xA0];                // 0A0
 		void*     cameraStates[CameraState::kTotal];  // 188
 
 		// ...

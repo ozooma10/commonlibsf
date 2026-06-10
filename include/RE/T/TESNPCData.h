@@ -11,8 +11,8 @@ namespace RE
 namespace RE::TESNPCData
 {
 	class ChargenDataModel :
-		public IDataModel,
-		public BSTSingletonSDM<ChargenDataModel>
+		public IDataModel,                        // 00
+		public BSTSingletonSDM<ChargenDataModel>  // 10
 	{
 	public:
 		SF_RTTI_VTABLE(TESNPCData__ChargenDataModel);
