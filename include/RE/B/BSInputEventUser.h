@@ -51,8 +51,13 @@ namespace RE
 		virtual ~InputEvent() = default;  // 00
 
 		// add
-		virtual bool                HasIDCode() const { return false; }
-		virtual const BSFixedString QUserEvent() const { return ""; }
+		virtual bool HasIDCode() const { return false; }  // 01
+
+		virtual const BSFixedString& QUserEvent() const  // 02
+		{
+			static const BSFixedString empty;
+			return empty;
+		}
 
 		// members
 		DeviceType    deviceType{ DeviceType::kNone };             // 08
@@ -65,6 +70,9 @@ namespace RE
 	};
 	static_assert(sizeof(InputEvent) == 0x28);
 
+	class ICanBeChorded;
+	class ICanBeDebounced;
+
 	class IDEvent :
 		public InputEvent
 	{
@@ -74,12 +82,17 @@ namespace RE
 		virtual ~IDEvent() = default;  // 00
 
 		// override (InputEvent)
-		virtual bool HasIDCode() const override { return true; }
+		virtual bool HasIDCode() const override { return true; }  // 01
 
-		virtual const BSFixedString QUserEvent() const override
+		virtual const BSFixedString& QUserEvent() const override  // 02
 		{
-			return disabled ? "DISABLED" : strUserEvent;
+			static const BSFixedString disabledName{ "DISABLED" };
+			return disabled ? disabledName : strUserEvent;
 		}
+
+		// add
+		virtual ICanBeDebounced* AsICanBeDebounced() { return nullptr; }  // 03
+		virtual ICanBeChorded*   AsICanBeChorded() { return nullptr; }    // 04
 
 		// members
 		BSFixedString strUserEvent;       // 28
@@ -93,28 +106,32 @@ namespace RE
 	public:
 		SF_RTTI(ICanBeChorded);
 
-		// members
-		std::uint64_t pad00;
+		virtual ~ICanBeChorded() = default;  // 00
 	};
+	static_assert(sizeof(ICanBeChorded) == 0x8);
 
-	class ICanBeDebounced :
-		public ICanBeChorded
+	class ICanBeDebounced
 	{
 	public:
 		SF_RTTI(ICanBeDebounced);
 
-		// members
-		std::uint64_t pad00;
+		virtual ~ICanBeDebounced() = default;  // 00
 	};
+	static_assert(sizeof(ICanBeDebounced) == 0x8);
 
 	class ButtonEvent :
-		public IDEvent,
-		public ICanBeDebounced
+		public IDEvent,          // 00
+		public ICanBeDebounced,  // 38
+		public ICanBeChorded     // 40
 	{
 	public:
 		SF_RTTI_VTABLE(ButtonEvent);
 
 		virtual ~ButtonEvent() = default;  // 00
+
+		// override (IDEvent)
+		virtual ICanBeDebounced* AsICanBeDebounced() override { return this; }  // 03
+		virtual ICanBeChorded*   AsICanBeChorded() override { return this; }    // 04
 
 		// members
 		float value{ 0.0f };         // 48
@@ -123,6 +140,7 @@ namespace RE
 		void* debounceManager;       // 58
 	};
 	static_assert(sizeof(ButtonEvent) == 0x60);
+	static_assert(offsetof(ButtonEvent, value) == 0x48);
 
 	class BSInputEventUser
 	{
