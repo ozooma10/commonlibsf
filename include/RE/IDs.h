@@ -1228,6 +1228,12 @@ namespace RE::ID
 		inline constexpr REL::ID GetEventSource{ 0 };  // 139097
 	}
 
+	namespace MovementControllerNPC
+	{
+		inline constexpr REL::ID SetAnimationDriven{ 135316 };
+		inline constexpr REL::ID SetMotionDriven{ 135315 };
+	}
+
 	namespace MissionMenu_ShowItemLocation
 	{
 		inline constexpr REL::ID GetEventSource{ 0 };  // 139100

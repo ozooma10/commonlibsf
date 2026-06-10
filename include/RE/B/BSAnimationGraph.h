@@ -7,18 +7,27 @@
 
 namespace RE
 {
+	class BGSAnimationPathImplementation;
 	class BSAnimationGraphEvent;
+	class BSFadeNode;
 	struct BSMovementDataChangedEvent;
 	struct BSSubGraphActivationUpdate;
 	class BSTransformDeltaEvent;
 	class BSAnimationUpdateData;
+	class IPostAnimationChannelUpdateFunctor;
+	class NiTransform;
 
+	// The event sources come first and BSIntrusiveRefCounted last: the engine
+	// places the sources at 0x00/0x28/0x50/0x78 and the refcount at 0xA0
+	// (RTTI base map). Declaring the refcount first makes MSVC move the first
+	// event source to offset 0 anyway and shifts the other three sources and
+	// the refcount to the wrong offsets.
 	class BSAnimationGraph :
-		public BSIntrusiveRefCounted,
-		public BSTEventSource<BSAnimationGraphEvent>,
-		public BSTEventSource<BSMovementDataChangedEvent>,
-		public BSTEventSource<BSSubGraphActivationUpdate>,
-		public BSTEventSource<BSTransformDeltaEvent>
+		public BSTEventSource<BSAnimationGraphEvent>,       // 00
+		public BSTEventSource<BSMovementDataChangedEvent>,  // 28
+		public BSTEventSource<BSSubGraphActivationUpdate>,  // 50
+		public BSTEventSource<BSTransformDeltaEvent>,       // 78
+		public BSIntrusiveRefCounted                        // A0
 	{
 	public:
 		virtual ~BSAnimationGraph();
@@ -29,7 +38,12 @@ namespace RE
 		virtual void Update(BSAnimationUpdateData& a_updateData);  // 04
 		virtual void Unk_05();                                     // 05
 		virtual void Unk_06();                                     // 06
-		virtual void Unk_07();                                     // 07
+
+		// Post-update pose harvest: runs 1:1 after every Update (vfunc 04) and
+		// applies the generated pose to the rig buffers / node locals when
+		// a_updateData.modelNode is set. A pose written after Update returns is
+		// overwritten here.
+		virtual void GenerateOutputPose(BSAnimationUpdateData& a_updateData, void* a_eventListOut);  // 07
 		virtual void Unk_08();                                     // 08
 		virtual void Unk_09();                                     // 09
 		virtual void Unk_0A();                                     // 0A
@@ -69,15 +83,39 @@ namespace RE
 		virtual void Unk_2C();                                     // 2C
 	};
 
+	static_assert(sizeof(BSAnimationGraph) == 0xA8);
+
 	class AnimationManager : public BSAnimationGraph
 	{
 	public:
 		virtual ~AnimationManager();
 
-		std::byte unkB0[0x3C0 - 0xB0];  // B0
+		// members
+		std::byte                           unkA8[0x218];        // A8
+		BGSAnimationPathImplementation*     animationPath;       // 2C0 - its reference member identifies the managed actor
+		std::uint64_t                       unk2C8;              // 2C8
+		IPostAnimationChannelUpdateFunctor* postUpdateFunctor;   // 2D0 - swapped in from the update data by Update (vfunc 04)
+		float                               sampleQuantum;       // 2D8 - min sample interval over the channel objects
+		std::uint32_t                       unk2DC;              // 2DC - sample countdown
+		std::uint32_t                       unk2E0;              // 2E0 - interpolation gate
+		std::uint32_t                       unk2E4;              // 2E4 - interpolation gate
+		std::uint32_t                       prevPoseCount;       // 2E8
+		std::uint32_t                       unk2EC;              // 2EC
+		NiTransform*                        prevPoseSnapshot;    // 2F0 - manager-owned pose snapshot consumed by GenerateOutputPose
+		std::uint32_t                       currPoseCount;       // 2F8
+		std::uint32_t                       unk2FC;              // 2FC
+		NiTransform*                        currPoseSnapshot;    // 300 - rewritten by every GenerateOutputPose harvest
+		std::byte                           unk308[0x28];        // 308
+		BSFadeNode*                         rootNode;            // 330
+		std::byte                           unk338[0x4C];        // 338
+		float                               lastUpdateDelta;     // 384
+		std::uint32_t                       unk388;              // 388
+		std::uint32_t                       updateCount;         // 38C
+		std::byte                           unk390[0x30];        // 390
 	};
-	// FIXME: compiler doesn't recognize vtable pointer as part of the size, but intellisense does.
-	static_assert(sizeof(AnimationManager) == 0x3C0 - 0x8);
+	static_assert(offsetof(AnimationManager, animationPath) == 0x2C0);
+	static_assert(offsetof(AnimationManager, rootNode) == 0x330);
+	static_assert(sizeof(AnimationManager) == 0x3C0);
 
 	class BSAnimationGraphManager :
 		public BSTEventSink<BSAnimationGraphEvent>,

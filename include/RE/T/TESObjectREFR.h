@@ -11,7 +11,7 @@
 #include "RE/E/ExtraDataList.h"
 #include "RE/I/IAnimationGraphManagerHolder.h"
 #include "RE/I/IKeywordFormBase.h"
-#include "RE/I/IMovementInterface.h"
+#include "RE/I/IMovementProcessMessageInterface.h"
 #include "RE/I/IPostAnimationChannelUpdateFunctor.h"
 #include "RE/N/NiPoint.h"
 #include "RE/N/NiSmartPointer.h"
@@ -96,17 +96,6 @@ namespace RE
 		kCurrencyRegisterShip,
 		kConsumingIngredient
 	};
-
-	class IMovementProcessMessageInterface :
-		public IMovementInterface  // 00
-	{
-	public:
-		~IMovementProcessMessageInterface() override;
-
-		// add
-		virtual void Unk_01();  // 01
-	};
-	static_assert(sizeof(IMovementProcessMessageInterface) == 0x8);
 
 	struct OBJ_REFR
 	{
