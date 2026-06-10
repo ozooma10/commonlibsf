@@ -8,13 +8,9 @@ namespace RE
 {
 	struct ConsoleLogAddEvent;
 
-	// EXE RTTI (2026-06-09, SingletonSdmAuditProbe): BSTSingletonSDM at mdisp
-	// 0x0 (0x10, polymorphic), BSTEventSource<ConsoleLogAddEvent> at mdisp
-	// 0x10 — which the fixed SDM template now produces naturally (the old
-	// empty-SDM math put the source at 0x08).
 	class __declspec(novtable) ConsoleLog :
 		public BSTSingletonSDM<ConsoleLog>,        // 00
-		public BSTEventSource<ConsoleLogAddEvent>  // 10 — exe RTTI mdisp
+		public BSTEventSource<ConsoleLogAddEvent>  // 10
 	{
 	public:
 		SF_RTTI_VTABLE(ConsoleLog);
@@ -64,8 +60,7 @@ namespace RE
 			useConsoleOverlay = a_value;
 		}
 
-		// members — offsets carried over (now consistent with the proven 0x10
-		// source base; not independently re-proven)
+		// members
 		BSStringT<char> buffer;             // 38
 		bool            useConsoleOverlay;  // 48
 	};

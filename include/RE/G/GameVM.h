@@ -103,16 +103,8 @@ namespace RE
 		static_assert(sizeof(DelayFunctor) == 0x10);
 	}
 
-	// EXE RTTI (2026-06-09, SingletonSdmAuditProbe BaseClassArray): the old
-	// header listed BSTSingletonSDM LAST (at 0xA8); the engine has it FIRST at
-	// mdisp 0x0 (0x10 bytes, polymorphic), shifting every other base by +0x10:
-	// IClientVM 0x10, IStackCallbackSaveInterface 0x18, the sink band
-	// 0x20-0x58, the sources at 0x60/0x88, and the final sink at 0xB0. Member
-	// offsets below were shifted +8 accordingly (bases now end at 0xB8 instead
-	// of the old empty-SDM 0xB0) — base map is proven, individual member
-	// offsets are carried over, not independently re-proven.
 	class GameVM :
-		public BSTSingletonSDM<GameVM>,                                            // 0000  exe RTTI mdisp 0x0
+		public BSTSingletonSDM<GameVM>,                                            // 0000
 		public BSScript::IClientVM,                                                // 0010
 		public BSScript::IStackCallbackSaveInterface,                              // 0018
 		public BSTEventSink<BSScript::StatsEvent>,                                 // 0020
@@ -186,9 +178,7 @@ namespace RE
 			return func(a_vm);
 		}
 
-		// members — offsets shifted +8 by the 2026-06-09 SDM/base-map fix
-		// (bases end at 0xB8 now); carried over from the old header, not
-		// individually re-proven.
+		// members
 		std::uint64_t                                                                    unkB8;                          // 00B8
 		std::uint64_t                                                                    unkC0;                          // 00C0
 		std::uint64_t                                                                    unkC8;                          // 00C8

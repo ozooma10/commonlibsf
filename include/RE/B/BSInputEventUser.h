@@ -53,12 +53,6 @@ namespace RE
 		// add
 		virtual bool HasIDCode() const { return false; }  // 01
 
-		// FIXED (2026-06-09, exe 1.16.242): the engine's QUserEvent (vtable
-		// slot 2, e.g. 0x1422D95F0 for the IDEvent family) returns
-		// `const BSFixedString&` in rax — `lea rax,[rcx+0x28]` or the address
-		// of a static "DISABLED" string. The previous by-value declaration
-		// made callers pass a hidden return-slot and then read uninitialized
-		// stack as the result (observed live: garbage pool pointers).
 		virtual const BSFixedString& QUserEvent() const  // 02
 		{
 			static const BSFixedString empty;
@@ -90,20 +84,13 @@ namespace RE
 		// override (InputEvent)
 		virtual bool HasIDCode() const override { return true; }  // 01
 
-		// RUNTIME-PROVEN (2026-06-09): engine slot 2 (0x1422D95F0, shared by
-		// the whole IDEvent family) is exactly `disabled ? &static_DISABLED :
-		// &strUserEvent` — confirming strUserEvent@0x28 and disabled@0x34.
 		virtual const BSFixedString& QUserEvent() const override  // 02
 		{
 			static const BSFixedString disabledName{ "DISABLED" };
 			return disabled ? disabledName : strUserEvent;
 		}
 
-		// add — slots 3/4 in the engine vtables (all observed IDEvent-family
-		// vtables have 5 slots; non-ButtonEvent ones point both slots at a
-		// shared `xor eax,eax; ret`). ButtonEvent overrides them to return its
-		// ICanBeDebounced (+0x38) / ICanBeChorded (+0x40) bases. Names are
-		// role-derived, not from the exe.
+		// add
 		virtual ICanBeDebounced* AsICanBeDebounced() { return nullptr; }  // 03
 		virtual ICanBeChorded*   AsICanBeChorded() { return nullptr; }    // 04
 
@@ -114,11 +101,6 @@ namespace RE
 	};
 	static_assert(sizeof(IDEvent) == 0x38);
 
-	// EXE RTTI (2026-06-09, ButtonEvent BaseClassArray): ICanBeDebounced
-	// (mdisp 0x38) and ICanBeChorded (mdisp 0x40) are SIBLING bases of
-	// ButtonEvent — numContainedBases == 0 for both, so the previous
-	// "ICanBeDebounced : ICanBeChorded" nesting was wrong — and both are
-	// polymorphic (live ButtonEvent holds vptrs at +0x38/+0x40).
 	class ICanBeChorded
 	{
 	public:
@@ -139,17 +121,15 @@ namespace RE
 
 	class ButtonEvent :
 		public IDEvent,          // 00
-		public ICanBeDebounced,  // 38 — exe RTTI mdisp
-		public ICanBeChorded     // 40 — exe RTTI mdisp
+		public ICanBeDebounced,  // 38
+		public ICanBeChorded     // 40
 	{
 	public:
 		SF_RTTI_VTABLE(ButtonEvent);
 
 		virtual ~ButtonEvent() = default;  // 00
 
-		// override (IDEvent) — engine slots 3/4 on ButtonEvent's vtable are
-		// `lea rax,[rcx+0x38]` / `lea rax,[rcx+0x40]` (0x140A37CA0 /
-		// 0x1422DCBB0).
+		// override (IDEvent)
 		virtual ICanBeDebounced* AsICanBeDebounced() override { return this; }  // 03
 		virtual ICanBeChorded*   AsICanBeChorded() override { return this; }    // 04
 

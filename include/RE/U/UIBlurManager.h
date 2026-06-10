@@ -10,10 +10,6 @@ namespace RE
 	class TESImageSpaceModifier;
 	class UIBlurManager;
 
-	// NOTE (2026-06-09): this header used to carry a per-class specialization
-	// of BSTSingletonSDM adding the virtual dtor (vptr, 0x10). That shape was
-	// proven engine-wide (7-singleton RTTI audit) and is now the primary
-	// template in BSTSingleton.h, so the specialization was removed.
 	static_assert(sizeof(BSTSingletonSDM<UIBlurManager>) == 0x10);
 
 	struct DefaultObjectsReadyEvent

@@ -5,15 +5,8 @@
 
 namespace RE
 {
-	// EXE RTTI + ctor disasm (2026-06-09): the BaseClassArray (exe_query
-	// `vtable Calendar --bases`) proves BSTSingletonSDM at mdisp 0x0 as the
-	// only base (1-slot vtable 0x144CB5340), and the magic-static initializer
-	// behind the accessor 0x14059b7e0 PROVES the member offsets: it stores the
-	// looked-up TESGlobal* sequence at instance+0x10/+0x18/+0x20/... (instance
-	// 0x145C1CA28; the Calendar* global it publishes is RVA 0x5FE4D28 =
-	// ID 937673).
 	class Calendar :
-		public BSTSingletonSDM<Calendar>  // 00 — exe RTTI mdisp
+		public BSTSingletonSDM<Calendar>  // 00
 	{
 	public:
 		[[nodiscard]] static auto GetSingleton()
@@ -67,7 +60,7 @@ namespace RE
 			return gameYear ? static_cast<std::uint32_t>(gameYear->value) : 77u;
 		}
 
-		// members — PROVEN by the initializer disasm (see class comment)
+		// members
 		TESGlobal*    gameYear;         // 10
 		TESGlobal*    gameMonth;        // 18
 		TESGlobal*    gameDay;          // 20

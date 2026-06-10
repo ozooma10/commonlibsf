@@ -62,7 +62,7 @@ namespace RE
 		public BSTEventSink<Spaceship::DockEvent>,       // 78
 		public BSTEventSink<Spaceship::LandedSetEvent>,  // 80
 		public BSTEventSink<BSWorldOriginShiftEvent>,    // 88
-		public BSTSingletonSDM<PlayerCamera>             // 90 — exe RTTI mdisp; spans 0x90..0xA0 (polymorphic, 2026-06-09 audit), so members start at 0xA0
+		public BSTSingletonSDM<PlayerCamera>             // 90
 	{
 	public:
 		SF_RTTI_VTABLE(PlayerCamera);
@@ -116,11 +116,7 @@ namespace RE
 			return (currentState == cameraStates[a_cameraState]);
 		}
 
-		// members — start at 0xA0 (RTTI: SDM spans 0x90..0xA0). cameraStates
-		// RUNTIME-PROVEN at 0x188 (live peek 2026-06-10): TESCamera::
-		// currentState matched cameraStates[kThirdPerson] (index 20) and,
-		// after the idle vanity cam engaged, cameraStates[kAutoVanity]
-		// (index 1) — both against an array based at +0x188.
+		// members
 		std::byte unkA0[0x188 - 0xA0];                // 0A0
 		void*     cameraStates[CameraState::kTotal];  // 188
 
