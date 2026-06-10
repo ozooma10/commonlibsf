@@ -184,10 +184,9 @@ namespace RE
 		std::uint64_t                                                                    unkC8;                          // 00C8
 		std::uint64_t                                                                    unkD0;                          // 00D0
 		std::uint64_t                                                                    unkD8;                          // 00D8
-		std::uint64_t                                                                    unkE0;                          // 00E0
-		BSTSmartPointer<BSScript::IVirtualMachine>                                       impl;                           // 00E8
-		BSScript::IVMSaveLoadInterface*                                                  saveLoadInterface;              // 00F0
-		BSScript::IVMDebugInterface*                                                     debugInterface;                 // 00F8
+		BSTSmartPointer<BSScript::IVirtualMachine>                                       impl;                           // 00E0
+		BSScript::IVMSaveLoadInterface*                                                  saveLoadInterface;              // 00E8
+		BSScript::IVMDebugInterface*                                                     debugInterface;                 // 00F0
 		BSScript::SimpleAllocMemoryPagePolicy                                            memoryPagePolicy;               // 0128
 		BSScript::CompiledScriptLoader                                                   scriptLoader;                   // 0160
 		GameScript::Logger                                                               logger;                         // 01E8
@@ -229,5 +228,5 @@ namespace RE
 		std::uint32_t                                                                    lastWarningTime;                // 8970
 		std::uint32_t                                                                    overflowFlags;                  // 8978
 	};
-	static_assert(sizeof(GameVM) == 0x8980);
+	static_assert(sizeof(GameVM) == 0x8978);
 }
