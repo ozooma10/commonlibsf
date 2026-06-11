@@ -1637,7 +1637,10 @@ namespace RE::ID
 
 	namespace SaveLoadEvent
 	{
-		inline constexpr REL::ID GetEventSource{ 0 };  // 129747
+		// 1.16.242 re-proven 2026-06-10: magic-static returning BSTGlobalEvent::EventSource<SaveLoadEvent>
+		// singleton @ ID 939107 (vtable ID 433957). The old comment-trail ID 129747 now resolves to
+		// unrelated MaterialTraitBinding code — versionlib drift.
+		inline constexpr REL::ID GetEventSource{ 82710 };
 	}
 
 	namespace Scaleform
@@ -2295,7 +2298,11 @@ namespace RE::ID
 
 	namespace TESLoadGameEvent
 	{
-		inline constexpr REL::ID GetEventSource{ 0 };  // 1868757
+		// 1.16.242 re-proven 2026-06-10: magic-static (atexit-only; source is constant-initialized)
+		// returning the static BSTEventSource<TESLoadGameEvent> @ ID 838425 (vtable ID 413741).
+		// Fired once per completed save load from the LoadGame finalizer (0x141847430 on 1.16.242).
+		// The old comment-trail ID 1868757 is out of range in the 1.16.242 versionlib.
+		inline constexpr REL::ID GetEventSource{ 64149 };
 	}
 
 	namespace TESLockChangedEvent
