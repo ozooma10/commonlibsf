@@ -20,10 +20,14 @@ namespace RE
 	{
 	public:
 		// members
-		BSTArray<TESFile*> files;       // 00
-		BSTArray<TESFile*> smallFiles;  // 10
+		// Tier order live-proven on 1.16.242 (2026-06-10) via the TESFile
+		// compile-index byte at +0x1B7: files = 0..n, smallFiles = 0xFE,
+		// mediumFiles = 0xFD. Starfield has three compiled tiers, not two.
+		BSTArray<TESFile*> files;        // 00
+		BSTArray<TESFile*> smallFiles;   // 10 - 0xFE light
+		BSTArray<TESFile*> mediumFiles;  // 20 - 0xFD medium
 	};
-	static_assert(sizeof(TESFileCollection) == 0x20);
+	static_assert(sizeof(TESFileCollection) == 0x30);
 
 	class TESDataHandler :
 		public BSTEventSource<BGSHotloadCompletedEvent>  // 0000
@@ -67,25 +71,10 @@ namespace RE
 		std::uint64_t          unk14E0;                                           // 14E0
 		std::uint64_t          unk14E8;                                           // 14E8
 		BSSimpleList<TESFile*> files;                                             // 14F0
-		TESFileCollection      compiledFileCollection;                            // 1500
-		std::uint64_t          unk1520;                                           // 1520
-		std::uint64_t          unk1528;                                           // 1528
-		std::uint64_t          unk1530;                                           // 1530
-		std::uint64_t          unk1538;                                           // 1538
-		std::uint64_t          unk1540;                                           // 1540
-		std::uint64_t          unk1548;                                           // 1548
-		std::uint64_t          unk1550;                                           // 1550
-		std::uint64_t          unk1558;                                           // 1558
-		std::uint64_t          unk1560;                                           // 1560
-		std::uint64_t          unk1568;                                           // 1568
-		std::uint64_t          unk1570;                                           // 1570
-		std::uint64_t          unk1578;                                           // 1578
-		std::uint64_t          unk1580;                                           // 1580
-		std::uint64_t          unk1588;                                           // 1588
-		std::uint64_t          unk1590;                                           // 1590
-		std::uint64_t          unk1598;                                           // 1598
-		std::uint64_t          unk15A0;                                           // 15A0
-		std::uint64_t          unk15A8;                                           // 15A8
+		std::byte              pad1500[0x80];                                     // 1500 - pre-1.16.242 headers put compiledFileCollection here; live qword dump showed garbage at that offset
+		// Live-proven 2026-06-10 (1.16.242): runtime scan anchored on
+		// 'Starfield.esm' at files[0]->fileName found the collection at +0x1580.
+		TESFileCollection      compiledFileCollection;                            // 1580
 		std::uint64_t          unk15B0;                                           // 15B0
 		std::uint64_t          unk15B8;                                           // 15B8
 		std::uint64_t          unk15C0;                                           // 15C0
