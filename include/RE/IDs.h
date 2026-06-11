@@ -37,9 +37,14 @@ namespace RE::ID
 
 	namespace ActorEquipManager
 	{
-		inline constexpr REL::ID Singleton{ 938503 };  // 879425
-		inline constexpr REL::ID EquipObject{ 0 };     // 151991 -> TODO: Verify 101949 in 1.15
-		inline constexpr REL::ID UnequipObject{ 0 };   // 152007 -> TODO: Verify 101951 in 1.15
+		inline constexpr REL::ID Singleton{ 938503 };      // 879425
+		// 1.16.242 re-proven 2026-06-11 via Papyrus EquipItem/UnequipItem ->
+		// Actor::EquipItem (0x1966A60) -> these singleton call sites. The old
+		// 1.15 candidates survived. Prologue (first 29 bytes, shared):
+		// 48 89 5C 24 18 48 89 4C 24 08 55 56 57 41 54 41 55 41 56 41 57
+		// 48 8D 6C 24 F9 48 81 EC (then E0|D0 = frame size).
+		inline constexpr REL::ID EquipObject{ 101949 };    // RVA 0x19A4C40
+		inline constexpr REL::ID UnequipObject{ 101951 };  // RVA 0x19A5300
 	}
 
 	namespace ActorCellChangeEvent::Event
