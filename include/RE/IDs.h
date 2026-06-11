@@ -2273,12 +2273,18 @@ namespace RE::ID
 
 	namespace TESFormDeleteEvent
 	{
-		inline constexpr REL::ID GetEventSource{ 0 };  // 107166
+		// 1.16.242 proven 2026-06-11: magic-static returning the constant-initialized
+		// static BSTEventSource<TESFormDeleteEvent> @ 0x14597fe40 (vtable 0x144b9c120).
+		// Comment-trail 107166 drifted to an unrelated arg-taking function.
+		inline constexpr REL::ID GetEventSource{ 64137 };
 	}
 
 	namespace TESFormIDRemapEvent
 	{
-		inline constexpr REL::ID GetEventSource{ 0 };  // 107167
+		// 1.16.242 proven 2026-06-11: magic-static returning the constant-initialized
+		// static BSTEventSource<TESFormIDRemapEvent> @ 0x14597fe68 (vtable 0x144b9c0f0).
+		// Comment-trail 107167 drifted. Beside TESFormDeleteEvent(64137)/TESLoadGameEvent(64149).
+		inline constexpr REL::ID GetEventSource{ 64138 };
 	}
 
 	namespace TESFurnitureEvent
