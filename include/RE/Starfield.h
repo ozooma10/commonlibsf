@@ -470,6 +470,7 @@
 #include "RE/T/TESWeightForm.h"
 #include "RE/T/TESWorldSpace.h"
 #include "RE/T/TLS.h"
+#include "RE/T/TransformService.h"
 #include "RE/T/TypeInfo.h"
 #include "RE/U/UI.h"
 #include "RE/U/UIBlurManager.h"
