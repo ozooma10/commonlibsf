@@ -2397,6 +2397,12 @@ namespace RE::ID
 		inline constexpr REL::ID GetEventSource{ 0 };  // 138718
 	}
 
+	namespace TransformService
+	{
+		inline constexpr REL::ID Singleton{ 883606 };
+		inline constexpr REL::ID Request{ 99963 };
+	}
+
 	namespace TryUpdateShipHudTarget::Event
 	{
 		inline constexpr REL::ID GetEventSource{ 0 };  // 137012
