@@ -1204,6 +1204,7 @@ namespace RE::ID
 	namespace Misc
 	{
 		inline constexpr REL::ID DebugNotification{ 0 };        // 138728
+		inline constexpr REL::ID FadeOutGame{ 114430 };         // 0x1EE2740 on 1.16.244; engine impl behind the Papyrus Game.FadeOutGame native (RE-verified, osf-re ui.fader_menu)
 		inline constexpr REL::ID LookupReferenceByHandle{ 0 };  // 72986
 		inline constexpr REL::ID PlayMenuSound{ 0 };            // 167344
 	}

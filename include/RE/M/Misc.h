@@ -16,6 +16,21 @@ namespace RE
 		return func(a_notification, a_soundToPlay, a_cancelIfAlreadyQueued, a_arg4);
 	}
 
+	// Engine impl behind the Papyrus native Game.FadeOutGame (same parameter
+	// order as the Papyrus declaration). Thread-safe: it only enqueues a
+	// FaderData kShow message to "FaderMenu" via UIMessageQueue; the Scaleform
+	// work happens on the UI pump. abStayFaded holds the screen at black until
+	// the next fade-in request; a fade-in (a_fadingOut = false) always
+	// releases, even mid-fade. Engine arg order differs from Papyrus:
+	// (fadingOut, blackFade, fadeDuration, stayFaded, secsBeforeFade,
+	// doneCallback, setGlobalFadedFlag, flags).
+	inline void FadeOutGame(bool a_fadingOut, bool a_blackFade, float a_secsBeforeFade, float a_fadeDuration, bool a_stayFaded)
+	{
+		using func_t = void(bool, bool, float, bool, float, void*, bool, std::uint32_t);
+		static REL::Relocation<func_t> func{ ID::Misc::FadeOutGame };
+		return func(a_fadingOut, a_blackFade, a_fadeDuration, a_stayFaded, a_secsBeforeFade, nullptr, true, 1);
+	}
+
 	inline Setting* GetINISetting(const std::string_view a_name)
 	{
 		const auto iniPrefs = INIPrefSettingCollection::GetSingleton();
