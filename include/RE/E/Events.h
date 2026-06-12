@@ -2631,7 +2631,16 @@ namespace RE
 			static REL::Relocation<func_t> func{ ID::SaveLoadEvent::GetEventSource };
 			return func();
 		}
+
+		// members
+		std::uint32_t elapsedMs;  // 00
+		std::uint32_t unk04;      // 04
+		std::uint32_t unk08;      // 08
+		std::uint8_t  opType;     // 0C
+		std::uint8_t  status;     // 0D
 	};
+	static_assert(offsetof(SaveLoadEvent, opType) == 0xC);
+	static_assert(offsetof(SaveLoadEvent, status) == 0xD);
 
 	struct SecurityMenu_BackOutKey
 	{
