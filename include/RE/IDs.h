@@ -1632,12 +1632,12 @@ namespace RE::ID
 
 	namespace RuntimeComponentDBFactory::ReferenceDetach
 	{
-		inline constexpr REL::ID GetEventSource{ 0 };  // 77128
+		inline constexpr REL::ID GetEventSource{ 40306 };
 	}
 
 	namespace RuntimeComponentDBFactory::ReferenceSet3d
 	{
-		inline constexpr REL::ID GetEventSource{ 0 };  // 88599
+		inline constexpr REL::ID GetEventSource{ 49237 };
 	}
 
 	namespace SaveLoadEvent
