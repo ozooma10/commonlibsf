@@ -173,8 +173,8 @@ namespace RE::ID
 
 	namespace BGSSaveLoadGame
 	{
-		inline constexpr REL::ID SaveGame{ 0 };  // 147515
-		inline constexpr REL::ID LoadGame{ 0 };  // 147564
+		inline constexpr REL::ID SaveGame{ 98376 };
+		inline constexpr REL::ID LoadGame{ 98380 };
 	}
 
 	namespace BGSSaveLoadManager
