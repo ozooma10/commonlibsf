@@ -369,8 +369,8 @@ namespace RE::ID
 			inline constexpr REL::ID GetSingleton{ 139337 };
 		}
 
-		inline constexpr REL::ID GetEntry{ 139352 };
-		inline constexpr REL::ID GetEntryW{ 139354 };
+		inline constexpr REL::ID GetEntry{ 1186742 };
+		inline constexpr REL::ID GetEntryW{ 1186743 };
 	}
 
 	namespace BSStorage
