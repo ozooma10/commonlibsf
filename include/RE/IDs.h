@@ -803,6 +803,11 @@ namespace RE::ID
 		inline constexpr REL::ID GetEventSource{ 0 };  // 132107
 	}
 
+	namespace CreationRendererPrivate::Renderer
+	{
+		inline constexpr REL::ID Singleton{ 944397 };  // g_RendererRoot
+	}
+
 	namespace CriticalHitEvent::Event
 	{
 		inline constexpr REL::ID GetEventSource{ 0 };  // 153653
