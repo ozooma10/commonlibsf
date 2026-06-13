@@ -2623,8 +2623,36 @@ namespace RE
 		static_assert(sizeof(RuntimeComponentDBFactory::ReferenceSet3d) == 0x8);
 	};
 
+	// Begin/end telemetry for every BGSSaveLoadManager save/load op. Fired by the
+	// manager's begin/end helpers (1.16.244: 0x141850940 / 0x1418509c0, IDs 98692/98693);
+	// begin fires on the MAIN thread strictly before any world teardown.
+	// NOT fired for: silent saves (manager request bit 1), new game, Unity/NG+ -
+	// the latter two never enter the manager's request pump.
 	struct SaveLoadEvent
 	{
+		// All FireBegin call sites enumerated on 1.16.242 + 1.16.244; values 0/9/0xA unused.
+		enum class OpType : std::uint8_t
+		{
+			kAutosave = 1,            // request bit 0; begin fires ~2 frames before the save executes
+			kLoadMostRecent = 2,      // death reload / console "loadrecent" (loads name stashed at mgr+0x70)
+			kQuicksave = 3,           // console "qsave" / F5; two-stage like autosave
+			kQuickload = 4,           // console "qload" / F9; newest quicksave
+			kManualSave = 5,          // direct save with explicit name (no pump request pending)
+			kLoad = 6,                // save-menu selection (request obj) or main-menu Continue (newest)
+			kExitSaveToMainMenu = 7,  // console "savequit"
+			kExitSaveToDesktop = 8,   // console "savequitdesktop"
+			kLoadNamedFile = 0xB,     // console "load <name>" / deferred named load (name at mgr+0x940)
+		};
+
+		enum class Status : std::uint8_t
+		{
+			kBegin = 0,                // begin marker; world-replacing op types = load-START signal
+			kLoadSucceeded = 1,
+			kFailed = 3,               // failure/cancel (any op)
+			kSaveCompleted = 4,
+			kLoadDispatchRefused = 5,  // quickload found a file but the load entry refused (op in flight)
+		};
+
 		[[nodiscard]] static BSTEventSource<SaveLoadEvent>* GetEventSource()
 		{
 			using func_t = decltype(&SaveLoadEvent::GetEventSource);
@@ -2633,14 +2661,15 @@ namespace RE
 		}
 
 		// members
-		std::uint32_t elapsedMs;  // 00
-		std::uint32_t unk04;      // 04
-		std::uint32_t unk08;      // 08
-		std::uint8_t  opType;     // 0C
-		std::uint8_t  status;     // 0D
+		std::uint32_t elapsedMs;      // 00 - begin: 0; end: ms since the op started (QPC-based)
+		std::uint32_t fileSizeBytes;  // 04 - size of the save file being written/read (mgr+0x960)
+		std::uint32_t unk08;          // 08 - ms view of a u64 ns accumulator at mgr+0x958, zeroed at op end; writer unidentified
+		OpType        opType;         // 0C
+		Status        status;         // 0D
 	};
 	static_assert(offsetof(SaveLoadEvent, opType) == 0xC);
 	static_assert(offsetof(SaveLoadEvent, status) == 0xD);
+	static_assert(sizeof(SaveLoadEvent) == 0x10);
 
 	struct SecurityMenu_BackOutKey
 	{

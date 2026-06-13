@@ -285,6 +285,18 @@ namespace RE
 		virtual void         Unk_1A0();                                                                              // 1A0
 		virtual void         Unk_1A1();                                                                              // 1A1
 
+		// The engine's own add-then-equip (what Papyrus Actor.EquipItem bottoms out
+		// in, via TaskQueueInterface): looks the form up in the inventory, ADDS it
+		// if missing, then ActorEquipManager::EquipObject with queueEquip=true.
+		// Game-thread only. Proven on 1.16.242 + 1.16.244 (osf-re
+		// gameplay.actor_equipment).
+		void EquipItem(TESBoundObject* a_object, bool a_preventRemoval = false, bool a_silent = false)
+		{
+			using func_t = decltype(&Actor::EquipItem);
+			static REL::Relocation<func_t> func{ ID::Actor::EquipItem };
+			func(this, a_object, a_preventRemoval, a_silent);
+		}
+
 		void EvaluatePackage(bool a_immediate = false, bool a_resetAI = false)
 		{
 			using func_t = decltype(&Actor::EvaluatePackage);

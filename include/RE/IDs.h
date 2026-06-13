@@ -14,6 +14,7 @@ namespace RE::ID
 
 	namespace Actor
 	{
+		inline constexpr REL::ID EquipItem{ 101349 };     // add-if-missing equip; 1.16.244 0x1963F20 / 1.16.242 0x1966A60 (osf-re gameplay.actor_equipment)
 		inline constexpr REL::ID EvaluatePackage{ 0 };    // 150640
 		inline constexpr REL::ID GetActorKnowledge{ 0 };  // 150669
 		inline constexpr REL::ID IsHostileToActor{ 0 };   // 150777
@@ -1864,7 +1865,7 @@ namespace RE::ID
 
 	namespace ShowHUDMessageEvent
 	{
-		inline constexpr REL::ID GetEventSource{ 0 };  // 133512
+		inline constexpr REL::ID GetEventSource{ 86800 };  // re-found from the Papyrus Debug.Notification native; magic-static BSTGlobalEvent::EventSource<ShowHUDMessageEvent> accessor, verified 1.16.242 (0x1491BF0) + 1.16.244 (0x14915A0); static source ID 939372 (osf-re systems.events). Old comment ID 133512 is drift.
 	}
 
 	namespace ShowingQuestMarketTextEvent

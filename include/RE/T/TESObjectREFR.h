@@ -97,6 +97,32 @@ namespace RE
 		kConsumingIngredient
 	};
 
+	class TESObjectREFR;
+
+	// Request consumed by TESObjectREFR::RemoveItem (vfunc 0x8B). Layout proven on
+	// 1.16.242 + 1.16.244 from the engine's two builder sites (the Papyrus
+	// RemoveItem helper's uniqueID branch builds it with inventoryIndex = -1; the
+	// index-identified populate helper fills object/instanceData/extra) and live
+	// use (osf-re gameplay.actor_equipment, 2026-06-12). The engine passes
+	// ITEM_TRANSFER_REASON values kNone (destroy), kSelling, kDropping and
+	// kStoreInContainer through this field; the same enum also annotates the
+	// inventory ADD worker (e.g. kScriptAddItem for Actor::EquipItem's
+	// add-if-missing branch).
+	struct RemoveItemRequest
+	{
+		TESBoundObject*                   object{ nullptr };                            // 00
+		BSTSmartPointer<TBO_InstanceData> instanceData;                                 // 08
+		ExtraDataList*                    extra{ nullptr };                             // 10 - addref'd by the consumer
+		std::int32_t                      inventoryIndex{ -1 };                         // 18 - -1 = identify by {object, instanceData}
+		std::int32_t                      count{ 1 };                                   // 1C
+		ITEM_TRANSFER_REASON              reason{ ITEM_TRANSFER_REASON::kNone };        // 20
+		std::uint32_t                     pad24{ 0 };                                   // 24
+		TESObjectREFR*                    moveTo{ nullptr };                            // 28 - target container for kStoreInContainer
+		NiPoint3*                         dropLocation{ nullptr };                      // 30
+		NiPoint3*                         dropRotation{ nullptr };                      // 38
+	};
+	static_assert(sizeof(RemoveItemRequest) == 0x40);
+
 	struct OBJ_REFR
 	{
 	public:
@@ -181,7 +207,7 @@ namespace RE
 		virtual void         Unk_88();                                                                                                                                                                                                                                                                // 088
 		virtual void         Unk_89();                                                                                                                                                                                                                                                                // 089
 		virtual void         Unk_8A();                                                                                                                                                                                                                                                                // 08A
-		virtual void         Unk_8B();                                                                                                                                                                                                                                                                // 08B
+		virtual void         RemoveItem(std::uint32_t& a_outHandle, const RemoveItemRequest& a_request);                                                                                                                                                                                               // 08B - slot cross-checked vs VTABLE IDs 413258/451614 on 1.16.242+.244; impl also returns &a_outHandle in rax
 		virtual void         Unk_8C();                                                                                                                                                                                                                                                                // 08C
 		virtual void         Unk_8D();                                                                                                                                                                                                                                                                // 08D
 		virtual void         Unk_8E();                                                                                                                                                                                                                                                                // 08E

@@ -9,6 +9,13 @@
 
 namespace RE
 {
+	// DO NOT CALL: ID::Misc::DebugNotification is {0} and this FO4-shaped free
+	// function no longer exists on 1.16.x. The Papyrus Debug.Notification native
+	// (1.16.244 0x142003A60) inlines the work: it fires a ShowHUDMessageEvent
+	// {text, sound = none, canThrottle = true, isWarning = false} through
+	// BSTGlobalEvent (GetEventSource ID 86800, verified .242 + .244). Use
+	// RE::ShowHUDMessageEvent (Events.h) instead; an event-firing replacement
+	// for this helper is pending a runtime proof round (osf-re systems.events).
 	inline void DebugNotification(const char* a_notification, const char* a_soundToPlay = nullptr, bool a_cancelIfAlreadyQueued = true, bool a_arg4 = false)
 	{
 		using func_t = decltype(&DebugNotification);
