@@ -51,11 +51,16 @@ namespace RE
 	public:
 		~BSTEventSource() override = default;  // 00
 
-		void Notify(void* a_event)
+		// The engine's Notify takes a type-erased functor, NOT the event itself:
+		// the dispatcher invokes visitor->vtbl[2](visitor, sink) for every
+		// registered sink. Passing the raw event here (the old void* signature)
+		// treated the event's first qword as a vtable.
+		void Notify(const Event& a_event)
 		{
-			using func_t = decltype(&BSTEventSource::Notify);
+			NotifyVisitor visitor{ &a_event, this };
+			using func_t = void (*)(BSTEventSource*, void*);
 			static REL::Relocation<func_t> func{ ID::BSTEventSource::Notify };
-			return func(this, a_event);
+			func(this, &visitor);
 		}
 
 		void RegisterSink(BSTEventSink<Event>* a_sink)
@@ -72,6 +77,32 @@ namespace RE
 			return func(this, a_sink);
 		}
 
+	private:
+		// Mirrors the engine's stl::local_function visitor layout. The notify
+		// dispatcher only ever calls vtable slot 2 (Invoke) on this object;
+		// slots 0/1 are never used on the notify path (1.16.244 dispatcher
+		// 0x1422C91C0, osf-re systems.events).
+		struct NotifyVisitor
+		{
+			NotifyVisitor(const Event* a_event, BSTEventSource* a_source) noexcept :
+				event(a_event), source(a_source)
+			{}
+
+			virtual ~NotifyVisitor() = default;  // 00
+
+			virtual void Unk01() {}  // 01 - reserved, never called during Notify
+
+			virtual BSEventNotifyControl Invoke(BSTEventDetail::SinkBase* a_sink)  // 02
+			{
+				return static_cast<BSTEventSink<Event>*>(a_sink)->ProcessEvent(*event, source);
+			}
+
+			// members
+			const Event*    event;   // 08
+			BSTEventSource* source;  // 10
+		};
+
+	public:
 		// members
 		BSTArray<BSTEventSink<Event>> sinks;  // 08
 		std::uint32_t                 unk18;  // 18
