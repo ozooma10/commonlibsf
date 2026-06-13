@@ -44,8 +44,8 @@ namespace RE::ID
 		// 1.15 candidates survived. Prologue (first 29 bytes, shared):
 		// 48 89 5C 24 18 48 89 4C 24 08 55 56 57 41 54 41 55 41 56 41 57
 		// 48 8D 6C 24 F9 48 81 EC (then E0|D0 = frame size).
-		inline constexpr REL::ID EquipObject{ 101949 };    // RVA 0x19A4C40
-		inline constexpr REL::ID UnequipObject{ 101951 };  // RVA 0x19A5300
+		inline constexpr REL::ID EquipObject{ 101949 };    // .244 RVA 0x19A20C0 (.242 0x19A4C40)
+		inline constexpr REL::ID UnequipObject{ 101951 };  // .244 RVA 0x19A2780 (.242 0x19A5300)
 	}
 
 	namespace ActorCellChangeEvent::Event
@@ -346,8 +346,8 @@ namespace RE::ID
 
 	namespace BSService::TaskQueue
 	{
-		inline constexpr REL::ID Singleton{ 883606 };  // 0x5E796A8 g_TaskQueueHolder: ptr -> stream holder ([holder] = command stream at Main+0x40)
-		inline constexpr REL::ID QueueTask{ 100121 };  // 0x18CD0D0 (holder, QueuedDelegate**) - steals the ref when it enqueues
+		inline constexpr REL::ID Singleton{ 883606 };  // .244 0x5E71728 (.242 0x5E796A8) g_TaskQueueHolder: ptr -> stream holder ([holder] = command stream at Main+0x40)
+		inline constexpr REL::ID QueueTask{ 100121 };  // .244 RVA 0x18CA630 (.242 0x18CD0D0) (holder, QueuedDelegate**) - steals the ref when it enqueues
 	}
 
 	namespace BSSpinLock
