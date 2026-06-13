@@ -91,14 +91,28 @@ namespace RE
 		}
 
 		// members
-		std::byte        m_pad008[0x080];          // 0x008
-		BSSpinLock       m_cacheLock;              // 0x088
-		USER_EVENT_FLAG  m_cachedUserEventFlags;   // 0x090
-		OTHER_EVENT_FLAG m_cachedOtherEventFlags;  // 0x094
-		USER_EVENT_FLAG  m_forcedUserEventFlags;   // 0x098
-		OTHER_EVENT_FLAG m_forcedOtherEventFlags;  // 0x09C
-		BSSpinLock       m_layerLock;              // 0x0A0
-												   // TODO: more members
+		std::byte            m_pad008[0x080];          // 0x008
+		BSSpinLock           m_cacheLock;              // 0x088
+		USER_EVENT_FLAG      m_cachedUserEventFlags;   // 0x090 AND of every active layer's user mask (the effective gate)
+		OTHER_EVENT_FLAG     m_cachedOtherEventFlags;  // 0x094 AND of every active layer's other mask
+		USER_EVENT_FLAG      m_forcedUserEventFlags;   // 0x098
+		OTHER_EVENT_FLAG     m_forcedOtherEventFlags;  // 0x09C
+		BSSpinLock           m_layerLock;              // 0x0A0
+		std::uint32_t        m_layerCount;             // 0x0A8 number of layer slots (runtime 1.16.244: 100)
+		std::uint32_t        m_pad0AC;                 // 0x0AC (likely m_layerCapacity)
+		std::uint64_t*       m_layerEventFlags;        // 0x0B0 per-layer packed mask {user:lo32, other:hi32}; ~0ull = all enabled
+		std::uint32_t        m_layerPoolCount;         // 0x0B8 (== m_layerCount; runtime 100)
+		std::uint32_t        m_pad0BC;                 // 0x0BC (likely capacity)
+		BSInputEnableLayer** m_layers;                 // 0x0C0 fixed pool of pre-allocated layers (AllocateNewLayer claims a free one)
+		std::uint32_t        m_layerNameCount;         // 0x0C8 (== m_layerCount; runtime 100)
+		std::uint32_t        m_pad0CC;                 // 0x0CC (likely capacity)
+		BSFixedString*       m_layerNames;             // 0x0D0 per-layer debug names (set by AllocateNewLayer's functor)
+		bool                 m_allocDisabled;          // 0x0D8 AllocateNewLayer no-ops while set
+												       // members past 0x0D8 not yet mapped
 	};
 	static_assert(offsetof(BSInputEnableManager, m_cacheLock) == 0x088);
+	static_assert(offsetof(BSInputEnableManager, m_layerLock) == 0x0A0);
+	static_assert(offsetof(BSInputEnableManager, m_layerEventFlags) == 0x0B0);
+	static_assert(offsetof(BSInputEnableManager, m_layers) == 0x0C0);
+	static_assert(offsetof(BSInputEnableManager, m_layerNames) == 0x0D0);
 }

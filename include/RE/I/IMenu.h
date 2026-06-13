@@ -24,19 +24,27 @@ namespace RE
 	public:
 		SF_RTTI_VTABLE(IMenu);
 
+		// Bit semantics proven on 1.16.244 (MenuFlagsProbe live capture + static
+		// causal RE; evidence in context_repo module ui.menu_flags). NOTE: this
+		// field at +0xC0 mixes static per-menu config bits (set in each menu's
+		// ctor via SetFlags) with two RUNTIME-TOGGLED state bits: kShowCursor (3)
+		// and kAdvancesMovie (6) are set/cleared live as menus show/advance, so a
+		// static ctor read will not show them. Unnamed bits stay FlagN (unproven).
 		enum Flag : std::uint32_t
 		{
 			Flag0 = 1 << 0,
 			Flag1 = 1 << 1,
-			ShowCursor = 1 << 3,
 			Flag4 = 1 << 4,
-			Flag6 = 1 << 6,
-			Flag8 = 1 << 8,
 			Flag9 = 1 << 9,
 			Flag10 = 1 << 10,
 			Flag18 = 1 << 18,
 			Flag25 = 1 << 25,
-			Flag27 = 1 << 27,
+
+			ShowCursor = 1 << 3,               // proven: shows the cursor (runtime-toggled when the menu is shown)
+			kAdvancesMovie = 1 << 6,           // proven: UI_AdvanceActiveMenus advance gate (runtime "advance this movie now")
+			kModal = 1 << 8,                   // medium: top-of-stack application/modal selector (UI_SelectTopModalMenu 0x14253f580); leading menu-mode / input-ownership bit
+			kAdvancesUnderPauseMenu = 1 << 15, // proven: UI_AdvanceActiveMenus advances this menu even while PauseMenu is up
+			kPausesGame = 1 << 27,             // proven: pauses simulation (Main::isGameMenuPaused) + engages 16:9 freeze-frame background
 		};
 
 		virtual ~IMenu()  // 00

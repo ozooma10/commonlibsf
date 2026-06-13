@@ -236,6 +236,7 @@ namespace RE::ID
 
 	namespace BSInputEnableLayer
 	{
+		inline constexpr REL::ID DecRef{ 45194 };  // engine release: dec m_refCount; 2->1 LayerFreed, 1->0 free object
 	}
 
 	namespace BSInputEnableManager
@@ -243,6 +244,10 @@ namespace RE::ID
 		inline constexpr REL::ID AllocateNewLayerImpl{ 124211 };
 		inline constexpr REL::ID EnableUserEvent{ 63121 };
 		inline constexpr REL::ID EnableOtherEvent{ 65852 };
+		inline constexpr REL::ID EnableUserEventImpl{ 124231 };   // worker behind EnableUserEvent
+		inline constexpr REL::ID EnableOtherEventImpl{ 124232 };  // worker behind EnableOtherEvent
+		inline constexpr REL::ID RecomputeCachedFlags{ 124226 };  // AND all active layers -> m_cachedUser/OtherEventFlags
+		inline constexpr REL::ID LayerFreed{ 124230 };            // reset layer flags + recompute + fire events (called by DecRef at 2->1)
 		inline constexpr REL::ID Singleton{ 938036 };
 	}
 

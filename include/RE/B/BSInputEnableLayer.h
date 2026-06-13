@@ -4,15 +4,23 @@
 
 namespace RE
 {
+	// Ownership: AllocateNewLayer hands back a pooled layer at m_refCount == 2 (1 for
+	// the manager's pool slot, 1 for the caller). Disable events on it, then DecRef
+	// once when done: that drops it to 1, which runs LayerFreed (resets the layer's
+	// mask to all-enabled, recomputes the cached aggregate, fires the change events)
+	// and returns the layer to the pool — controls are restored with no leak. The
+	// 1 -> 0 transition (object free) only happens on manager teardown.
 	class BSInputEnableLayer
 	{
 	public:
+		// Delegates to the engine release (ID 45194): decrements m_refCount and, at
+		// 2 -> 1, runs the inlined BSInputEnableManager::LayerFreed. Do NOT reimplement
+		// the decrement here — the engine function performs it.
 		inline void DecRef()
 		{
-			const auto count = REX::W32::InterlockedDecrement(&m_refCount);
-			if (count == 1) {
-				// TODO: BSInputEnableManager::LayerFreed (inlined)
-			}
+			using func_t = decltype(&BSInputEnableLayer::DecRef);
+			static REL::Relocation<func_t> func{ ID::BSInputEnableLayer::DecRef };
+			func(this);
 		}
 
 		inline void EnableUserEvent(USER_EVENT_FLAG a_flags, bool a_enable, USER_EVENT_SENDER_ID a_sender = USER_EVENT_SENDER_ID::None)

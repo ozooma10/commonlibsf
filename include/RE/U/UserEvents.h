@@ -13,15 +13,15 @@ namespace RE
 	enum class USER_EVENT_FLAG : std::uint32_t
 	{
 		Walking = (1 << 0),
-		Looking = (1 << 1),
-		Activation = (1 << 2),    //Unconfirmed
-		TabMenuMaybe = (1 << 3),  //Unconfirmed
-		Console = (1 << 4),       //Unconfirmed
-		POVSwitch = (1 << 5),     //Unconfirmed
+		Looking = (1 << 1),       // mouse-look / camera (runtime-proven 1.16.244, not CamSwitch)
+		Activation = (1 << 2),    // activate / "use" (runtime-proven 1.16.244; user-side, distinct from OTHER::Activate)
+		TabMenuMaybe = (1 << 3),  //Unconfirmed (live test inconclusive)
+		Console = (1 << 4),       //Unconfirmed — clearing this did NOT gate the console on 1.16.244; name is a guess
+		POVSwitch = (1 << 5),     // first/third-person view toggle (runtime-proven 1.16.244, not OTHER::CamSwitch)
 		Fighting = (1 << 6),
 		Sneaking = (1 << 7),
 		Menu = (1 << 8),
-		WheelZoom = (1 << 9),  //Unconfirmed
+		WheelZoom = (1 << 9),     // zoom (runtime-proven 1.16.244)
 		Jumping = (1 << 10),
 		Movement = Walking | Jumping,
 	};

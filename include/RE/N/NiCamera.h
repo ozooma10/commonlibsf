@@ -64,6 +64,14 @@ namespace RE
 
 		// members
 		float         unk[20];
+		// worldToCam is a CPU-side world->screen matrix used by WorldToScreen /
+		// culling / occlusion only - it is NOT the matrix the GPU renders through.
+		// It is rebuilt each frame during the scene-graph downward pass (NiCamera
+		// update vfunc +0x278) from world.rotate/translate + viewFrustum via the
+		// pure builder BuildProjection (1.16.244 RVA 0x2BE50F0) on worker threads,
+		// NOT in TESCamera::Update. Overriding it does not move the rendered view;
+		// the GPU view-projection is built separately from the render camera's
+		// world. See osf-re context modules camera.player_update / camera.gpu_view.
 		float         worldToCam[4][4];
 		NiFrustum     viewFrustum;
 		float         minNearPlaneDist;
@@ -72,5 +80,8 @@ namespace RE
 		float         lodAdjust;
 		float         unk2[24];
 	};
-	// static_assert(offsetof(NiCamera, NiCamera::worldToCam) == 384); // FIXME: clang-cl chokes on this assertion
+	// worldToCam offset verified == 0x180 live on 1.16.244 (HW write-watch). Kept
+	// disabled because clang-cl rejects offsetof on this non-standard-layout type;
+	// re-enable once a clang-cl-safe form is confirmed:
+	// static_assert(offsetof(NiCamera, worldToCam) == 0x180);
 }
