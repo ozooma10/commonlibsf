@@ -178,8 +178,11 @@ namespace RE::ID
 
 	namespace BGSSaveLoadGame
 	{
-		inline constexpr REL::ID SaveGame{ 0 };  // 147515
-		inline constexpr REL::ID LoadGame{ 0 };  // 147564
+		// Re-derived + runtime-verified on 1.16.244 (2026-06-13). The old
+		// comment-trail guesses 147515/147564 are dead on .244 (147515 is a
+		// 3-instruction stub, 147564 an unrelated fn at 0x142bf3670).
+		inline constexpr REL::ID SaveGame{ 98376 };  // .244 0x1814220 / .242 0x1816bc0; the .sfs writer ("Finished saving game")
+		inline constexpr REL::ID LoadGame{ 98380 };  // .244 0x1815620 / .242 0x1817fc0; the reader-consumer ("Loading game"); name @ reader+0x000
 	}
 
 	namespace BGSSaveLoadManager
