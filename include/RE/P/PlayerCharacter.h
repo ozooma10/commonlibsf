@@ -361,7 +361,7 @@ namespace RE
 		std::uint64_t  unk0F18;          // 0F18
 		std::uint64_t  unk0F20;          // 0F20
 		std::uint64_t  unk0F28;          // 0F28
-		TESObjectREFR* crosshairRef;     // 0F30 - NiPointer?
+		std::uint64_t  unk0F30;          // 0F30
 		std::uint64_t  unk0F38;          // 0F38
 		std::uint64_t  unk0F40;          // 0F40
 		std::uint64_t  unk0F48;          // 0F48
@@ -370,10 +370,10 @@ namespace RE
 		std::uint64_t  unk0F60;          // 0F60
 		std::uint64_t  unk0F68;          // 0F68
 		std::uint64_t  unk0F70;          // 0F70
-		std::uint64_t  unk0F78;          // 0F78
+		TESRace*	   charGenRace;      // 0F78
 		std::uint64_t  unk0F80;          // 0F80
 		std::uint64_t  unk0F88;          // 0F88
-		std::uint64_t  unk0F90;          // 0F90
+		TESObjectREFR* commandTarget;    // 0F90 - crosshair target
 		std::uint64_t  unk0F98;          // 0F98
 		std::uint64_t  unk0FA0;          // 0FA0
 		std::uint64_t  unk0FA8;          // 0FA8
