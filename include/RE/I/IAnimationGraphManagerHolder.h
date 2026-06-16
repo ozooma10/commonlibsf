@@ -16,6 +16,12 @@ namespace RE
 		virtual ~IAnimationGraphManagerHolder();  // 00
 
 		// add
+		// NB (OSF RE, 1.16.244, runtime+disasm proven 2026-06-16): the engine impl is __fastcall
+		// bool(this, const BSFixedString& a_eventName, bool a_flag) — there is a THIRD arg in r8b this
+		// 1-param decl omits (harmless for vtable override matching, but a direct call must supply it).
+		// Concrete REFR/Actor impl = AddrLib ID 73218 (0x140f09f60 on .244); PlayerCharacter does NOT
+		// override it (Actor holder vtable 0x144cb8d18 slot 1 == PlayerCharacter holder vtable 0x144cbc2e8
+		// slot 1). Impl: GetAnimationGraphManagerImpl(slot 3) then dispatch (mgr, eventName, flag) -> ID 123568.
 		virtual bool          NotifyAnimationGraphImpl(const BSFixedString& a_eventName);                                                                         // 01
 		virtual void          Unk_02();                                                                                                                           // 02
 		virtual bool          GetAnimationGraphManagerImpl(BSTSmartPointer<BSAnimationGraphManager>& a_animGraphMgr);                                             // 03
