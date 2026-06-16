@@ -80,25 +80,42 @@ namespace RE
 			return func(this, a_keyPtr, a_selector, a_prev, a_out);
 		}
 
-		// ------------------------------------------------------------------------------------------------
-		// PARTIAL LAYOUT — offsets PROVEN by the 123641 / 123661 disasm where marked; the rest is
-		// `[candidate]` pending the live object-layout audit. Members intentionally NOT declared yet (a
-		// wrong offset poisons consumers); documented as comments until the audit fills the gaps.
-		//
-		//   0x00  BSTSingletonSDM base
-		//   0x28  BSTScatterTable<...>*   secondary map: descriptor -> object   FUN_140320ef0(this+0x28,..)  [candidate]
-		//   0x60  BSTScatterTable<...>    sub-node registration map             FUN_140320ef0(this+0x60,..)  [candidate]
-		//   0x70  ...                     paired with +0x60                                                  [candidate]
-		//   0x88  BSTScatterTable<...>    LOADER insert map (123640 / 123666)                                [candidate]
-		//   0x98  <clip map header>       uint64-hash -> ClipDescriptor*:                                    [PROVEN]
-		//   0xa8  void* entriesBase       0x18-byte entries { key@+0x00, value@+0x08, chainNext@+0x10 }      [PROVEN]
-		//   0xb0  std::uint64_t endIdx    "not found" sentinel (find returns this on miss)                   [PROVEN]
-		//   0xc8  BSReadWriteLock         acquired (0x1422cc350) before the +0x98 lookup                     [PROVEN]
-		//
-		// TODO(audit): GetSingleton() -> peek object 0x00..0xE0, confirm the BSTScatterTable<std::uint64_t,
-		// ClipDescriptor*> shape against RE/B/BSTScatterTable.h, fill the [candidate] members + the
-		// ClipDescriptor struct (descriptor+0x40 count, +0x48 sub-node array, +0x51 init flag, +0x10
-		// refcount), then add real members and `static_assert(sizeof(AnimationClipDataSingleton) == 0x??)`.
-		// ------------------------------------------------------------------------------------------------
+		// [AUDITED 2026-06-16, live peek] The singleton embeds THREE of these locked scatter tables
+		// (at +0x28, +0x60, +0x98, exactly 0x38 apart). Layout confirmed against the find-helper (37921)
+		// + a live walk: open-addressed, power-of-2 capacity, miss-sentinel == capacity. Bespoke (NOT stock
+		// RE::BSTScatterTable) — it carries its own count fields + an embedded lock.
+		struct LockedScatterTable  // 0x38
+		{
+			struct Entry  // 0x18
+			{
+				std::uint64_t key;        // 00 — lookup key (for the +0x98 map: the animationoffsets graph-variant hash)
+				void*         value;      // 08 — mapped value (for the +0x98 map: a ClipDescriptor*)
+				std::int32_t  chainNext;  // 10 — next-bucket INDEX, -1 = empty/end
+				std::uint32_t pad14;      // 14
+			};
+			static_assert(sizeof(Entry) == 0x18);
+
+			void*         pad00;     // 00
+			void*         pad08;     // 08
+			Entry*        entries;   // 10 — array[capacity]
+			std::uint64_t capacity;  // 18 — power of 2; also the miss sentinel the find returns
+			std::uint32_t count20;   // 20 — live count (clip map: 1701)
+			std::uint32_t count28;   // 28 — live count (clip map: 2953)
+			std::byte     lock[0x8]; // 30 — embedded lock (acquire 0x1422cc350 / release 0x1422cc3d0)
+		};
+		static_assert(sizeof(LockedScatterTable) == 0x38);
+
+		// [AUDITED 2026-06-16] Object = *(REL::ID(938037)) = img+0x621AC00, a BSTSingletonSDMOpStaticBuffer
+		// static object. Multi-inheritance: vtables at +0x00 / +0x10 / +0x18, and a 4th sub-object vtable at
+		// +0x110 (the base sub-objects are UNIDENTIFIED, so real members are NOT modelled yet; sizeof TBD —
+		// the object extends past +0x158). The three embedded LockedScatterTables:
+		//   +0x28  descriptor -> object map        (cap 64;   FUN_140320ef0(this+0x28, ..))
+		//   +0x60  sub-node registration map       (cap 2048; FUN_140320ef0(this+0x60, ..))
+		//   +0x98  THE CLIP MAP: hash -> ClipDescriptor*  (cap 4096; entries@+0xa8, cap/sentinel@+0xb0,
+		//          lock@+0xc8) — the runtime `animationoffsets` index; ResolveClipForKey reads it.
+		// Corrects the earlier "+0x88 loader map" guess: there is NO map at +0x88; +0x88 is the +0x60
+		// table's `count28`. TODO: identify the +0x10/+0x18/+0x110 base sub-objects and the ClipDescriptor
+		// struct (descriptor +0x10 refcount, +0x40 sub-node count, +0x48 sub-node array, +0x51 init flag),
+		// then model real members + a `static_assert(sizeof(AnimationClipDataSingleton) == 0x??)`.
 	};
 }
