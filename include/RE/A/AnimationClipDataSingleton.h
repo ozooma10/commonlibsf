@@ -19,6 +19,14 @@
 //
 //   * Clip SELECTION (which tag) is read LIVE from the .agx graph node TagName (loose-overridable).
 //   * Clip PATH resolves at GRAPH BIND (weapon equip), then is CACHED, via ResolveClipForKey below.
+//     >> CORRECTION (OSF RE Phase C, runtime tamper-test, 2026-06-16): ResolveClipForKey / this singleton
+//        is the clipgen / animationoffsets INDEX reader, but it is NOT load-bearing for the RENDERED clip.
+//        A runtime HARD-BREAK of ResolveClipForKey (force-miss + null its OUT) across ~4000+ cold-bind
+//        resolves left the played animation fully normal; tampering the downstream composed-name registry
+//        lookup (`<stancePrefix>_<TagName>`, e.g. Gun_FireSingle) likewise had ZERO visible effect. So do
+//        NOT treat this as the clip-redirect / conditional-OAR seam — the rendered `.af` is bound by the
+//        PATH layer (per-clip loader 123610 -> 123606 -> 123619), and clip SELECTION is decided at GRAPH
+//        BUILD from the `.agx`. This index is a real data structure, just not the playback determinant.
 //   * The +0x98 map is a `uint64-hash -> ClipDescriptor*` hashmap keyed by the animationoffsets /
 //     animationfiledata FILENAME HASH: low dword == crc32(graph_path) (e.g. 0x872B8B8E for
 //     Player_Gun.agx), high dword == an opaque per-variant discriminator. It is BUILT FROM THE BASE

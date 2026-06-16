@@ -16,13 +16,16 @@ namespace RE
 		virtual ~IAnimationGraphManagerHolder();  // 00
 
 		// add
-		// NB (OSF RE, 1.16.244, runtime+disasm proven 2026-06-16): the engine impl is __fastcall
-		// bool(this, const BSFixedString& a_eventName, bool a_flag) — there is a THIRD arg in r8b this
-		// 1-param decl omits (harmless for vtable override matching, but a direct call must supply it).
-		// Concrete REFR/Actor impl = AddrLib ID 73218 (0x140f09f60 on .244); PlayerCharacter does NOT
-		// override it (Actor holder vtable 0x144cb8d18 slot 1 == PlayerCharacter holder vtable 0x144cbc2e8
-		// slot 1). Impl: GetAnimationGraphManagerImpl(slot 3) then dispatch (mgr, eventName, flag) -> ID 123568.
-		virtual bool          NotifyAnimationGraphImpl(const BSFixedString& a_eventName);                                                                         // 01
+		// NB (OSF RE, 1.16.244 — disasm + IN-GAME proven 2026-06-16: a `NotifyAnimationGraph(event)` probe
+		// visibly drove the player's animation on command): the engine impl is __fastcall
+		// bool(this, const BSFixedString& a_eventName, bool a_flag). The `bool` (r8b) is a REAL third arg the
+		// impl forwards to the inner dispatcher — it is now IN this signature (the prior 1-param decl omitted
+		// it, leaving r8b undefined for direct callers). Concrete REFR/Actor impl = AddrLib ID 73218
+		// (0x140f09f60 on .244); PlayerCharacter does NOT override it (Actor holder vtable 0x144cb8d18 slot 1
+		// == PlayerCharacter holder vtable 0x144cbc2e8 slot 1). Impl reads the eventName BSFixedString chars at
+		// _data+0x18, calls GetAnimationGraphManagerImpl (slot 3), then dispatches (mgr, eventName, flag) ->
+		// inner ID 123568 (0x1422af480).
+		virtual bool          NotifyAnimationGraphImpl(const BSFixedString& a_eventName, bool a_flag);                                                            // 01
 		virtual void          Unk_02();                                                                                                                           // 02
 		virtual bool          GetAnimationGraphManagerImpl(BSTSmartPointer<BSAnimationGraphManager>& a_animGraphMgr);                                             // 03
 		virtual void          Unk_04();                                                                                                                           // 04
