@@ -66,6 +66,8 @@ namespace RE::ID
 		inline constexpr REL::ID PostEventByName{ 150393 };
 		inline constexpr REL::ID LoadBank{ 150389 };       
 		inline constexpr REL::ID LoadBankByID{ 150388 };   
+		inline constexpr REL::ID UnloadBank{ 150434 };
+		inline constexpr REL::ID SetPosition{ 150420 };
 	}
 
 

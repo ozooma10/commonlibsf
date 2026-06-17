@@ -46,6 +46,26 @@ namespace RE::BGSAudio
     };
     static_assert(sizeof(AkExternalSourceInfo) == 0x20);
 
+	// Wwise 2021.1 3D vector (AkTypes.h).
+	struct AkVector
+	{
+		float X;
+		float Y;
+		float Z;
+	};
+	static_assert(sizeof(AkVector) == 0x0C);
+
+	// Wwise 2021.1 AkSoundPosition (== AkTransform, AkTypes.h). Param of SetPosition.
+	struct AkSoundPosition
+	{
+		AkVector orientationFront;  // 00 - must be normalized
+		AkVector orientationTop;    // 0C - must be normalized, orthogonal to front
+		AkVector position;          // 18
+	};
+	static_assert(sizeof(AkSoundPosition) == 0x24);
+
+
+
     //Thin binding over wwise AK::SoundEngine entry points.
     //Posted events ride game mix (volume, pause, ducking, etc...) for "free"
     class AkSoundEngine
@@ -96,6 +116,29 @@ namespace RE::BGSAudio
 			using func_t = decltype(&AkSoundEngine::LoadBank);
 			static REL::Relocation<func_t> func{ ID::AkSoundEngine::LoadBank };
 			return func(a_name, a_outBankID);
+		}
+
+				// Unloads a SoundBank by name. a_inMemoryBankPtr must be the pointer the
+		// bank was loaded from, or nullptr for name/file-loaded banks (our case).
+		// NOTE: this build has NO memory-load (LoadBankMemoryView) overload — it was
+		// dead-code-eliminated — so a mod bank is always name/file-loaded, and this
+		// is the matching unload. Returns AKRESULT (kAkSuccess == 1). AddrLib 150434.
+
+		//unload a sound bank. a_inMemoryBankPtr must be the pointer bank loaded from, or nullptr for name/file-loaded banks
+		//Pretty sure banks are always name/file-loaded 
+		static AKRESULT UnloadBank(const char* a_name, const void* a_inMemoryBankPtr = nullptr)
+		{
+			using func_t = decltype(&AkSoundEngine::UnloadBank);
+			static REL::Relocation<func_t> func{ ID::AkSoundEngine::UnloadBank };
+			return func(a_name, a_inMemoryBankPtr);
+		}
+
+		//Sets a registered game object's 3D position/orientationa so its spacialized.
+		static AKRESULT SetPosition(AkGameObjectID a_gameObject, const AkSoundPosition& a_position)
+		{
+			using func_t = decltype(&AkSoundEngine::SetPosition);
+			static REL::Relocation<func_t> func{ ID::AkSoundEngine::SetPosition };
+			return func(a_gameObject, a_position);
 		}
 	};
 }
