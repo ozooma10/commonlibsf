@@ -58,6 +58,17 @@ namespace RE::ID
 		inline constexpr REL::ID GetEventSource{ 100427 };  // 151162
 	}
 
+	// Statically-linked Wwise 2021.1 AK::SoundEngine entry points (no exported symbols).
+	namespace AkSoundEngine
+	{
+		inline constexpr REL::ID GetIDFromString{ 150371 };
+		inline constexpr REL::ID PostEvent{ 150391 };      
+		inline constexpr REL::ID PostEventByName{ 150393 };
+		inline constexpr REL::ID LoadBank{ 150389 };       
+		inline constexpr REL::ID LoadBankByID{ 150388 };   
+	}
+
+
 	namespace AttachReference::Event
 	{
 		inline constexpr REL::ID GetEventSource{ 0 };  // 778826
