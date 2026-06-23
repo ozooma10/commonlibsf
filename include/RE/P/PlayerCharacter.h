@@ -370,7 +370,7 @@ namespace RE
 		std::uint64_t  unk0F60;          // 0F60
 		std::uint64_t  unk0F68;          // 0F68
 		std::uint64_t  unk0F70;          // 0F70
-		TESRace*	   charGenRace;      // 0F78
+		TESRace*       charGenRace;      // 0F78
 		std::uint64_t  unk0F80;          // 0F80
 		std::uint64_t  unk0F88;          // 0F88
 		TESObjectREFR* commandTarget;    // 0F90 - crosshair target
