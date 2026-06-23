@@ -28,7 +28,7 @@ namespace RE::ID
 
 	namespace ActorUtils
 	{
-		inline constexpr REL::ID ChangeAnimArchetype{ 0 };  // 150497
+		inline constexpr REL::ID ChangeAnimArchetype{ 100510 };  // runtime-proven .244 2026-06-23 (was {0}//150497, stale)
 	}
 
 	namespace ActorValue
