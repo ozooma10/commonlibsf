@@ -28,7 +28,10 @@ namespace RE::ID
 
 	namespace ActorUtils
 	{
-		inline constexpr REL::ID ChangeAnimArchetype{ 100510 };  // runtime-proven .244 2026-06-23 (was {0}//150497, stale)
+		inline constexpr REL::ID ChangeAnimArchetype{ 100510 };
+		// Accessor for the lazily-initialized global the idle setter requires as its last arg.
+		// FIXME: canonical symbol name unconfirmed; "IdleContext" is descriptive, not authoritative.
+		inline constexpr REL::ID IdleContextGlobal{ 35720 };
 	}
 
 	namespace ActorValue
@@ -68,6 +71,14 @@ namespace RE::ID
 		inline constexpr REL::ID LoadBankByID{ 150388 };   
 		inline constexpr REL::ID UnloadBank{ 150434 };
 		inline constexpr REL::ID SetPosition{ 150420 };
+	}
+
+	namespace AIProcess
+	{		
+		// AIProcess member that drives idle playback; the (Actor*, flags, TESIdleForm*, ...)
+		// signature matches the inherited-lineage AIProcess::SetupSpecialIdle. Name is from
+		// that lineage, not verified against a Starfield-specific symbol source.
+		inline constexpr REL::ID SetupSpecialIdle{ 102136 };
 	}
 
 
