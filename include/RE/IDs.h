@@ -715,6 +715,16 @@ namespace RE::ID
 		inline constexpr REL::ID GetEventSource{ 0 };  // 137011
 	}
 
+	namespace Console
+	{
+		// `tcai` (ToggleCombatAI) console handler. It writes the global "all combat AI
+		// disabled" gate (DAT_1458d570d - a raw global with NO AddrLib ID) via
+		// `40 88 3D <disp32>` (mov byte [rip+disp], dil). RE::Console::SetCombatAIProcessing
+		// resolves the gate off this handler so it relocates across builds.
+		// (osf-re gameplay.defeat_damage_hook, 1.16.244)
+		inline constexpr REL::ID ToggleCombatAI{ 66826 };
+	}
+
 	namespace ConsoleLog
 	{
 		inline constexpr REL::ID Singleton{ 938104 };
