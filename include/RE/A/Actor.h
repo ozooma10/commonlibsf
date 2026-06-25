@@ -233,8 +233,8 @@ namespace RE
 		virtual bool         IsInCombat() const;                                                                     // 16C
 		virtual void         Unk_16D();                                                                              // 16D
 		virtual void         StopCombat();                                                                           // 16E
-		virtual void         Unk_16F();                                                                              // 16F
-		virtual void         SetLifeState(std::uint32_t a_state);                                                    // 170
+		virtual void         SetLifeState(std::uint32_t a_lifeState);                                                // 16F  (.244 RE: real SetLifeState = AddrLib ID 100787 / 0x14190bff0; arg is ACTOR_LIFE_STATE)
+		virtual void         Unk_170();                                                                              // 170  (.244 RE: bool getter 0x14197d9e0; CLSF had SetLifeState here by an off-by-one)
 		virtual void         Unk_171();                                                                              // 171
 		virtual void         Unk_172();                                                                              // 172
 		virtual void         Unk_173();                                                                              // 173
