@@ -21,6 +21,10 @@ namespace RE::ID
 		inline constexpr REL::ID IsJumping{ 0 };          // 150985
 		inline constexpr REL::ID IsOverEncumbered{ 0 };   // 150999
 		inline constexpr REL::ID IsSneaking{ 0 };         // 151014
+		inline constexpr REL::ID SetAIEnabled{ 101266 };  // boolBits kProcessMe (Actor+0x208 bit1); console TAI (osf-re gameplay.defeat_damage_hook)
+		inline constexpr REL::ID SetGhost{ 100873 };      // ExtraGhost invuln+AI-ignore; console SetGhost (osf-re gameplay.defeat_damage_hook)
+		inline constexpr REL::ID SetLifeState{ 100787 };  // vtable slot 0x16F; writes ACTOR_LIFE_STATE bits 17-20 of [actor+0xF8] (osf-re gameplay.defeat_damage_hook)
+		inline constexpr REL::ID SetRestrained{ 100871 }; // ACTOR_LIFE_STATE kRestrained(6); console SetRestrained (osf-re gameplay.defeat_damage_hook)
 		inline constexpr REL::ID SetSkinTone{ 97400 };
 		inline constexpr REL::ID UpdateAppearance{ 101306 };
 		inline constexpr REL::ID UpdateChargenAppearance{ 97399 };
@@ -1632,6 +1636,7 @@ namespace RE::ID
 	{
 		inline constexpr REL::ID AreHostileActorsNear{ 0 };  // 154040
 		inline constexpr REL::ID Singleton{ 937584 };
+		inline constexpr REL::ID StopCombatAndAlarmOnActor{ 103285 };  // manager-level combat removal -> all combatants drop the actor (core of console StopCombatAlarmOnActor; osf-re gameplay.defeat_damage_hook)
 		inline constexpr REL::ID ToggleAI{ 0 };  // 154056
 	}
 

@@ -233,7 +233,7 @@ namespace RE
 		virtual bool         IsInCombat() const;                                                                     // 16C
 		virtual void         Unk_16D();                                                                              // 16D
 		virtual void         StopCombat();                                                                           // 16E
-		virtual void         SetLifeState(std::uint32_t a_lifeState);                                                // 16F  (.244 RE: real SetLifeState = AddrLib ID 100787 / 0x14190bff0; arg is ACTOR_LIFE_STATE)
+		virtual void         SetLifeState(ACTOR_LIFE_STATE a_lifeState);                                             // 16F  (.244 RE: real SetLifeState = AddrLib ID 100787 / 0x14190bff0)
 		virtual void         Unk_170();                                                                              // 170  (.244 RE: bool getter 0x14197d9e0; CLSF had SetLifeState here by an off-by-one)
 		virtual void         Unk_171();                                                                              // 171
 		virtual void         Unk_172();                                                                              // 172
@@ -372,6 +372,33 @@ namespace RE
 			using func_t = decltype(&Actor::IsSneaking);
 			static REL::Relocation<func_t> func{ ID::Actor::IsSneaking };
 			return func(this);
+		}
+
+		// boolBits kProcessMe (Actor+0x208 bit 1) = AI enabled; false drops this actor from
+		// AI/process-list processing (console TAI). Runtime-proven (osf-re gameplay.defeat_damage_hook).
+		void SetAIEnabled(bool a_enable)
+		{
+			using func_t = decltype(&Actor::SetAIEnabled);
+			static REL::Relocation<func_t> func{ ID::Actor::SetAIEnabled };
+			func(this, a_enable);
+		}
+
+		// Bethesda "ghost" (ExtraGhost): true = invulnerable (can't be damaged/killed) and AI
+		// de-prioritizes it as a target. Console SetGhost. Runtime-proven (osf-re gameplay.defeat_damage_hook).
+		void SetGhost(bool a_ghost)
+		{
+			using func_t = decltype(&Actor::SetGhost);
+			static REL::Relocation<func_t> func{ ID::Actor::SetGhost };
+			func(this, a_ghost);
+		}
+
+		// Drives ACTOR_LIFE_STATE kRestrained (6): can't move, stays conscious. Console SetRestrained.
+		// (osf-re gameplay.defeat_damage_hook; the writer that pinned SetLifeState's slot/enum.)
+		void SetRestrained(bool a_restrained)
+		{
+			using func_t = decltype(&Actor::SetRestrained);
+			static REL::Relocation<func_t> func{ ID::Actor::SetRestrained };
+			func(this, a_restrained);
 		}
 
 		void SetSkinTone(std::uint32_t a_index)
