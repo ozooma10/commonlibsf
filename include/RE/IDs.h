@@ -1491,6 +1491,7 @@ namespace RE::ID
 		inline constexpr REL::ID ForceFirstPerson{ 113397 };
 		inline constexpr REL::ID ForceThirdPerson{ 113398 };
 		inline constexpr REL::ID SetCameraState{ 113375 };  // generic SetCameraState(this, CameraState): rbx = cameraStates[arg] swap. RE'd 1.16.244 (old `166078` was a container dtor, rejected)
+		inline constexpr REL::ID ToggleFreeCameraMode{ 113409 };  // ToggleFreeCameraMode(this, uint32 cameraStateIndex, bool flag): toggle wrapper over SetCameraState that manages the +0x2dd free-cam gate; the native `tfc` path. flag must be false for normal entry. In-game proven 1.16.244
 		inline constexpr REL::ID QCameraEquals{ 0 };        // unmapped: inlined in-engine (no standalone fn); header impl is inline, so this ID is unused. (`166081` was a wrong placeholder)
 	}
 

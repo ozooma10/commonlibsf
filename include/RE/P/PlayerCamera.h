@@ -111,6 +111,18 @@ namespace RE
 			return func(this, a_cameraState);
 		}
 
+		// Native free-camera toggle (the console `tfc` path). a_cameraStateIndex is the target
+		// free-cam state (e.g. CameraState::kFreeWalk=13 for the comfortable horizon-locked cam,
+		// 14 kFreeAdvanced, 15 kFreeFly, 16 kFreeTethered). a_flag MUST be false for normal entry
+		// (true is the axis-inverting alt path). Toggles: call again with the same args to exit.
+		// In-game proven on 1.16.244.
+		void ToggleFreeCameraMode(std::uint32_t a_cameraStateIndex, bool a_flag)
+		{
+			using func_t = decltype(&PlayerCamera::ToggleFreeCameraMode);
+			static REL::Relocation<func_t> func{ ID::PlayerCamera::ToggleFreeCameraMode };
+			return func(this, a_cameraStateIndex, a_flag);
+		}
+
 		bool QCameraEquals(CameraState a_cameraState) const
 		{
 			return (currentState == cameraStates[a_cameraState]);
