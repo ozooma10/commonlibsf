@@ -1495,6 +1495,19 @@ namespace RE::ID
 		inline constexpr REL::ID QCameraEquals{ 0 };        // unmapped: inlined in-engine (no standalone fn); header impl is inline, so this ID is unused. (`166081` was a wrong placeholder)
 	}
 
+	// Free-camera input context. The console `tfc` handler calls PushContext right after
+	// PlayerCamera::ToggleFreeCameraMode (and PopContext on exit) to route movement input to the free
+	// cam: fn(Manager singleton, contextId=0x13, &Descriptor). off2id-confirmed AddrLib IDs (1.16.244,
+	// in-game proven). The owning manager class is not yet identified — its singleton slot is BSS
+	// (unreadable in the static image) — so these are recorded as raw IDs, not yet a typed class binding.
+	namespace FreeCameraInputContext
+	{
+		inline constexpr REL::ID Manager{ 938003 };     // input/control manager singleton (the slot holds the ptr)
+		inline constexpr REL::ID Descriptor{ 894502 };  // static context descriptor (passed by address — lea r8)
+		inline constexpr REL::ID PushContext{ 124144 };
+		inline constexpr REL::ID PopContext{ 124143 };
+	}
+
 	namespace PlayerCharacter
 	{
 		inline constexpr REL::ID Singleton{ 922868 };
