@@ -303,7 +303,14 @@ namespace RE::ID
 
 	namespace BSPointerHandleManagerInterface
 	{
-		inline constexpr REL::ID GetSmartPointer{ 0 };  // 72432
+		// .244 AddrLib ID 35638 = the engine by-value resolver NiPointer<T> GetSmartPointer(const handle&)
+		// (FUN_1402b65e0): rcx = &out NiPointer (return slot), rdx = &handle -> args are (out, in), the
+		// reverse of the Skyrim-style bool(in, out) primitive CommonLibSF modelled, so the BSPointerHandle.h
+		// wrapper calls it as func(a_out, a_in). It loads the shared TES handle-manager singleton
+		// (DAT_145e60380) and delegates to the core lookup ID 139363 (mask index & [mgr+0x68], 0x10-byte
+		// entries @ [mgr+0x50], age-check (entry[+8] & ~mask) == (handle & ~mask)). The old // 72432 was a
+		// stale Skyrim ID that resolves to a list-walk on .244 and crashed. (osf-re gameplay.defeat_damage_hook)
+		inline constexpr REL::ID GetSmartPointer{ 35638 };
 	}
 
 	namespace BSReadWriteLock
