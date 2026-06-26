@@ -239,7 +239,7 @@ namespace RE
 		virtual void         Unk_172();                                                                              // 172
 		virtual void         Unk_173();                                                                              // 173
 		virtual void         Unk_174();                                                                              // 174
-		virtual bool         IsInFaction(TESFaction* a_faction);                                                     // 175
+		virtual bool         IsInFaction(TESFaction* a_faction);                                                     // 175  (.244 RE: slot 0x175 is NOT IsInFaction - it's an AIProcess byte-indexed query 0x141955350; read the base faction list at TESNPC_base+0x108 instead. osf-re gameplay.actor_faction_taxonomy)
 		virtual void         Unk_176();                                                                              // 176
 		virtual void         Unk_177();                                                                              // 177
 		virtual void         Unk_178();                                                                              // 178

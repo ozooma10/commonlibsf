@@ -1381,6 +1381,10 @@ namespace RE
 
 	struct HideSubtitleEvent
 	{
+		// Empty payload (osf-re ui.subtitle, 1.16.244): the producer (ID 114395 ->
+		// 0x141ee08a0) points Notify at an uninitialized stack Event that the sink
+		// HUDSubtitleDataModel::ProcessEvent (ID 86884) never reads — it just clears
+		// the current subtitle. Do not add members.
 		struct Event
 		{
 			[[nodiscard]] static BSTEventSource<HideSubtitleEvent::Event>* GetEventSource()
@@ -3034,6 +3038,18 @@ namespace RE
 
 	struct ShowSubtitleEvent
 	{
+		// Payload RE'd + runtime-proven 1.16.244 (osf-re ui.subtitle): the producer
+		// SubtitleManager dispatch (ID 114395, 0x141ee0960) builds this on the stack
+		// and the sink HUDSubtitleDataModel::ProcessEvent (ID 86881) reads it
+		// field-for-field, handing each char pointer to the UTF-8 string converter
+		// (ID 1016925, byte-strlen + U+FFFD decode). The fields are RAW const char*
+		// (a c_str / BSFixedString::data() == pool-entry+0x18), NOT BSFixedString
+		// objects: passing an entry pointer makes the converter read the entry header
+		// as text -> mojibake. The pointers must stay valid for the synchronous
+		// Notify (the sink copies them inline before Notify returns). speakerName is
+		// the pre-resolved display name shown as the attribution prefix; the box is
+		// the standard bottom-of-screen subtitle list, NOT 3D-positioned on the
+		// speaker. isPlayer == (speaker == player) -> bPlayerSubtitle styling.
 		struct Event
 		{
 			[[nodiscard]] static BSTEventSource<ShowSubtitleEvent::Event>* GetEventSource()
@@ -3042,7 +3058,13 @@ namespace RE
 				static REL::Relocation<func_t> func{ ID::ShowSubtitleEvent::Event::GetEventSource };
 				return func();
 			}
+
+			// members
+			const char* speakerName{ nullptr };   // 00 - UTF-8 display name (c_str), the speaker prefix
+			const char* subtitleText{ nullptr };  // 08 - UTF-8 subtitle line text (c_str)
+			bool        isPlayer{ false };         // 10 - speaker == player (bPlayerSubtitle)
 		};
+		static_assert(sizeof(Event) == 0x18);
 	};
 
 	struct SkillsMenu_Accept

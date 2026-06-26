@@ -1011,7 +1011,7 @@ namespace RE::ID
 
 	namespace HideSubtitleEvent::Event
 	{
-		inline constexpr REL::ID GetEventSource{ 0 };  // 133630
+		inline constexpr REL::ID GetEventSource{ 86875 };  // 0x141495d00 (.244) magic-static; returns source @0x145979BB0. (Old //133630 was a mislabel.) osf-re ui.subtitle
 	}
 
 	namespace HourPassed::Event
@@ -1955,7 +1955,7 @@ namespace RE::ID
 
 	namespace ShowSubtitleEvent::Event
 	{
-		inline constexpr REL::ID GetEventSource{ 0 };  // 133631
+		inline constexpr REL::ID GetEventSource{ 86874 };  // 0x141495c90 (.244) magic-static; returns source @0x145979B88. (CLSF's old //133631 was a mislabel: 133631/0x1426749b0 is an unrelated tagged-object accessor, NOT this accessor.) osf-re ui.subtitle
 	}
 
 	namespace SkillsMenu_Accept
