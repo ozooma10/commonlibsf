@@ -3059,9 +3059,10 @@ namespace RE
 				return func();
 			}
 
-			// members
-			const char* speakerName{ nullptr };   // 00 - UTF-8 display name (c_str), the speaker prefix
-			const char* subtitleText{ nullptr };  // 08 - UTF-8 subtitle line text (c_str)
+			// members (order runtime-proven: the box renders "<+0x08>: <+0x00>",
+			// i.e. "speakerName: subtitleText")
+			const char* subtitleText{ nullptr };  // 00 - UTF-8 subtitle line text (c_str)
+			const char* speakerName{ nullptr };   // 08 - UTF-8 display name (c_str), the speaker prefix
 			bool        isPlayer{ false };         // 10 - speaker == player (bPlayerSubtitle)
 		};
 		static_assert(sizeof(Event) == 0x18);
