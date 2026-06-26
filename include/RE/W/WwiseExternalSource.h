@@ -34,6 +34,31 @@ namespace RE::BGSAudio
     // hash of "External_Source" - the cookie engine uses for its own VO posts.
 	inline constexpr std::uint32_t kExternalSourceCookie = 0x24DB9834;
 
+	// Action applied to a playing instance / event (Wwise 2021.1 AkSoundEngine.h AkActionOnEventType).
+	enum class AkActionOnEventType : std::uint32_t
+	{
+		kStop = 0,
+		kPause = 1,
+		kResume = 2,
+		kBreak = 3,
+		kReleaseEnvelope = 4,
+	};
+
+	// Fade curve for the transition (Wwise 2021.1 AkTypes.h AkCurveInterpolation). With a 0 ms
+	// transition the curve is moot; the engine's own stop/pause sites pass kLinear (== 4).
+	enum class AkCurveInterpolation : std::uint32_t
+	{
+		kLog3 = 0,
+		kSine = 1,
+		kLog1 = 2,
+		kInvSCurve = 3,
+		kLinear = 4,
+		kSCurve = 5,
+		kExp1 = 6,
+		kSineRecip = 7,
+		kExp3 = 8,
+	};
+
     //AkExternalSourceInfo from wwise 2021.1.
     struct AkExternalSourceInfo
     {
@@ -139,6 +164,43 @@ namespace RE::BGSAudio
 			using func_t = decltype(&AkSoundEngine::SetPosition);
 			static REL::Relocation<func_t> func{ ID::AkSoundEngine::SetPosition };
 			return func(a_gameObject, a_position);
+		}
+
+		// Executes an action (Stop/Pause/Resume/...) on the content of a single AkPlayingID returned by
+		// PostEvent — the surgical way to cut/duck exactly one in-flight voice. Enqueue-only (reserves an
+		// AK queue message), so it is safe from any thread, like PostEvent. A no-op if in_playingID == 0.
+		// PROVEN (OSF RE 2026-06-25): the engine itself calls this to Stop (action 0) and Pause (action 1)
+		// by playing ID; StopPlayingID is a deprecated thunk to this. Runtime-confirmed by ear (an in-flight
+		// tone cut instantly). Re-verify the prologue byte-gate on a new build before relying on the raw ID.
+		static void ExecuteActionOnPlayingID(
+			AkActionOnEventType  in_ActionType,                                    ///< Action to execute
+			AkPlayingID          in_playingID,                                     ///< Target playing ID (PostEvent return)
+			std::int32_t         in_uTransitionDuration = 0,                       ///< Fade duration in ms (0 = instant)
+			AkCurveInterpolation in_eFadeCurve = AkCurveInterpolation::kLinear)    ///< Fade curve
+		{
+			using func_t = void (*)(AkActionOnEventType, AkPlayingID, std::int32_t, AkCurveInterpolation);
+			static REL::Relocation<func_t> func{ ID::AkSoundEngine::ExecuteActionOnPlayingID };
+			func(in_ActionType, in_playingID, in_uTransitionDuration, in_eFadeCurve);
+		}
+
+		// Convenience: stop exactly one voice by its AkPlayingID (the deprecated AK StopPlayingID, which is
+		// itself just ExecuteActionOnPlayingID(Stop, ...)). 0 ms transition -> instant cut.
+		static void StopPlayingID(
+			AkPlayingID          in_playingID,
+			std::int32_t         in_uTransitionDuration = 0,
+			AkCurveInterpolation in_eFadeCurve = AkCurveInterpolation::kLinear)
+		{
+			ExecuteActionOnPlayingID(AkActionOnEventType::kStop, in_playingID, in_uTransitionDuration, in_eFadeCurve);
+		}
+
+		// Stops every voice currently playing on a game object (AkGameObjectID). NOTE: all OSF posts ride
+		// the shared player object 2, so StopAll(2) would cut EVERY OSF voice — use ExecuteActionOnPlayingID
+		// for per-voice replace; StopAll is only useful with per-slot game objects. Static-proven (150401).
+		static AKRESULT StopAll(AkGameObjectID a_gameObject)
+		{
+			using func_t = AKRESULT (*)(AkGameObjectID);
+			static REL::Relocation<func_t> func{ ID::AkSoundEngine::StopAll };
+			return func(a_gameObject);
 		}
 	};
 }

@@ -75,6 +75,8 @@ namespace RE::ID
 		inline constexpr REL::ID LoadBankByID{ 150388 };   
 		inline constexpr REL::ID UnloadBank{ 150434 };
 		inline constexpr REL::ID SetPosition{ 150420 };
+		inline constexpr REL::ID ExecuteActionOnPlayingID{ 150360 };  // stop/pause/etc one voice by AkPlayingID
+		inline constexpr REL::ID StopAll{ 150401 };                   // stop every voice on an AkGameObjectID
 	}
 
 	namespace AIProcess
