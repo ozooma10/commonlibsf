@@ -17,7 +17,7 @@ namespace RE::ID
 		inline constexpr REL::ID EquipItem{ 101349 };     // add-if-missing equip; 1.16.244 0x1963F20 / 1.16.242 0x1966A60 (osf-re gameplay.actor_equipment)
 		inline constexpr REL::ID EvaluatePackage{ 0 };    // 150640
 		inline constexpr REL::ID GetActorKnowledge{ 0 };  // 150669
-		inline constexpr REL::ID IsHostileToActor{ 0 };   // 150777
+		inline constexpr REL::ID IsHostileToActor{ 100890 };  // 0x14191fca0; CLSF's 150777 was WRONG (a dtor) on .244 (osf-re gameplay.actor_faction_taxonomy)
 		inline constexpr REL::ID IsJumping{ 0 };          // 150985
 		inline constexpr REL::ID IsOverEncumbered{ 0 };   // 150999
 		inline constexpr REL::ID IsSneaking{ 0 };         // 151014
