@@ -164,6 +164,11 @@ namespace RE
 		{
 			kNone = 0,
 			kHasChargenSkeleton = 1 << 5,
+			// OSF runtime-PROVEN 2026-06-27: setting this bit in boolFlags2 (+0x37C) puts the actor in
+			// animation-driven movement — the AI keeps running (anims / AnimationManager::Update keep ticking)
+			// but it STOPS pathing the actor, so a teleported/anchored NPC stays put instead of walking back to
+			// its package post. This is the WORKING lever (MovementControllerNPC::SetAnimationDriven() did NOT
+			// achieve it on 1.16.244). Clear the bit to restore normal movement. Module: gameplay.actor_animation_driven.
 			kAnimationDriven = 1 << 19,
 		};
 

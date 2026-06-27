@@ -24,6 +24,11 @@ namespace RE
 	public:
 		SF_RTTI_VTABLE(MovementControllerNPC);
 
+		// ⚠ SUSPECT (OSF runtime 2026-06-27): SetAnimationDriven()/SetMotionDriven() (REL 135316/135315) had NO
+		// observable effect on 1.16.244 — called every frame, the NPC kept walking and MovementControllerAI::
+		// movementMode never moved off 0. The REL IDs look WRONG for this build (not yet re-RE'd, so left as-is
+		// rather than guessed). To make an actor animation-driven, set Actor::boolFlags2 kAnimationDriven (bit 19)
+		// directly — that IS proven to work. Module: gameplay.actor_animation_driven.
 		void SetAnimationDriven()
 		{
 			using func_t = decltype(&MovementControllerNPC::SetAnimationDriven);
