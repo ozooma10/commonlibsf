@@ -161,7 +161,7 @@ namespace RE::ID
 	namespace BGSDefaultObjectManager
 	{
 		inline constexpr REL::ID DefaultObjectData{ 0 };  // 761776
-		inline constexpr REL::ID GetSingleton{ 0 };       // 82283
+		inline constexpr REL::ID GetSingleton{ 43134 };   // runtime-proven .244 2026-06-27 (mgr+0x108 ptr == LookupByEditorID("Health")); 82283 was a stale cross-version note. See gameplay.defeat_damage_hook.
 	}
 
 	namespace BGSEditorID
