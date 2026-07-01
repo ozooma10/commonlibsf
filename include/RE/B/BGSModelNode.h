@@ -53,10 +53,22 @@ namespace RE
 		~BGSModelNode() override;  // 00
 
 		// members
-		Rig*                rig;          // 10
-		BSTArray<NodeEntry> nodes;        // 18
-		std::byte           unk28[0x68];  // 28
+		Rig*                rig;             // 10
+		BSTArray<NodeEntry> nodes;           // 18
+		std::byte           unk28[0x40];     // 28
+		std::uint32_t       frameStamp;      // 68 - frame counter; the rig commit loop stamps it into NodeEntry.node->lastUpdateFrame (NiAVObject+0x128)
+		std::uint32_t       unk6c;           // 6c
+		void*               sgSyncCallback;  // 70 - scene-graph sync callback, read at rig-sync time
+		std::uint16_t       rigBoneCount;    // 78 - element count of Rig::Buffer local/world/prevWorld; the engine's compose/commit bound (safe rig-write predicate: rigIndex < rigBoneCount). Runtime-proven (AnimGraphUpdateProbe), static-confirmed .244
+		std::uint16_t       unk7a;           // 7a
+		std::uint16_t       rootGroupA;      // 7c - root-group count A (root compose count = A + B)
+		std::uint16_t       rootGroupB;      // 7e - root-group count B
+		std::byte           unk80[0x10];     // 80
 	};
+	static_assert(offsetof(BGSModelNode, frameStamp) == 0x68);
+	static_assert(offsetof(BGSModelNode, sgSyncCallback) == 0x70);
+	static_assert(offsetof(BGSModelNode, rigBoneCount) == 0x78);
+	static_assert(offsetof(BGSModelNode, rootGroupA) == 0x7c);
 	static_assert(offsetof(BGSModelNode, nodes) == 0x18);
 	static_assert(sizeof(BGSModelNode) == 0x90);
 }
