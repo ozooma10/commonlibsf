@@ -1636,7 +1636,7 @@ namespace RE::ID
 
 	namespace ProcessLists
 	{
-		inline constexpr REL::ID AreHostileActorsNear{ 0 };  // 154040
+		inline constexpr REL::ID AreHostileActorsNear{ 103313 };  // .244 0x141a951b0; bool(ProcessLists*, BSScrapArray<BSPointerHandle<Actor>>* out=null): walks the high-actor list (+0x60), interior/exterior-aware radius, near-hostile test (osf-re gameplay.process_lists)
 		inline constexpr REL::ID Singleton{ 937584 };
 		inline constexpr REL::ID StopCombatAndAlarmOnActor{ 103285 };  // manager-level combat removal -> all combatants drop the actor (core of console StopCombatAlarmOnActor; osf-re gameplay.defeat_damage_hook)
 		inline constexpr REL::ID ToggleAI{ 0 };  // 154056
