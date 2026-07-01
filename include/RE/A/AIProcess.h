@@ -11,7 +11,6 @@
 
 namespace RE
 {
-	class Actor;
 	class ActorKnowledge;
 	class bhkCharacterController;
 	class DialogueItem;
@@ -223,15 +222,6 @@ namespace RE
 		bool IsRunningRunOnce() const
 		{
 			return middleHigh && middleHigh->runOncePackage.package;
-		}
-
-		bool PlayIdle(Actor* a_actor, TESIdleForm* a_idle, std::uint32_t a_flags = 0x36)
-		{
-			// Returns an opaque engine global (real type unconfirmed) the setter requires.
-			static REL::Relocation<void* (*)()> idleContext{ ID::ActorUtils::IdleContextGlobal };
-			using func_t = bool (AIProcess::*)(Actor*, std::uint32_t, TESIdleForm*, bool, void*, void*ss);
-			static REL::Relocation<func_t> func{ ID::AIProcess::SetupSpecialIdle };
-			return func(this, a_actor, a_flags, a_idle, true, nullptr, idleContext());
 		}
 
 		// members

@@ -136,15 +136,9 @@ namespace RE
 	public:
 		static bool GetSmartPointer(const BSPointerHandle<T>& a_in, NiPointer<T>& a_out)
 		{
-			// Starfield's resolver is the by-value form NiPointer<T> GetSmartPointer(const handle&):
-			// rcx = &a_out (return/out slot), rdx = &a_in (handle value) -> the engine reads the u32
-			// at [rdx] and writes the resolved owning NiPointer to [rcx]. The arg order is therefore
-			// (out, in), the reverse of the historical Skyrim bool(in, out) primitive, so we call it
-			// func(a_out, a_in). See RE/IDs.h (.244 ID 35638) and osf-re gameplay.defeat_damage_hook.
-			using func_t = NiPointer<T>& (*)(NiPointer<T>& a_out, const BSPointerHandle<T>& a_in);
+			using func_t = bool (*)(const BSPointerHandle<T>& a_in, NiPointer<T>& a_out);
 			static REL::Relocation<func_t> func{ ID::BSPointerHandleManagerInterface::GetSmartPointer };
-			func(a_out, a_in);
-			return static_cast<bool>(a_out);
+			return func(a_in, a_out);
 		}
 
 		static NiPointer<T> GetSmartPointer(const BSPointerHandle<T>& a_in)

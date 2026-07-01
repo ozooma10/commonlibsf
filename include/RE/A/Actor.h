@@ -164,11 +164,6 @@ namespace RE
 		{
 			kNone = 0,
 			kHasChargenSkeleton = 1 << 5,
-			// OSF runtime-PROVEN 2026-06-27: setting this bit in boolFlags2 (+0x37C) puts the actor in
-			// animation-driven movement — the AI keeps running (anims / AnimationManager::Update keep ticking)
-			// but it STOPS pathing the actor, so a teleported/anchored NPC stays put instead of walking back to
-			// its package post. This is the WORKING lever (MovementControllerNPC::SetAnimationDriven() did NOT
-			// achieve it on 1.16.244). Clear the bit to restore normal movement. Module: gameplay.actor_animation_driven.
 			kAnimationDriven = 1 << 19,
 		};
 
@@ -238,13 +233,13 @@ namespace RE
 		virtual bool         IsInCombat() const;                                                                     // 16C
 		virtual void         Unk_16D();                                                                              // 16D
 		virtual void         StopCombat();                                                                           // 16E
-		virtual void         SetLifeState(ACTOR_LIFE_STATE a_lifeState);                                             // 16F  (.244 RE: real SetLifeState = AddrLib ID 100787 / 0x14190bff0)
-		virtual void         Unk_170();                                                                              // 170  (.244 RE: bool getter 0x14197d9e0; CLSF had SetLifeState here by an off-by-one)
+		virtual void         Unk_16F();                                                                              // 16F
+		virtual void         SetLifeState(std::uint32_t a_state);                                                    // 170
 		virtual void         Unk_171();                                                                              // 171
 		virtual void         Unk_172();                                                                              // 172
 		virtual void         Unk_173();                                                                              // 173
 		virtual void         Unk_174();                                                                              // 174
-		virtual bool         IsInFaction(TESFaction* a_faction);                                                     // 175  (.244 RE: slot 0x175 is NOT IsInFaction - it's an AIProcess byte-indexed query 0x141955350; read the base faction list at TESNPC_base+0x108 instead. osf-re gameplay.actor_faction_taxonomy)
+		virtual bool         IsInFaction(TESFaction* a_faction);                                                     // 175
 		virtual void         Unk_176();                                                                              // 176
 		virtual void         Unk_177();                                                                              // 177
 		virtual void         Unk_178();                                                                              // 178
@@ -377,33 +372,6 @@ namespace RE
 			using func_t = decltype(&Actor::IsSneaking);
 			static REL::Relocation<func_t> func{ ID::Actor::IsSneaking };
 			return func(this);
-		}
-
-		// boolBits kProcessMe (Actor+0x208 bit 1) = AI enabled; false drops this actor from
-		// AI/process-list processing (console TAI). Runtime-proven (osf-re gameplay.defeat_damage_hook).
-		void SetAIEnabled(bool a_enable)
-		{
-			using func_t = decltype(&Actor::SetAIEnabled);
-			static REL::Relocation<func_t> func{ ID::Actor::SetAIEnabled };
-			func(this, a_enable);
-		}
-
-		// Bethesda "ghost" (ExtraGhost): true = invulnerable (can't be damaged/killed) and AI
-		// de-prioritizes it as a target. Console SetGhost. Runtime-proven (osf-re gameplay.defeat_damage_hook).
-		void SetGhost(bool a_ghost)
-		{
-			using func_t = decltype(&Actor::SetGhost);
-			static REL::Relocation<func_t> func{ ID::Actor::SetGhost };
-			func(this, a_ghost);
-		}
-
-		// Drives ACTOR_LIFE_STATE kRestrained (6): can't move, stays conscious. Console SetRestrained.
-		// (osf-re gameplay.defeat_damage_hook; the writer that pinned SetLifeState's slot/enum.)
-		void SetRestrained(bool a_restrained)
-		{
-			using func_t = decltype(&Actor::SetRestrained);
-			static REL::Relocation<func_t> func{ ID::Actor::SetRestrained };
-			func(this, a_restrained);
 		}
 
 		void SetSkinTone(std::uint32_t a_index)

@@ -17,14 +17,10 @@ namespace RE::ID
 		inline constexpr REL::ID EquipItem{ 101349 };     // add-if-missing equip; 1.16.244 0x1963F20 / 1.16.242 0x1966A60 (osf-re gameplay.actor_equipment)
 		inline constexpr REL::ID EvaluatePackage{ 0 };    // 150640
 		inline constexpr REL::ID GetActorKnowledge{ 0 };  // 150669
-		inline constexpr REL::ID IsHostileToActor{ 100890 };  // 0x14191fca0; CLSF's 150777 was WRONG (a dtor) on .244 (osf-re gameplay.actor_faction_taxonomy)
+		inline constexpr REL::ID IsHostileToActor{ 0 };   // 150777
 		inline constexpr REL::ID IsJumping{ 0 };          // 150985
 		inline constexpr REL::ID IsOverEncumbered{ 0 };   // 150999
 		inline constexpr REL::ID IsSneaking{ 0 };         // 151014
-		inline constexpr REL::ID SetAIEnabled{ 101266 };  // boolBits kProcessMe (Actor+0x208 bit1); console TAI (osf-re gameplay.defeat_damage_hook)
-		inline constexpr REL::ID SetGhost{ 100873 };      // ExtraGhost invuln+AI-ignore; console SetGhost (osf-re gameplay.defeat_damage_hook)
-		inline constexpr REL::ID SetLifeState{ 100787 };  // vtable slot 0x16F; writes ACTOR_LIFE_STATE bits 17-20 of [actor+0xF8] (osf-re gameplay.defeat_damage_hook)
-		inline constexpr REL::ID SetRestrained{ 100871 }; // ACTOR_LIFE_STATE kRestrained(6); console SetRestrained (osf-re gameplay.defeat_damage_hook)
 		inline constexpr REL::ID SetSkinTone{ 97400 };
 		inline constexpr REL::ID UpdateAppearance{ 101306 };
 		inline constexpr REL::ID UpdateChargenAppearance{ 97399 };
@@ -32,10 +28,7 @@ namespace RE::ID
 
 	namespace ActorUtils
 	{
-		inline constexpr REL::ID ChangeAnimArchetype{ 100510 };
-		// Accessor for the lazily-initialized global the idle setter requires as its last arg.
-		// FIXME: canonical symbol name unconfirmed; "IdleContext" is descriptive, not authoritative.
-		inline constexpr REL::ID IdleContextGlobal{ 35720 };
+		inline constexpr REL::ID ChangeAnimArchetype{ 0 };  // 150497
 	}
 
 	namespace ActorValue
@@ -64,29 +57,6 @@ namespace RE::ID
 	{
 		inline constexpr REL::ID GetEventSource{ 100427 };  // 151162
 	}
-
-	// Statically-linked Wwise 2021.1 AK::SoundEngine entry points (no exported symbols).
-	namespace AkSoundEngine
-	{
-		inline constexpr REL::ID GetIDFromString{ 150371 };
-		inline constexpr REL::ID PostEvent{ 150391 };      
-		inline constexpr REL::ID PostEventByName{ 150393 };
-		inline constexpr REL::ID LoadBank{ 150389 };       
-		inline constexpr REL::ID LoadBankByID{ 150388 };   
-		inline constexpr REL::ID UnloadBank{ 150434 };
-		inline constexpr REL::ID SetPosition{ 150420 };
-		inline constexpr REL::ID ExecuteActionOnPlayingID{ 150360 };  // stop/pause/etc one voice by AkPlayingID
-		inline constexpr REL::ID StopAll{ 150401 };                   // stop every voice on an AkGameObjectID
-	}
-
-	namespace AIProcess
-	{		
-		// AIProcess member that drives idle playback; the (Actor*, flags, TESIdleForm*, ...)
-		// signature matches the inherited-lineage AIProcess::SetupSpecialIdle. Name is from
-		// that lineage, not verified against a Starfield-specific symbol source.
-		inline constexpr REL::ID SetupSpecialIdle{ 102136 };
-	}
-
 
 	namespace AttachReference::Event
 	{
@@ -161,7 +131,7 @@ namespace RE::ID
 	namespace BGSDefaultObjectManager
 	{
 		inline constexpr REL::ID DefaultObjectData{ 0 };  // 761776
-		inline constexpr REL::ID GetSingleton{ 43134 };   // runtime-proven .244 2026-06-27 (mgr+0x108 ptr == LookupByEditorID("Health")); 82283 was a stale cross-version note. See gameplay.defeat_damage_hook.
+		inline constexpr REL::ID GetSingleton{ 0 };       // 82283
 	}
 
 	namespace BGSEditorID
@@ -309,14 +279,7 @@ namespace RE::ID
 
 	namespace BSPointerHandleManagerInterface
 	{
-		// .244 AddrLib ID 35638 = the engine by-value resolver NiPointer<T> GetSmartPointer(const handle&)
-		// (FUN_1402b65e0): rcx = &out NiPointer (return slot), rdx = &handle -> args are (out, in), the
-		// reverse of the Skyrim-style bool(in, out) primitive CommonLibSF modelled, so the BSPointerHandle.h
-		// wrapper calls it as func(a_out, a_in). It loads the shared TES handle-manager singleton
-		// (DAT_145e60380) and delegates to the core lookup ID 139363 (mask index & [mgr+0x68], 0x10-byte
-		// entries @ [mgr+0x50], age-check (entry[+8] & ~mask) == (handle & ~mask)). The old // 72432 was a
-		// stale Skyrim ID that resolves to a list-walk on .244 and crashed. (osf-re gameplay.defeat_damage_hook)
-		inline constexpr REL::ID GetSmartPointer{ 35638 };
+		inline constexpr REL::ID GetSmartPointer{ 0 };  // 72432
 	}
 
 	namespace BSReadWriteLock
@@ -721,16 +684,6 @@ namespace RE::ID
 		inline constexpr REL::ID GetEventSource{ 0 };  // 137011
 	}
 
-	namespace Console
-	{
-		// `tcai` (ToggleCombatAI) console handler. It writes the global "all combat AI
-		// disabled" gate (DAT_1458d570d - a raw global with NO AddrLib ID) via
-		// `40 88 3D <disp32>` (mov byte [rip+disp], dil). RE::Console::SetCombatAIProcessing
-		// resolves the gate off this handler so it relocates across builds.
-		// (osf-re gameplay.defeat_damage_hook, 1.16.244)
-		inline constexpr REL::ID ToggleCombatAI{ 66826 };
-	}
-
 	namespace ConsoleLog
 	{
 		inline constexpr REL::ID Singleton{ 938104 };
@@ -1011,7 +964,7 @@ namespace RE::ID
 
 	namespace HideSubtitleEvent::Event
 	{
-		inline constexpr REL::ID GetEventSource{ 86875 };  // 0x141495d00 (.244) magic-static; returns source @0x145979BB0. (Old //133630 was a mislabel.) osf-re ui.subtitle
+		inline constexpr REL::ID GetEventSource{ 0 };  // 133630
 	}
 
 	namespace HourPassed::Event
@@ -1507,21 +1460,7 @@ namespace RE::ID
 		inline constexpr REL::ID ForceFirstPerson{ 113397 };
 		inline constexpr REL::ID ForceThirdPerson{ 113398 };
 		inline constexpr REL::ID SetCameraState{ 113375 };  // generic SetCameraState(this, CameraState): rbx = cameraStates[arg] swap. RE'd 1.16.244 (old `166078` was a container dtor, rejected)
-		inline constexpr REL::ID ToggleFreeCameraMode{ 113409 };  // ToggleFreeCameraMode(this, uint32 cameraStateIndex, bool flag): toggle wrapper over SetCameraState that manages the +0x2dd free-cam gate; the native `tfc` path. flag must be false for normal entry. In-game proven 1.16.244
 		inline constexpr REL::ID QCameraEquals{ 0 };        // unmapped: inlined in-engine (no standalone fn); header impl is inline, so this ID is unused. (`166081` was a wrong placeholder)
-	}
-
-	// Free-camera input context. The console `tfc` handler calls PushContext right after
-	// PlayerCamera::ToggleFreeCameraMode (and PopContext on exit) to route movement input to the free
-	// cam: fn(Manager singleton, contextId=0x13, &Descriptor). off2id-confirmed AddrLib IDs (1.16.244,
-	// in-game proven). The owning manager class is not yet identified — its singleton slot is BSS
-	// (unreadable in the static image) — so these are recorded as raw IDs, not yet a typed class binding.
-	namespace FreeCameraInputContext
-	{
-		inline constexpr REL::ID Manager{ 938003 };     // input/control manager singleton (the slot holds the ptr)
-		inline constexpr REL::ID Descriptor{ 894502 };  // static context descriptor (passed by address — lea r8)
-		inline constexpr REL::ID PushContext{ 124144 };
-		inline constexpr REL::ID PopContext{ 124143 };
 	}
 
 	namespace PlayerCharacter
@@ -1636,9 +1575,8 @@ namespace RE::ID
 
 	namespace ProcessLists
 	{
-		inline constexpr REL::ID AreHostileActorsNear{ 103313 };  // .244 0x141a951b0; bool(ProcessLists*, BSScrapArray<BSPointerHandle<Actor>>* out=null): walks the high-actor list (+0x60), interior/exterior-aware radius, near-hostile test (osf-re gameplay.process_lists)
+		inline constexpr REL::ID AreHostileActorsNear{ 0 };  // 154040
 		inline constexpr REL::ID Singleton{ 937584 };
-		inline constexpr REL::ID StopCombatAndAlarmOnActor{ 103285 };  // manager-level combat removal -> all combatants drop the actor (core of console StopCombatAlarmOnActor; osf-re gameplay.defeat_damage_hook)
 		inline constexpr REL::ID ToggleAI{ 0 };  // 154056
 	}
 
@@ -1955,7 +1893,7 @@ namespace RE::ID
 
 	namespace ShowSubtitleEvent::Event
 	{
-		inline constexpr REL::ID GetEventSource{ 86874 };  // 0x141495c90 (.244) magic-static; returns source @0x145979B88. (CLSF's old //133631 was a mislabel: 133631/0x1426749b0 is an unrelated tagged-object accessor, NOT this accessor.) osf-re ui.subtitle
+		inline constexpr REL::ID GetEventSource{ 0 };  // 133631
 	}
 
 	namespace SkillsMenu_Accept
