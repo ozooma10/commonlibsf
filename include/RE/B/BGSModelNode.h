@@ -68,7 +68,6 @@ namespace RE
 	};
 	static_assert(offsetof(BGSModelNode, frameStamp) == 0x68);
 	static_assert(offsetof(BGSModelNode, sgSyncCallback) == 0x70);
-	static_assert(offsetof(BGSModelNode, rigBoneCount) == 0x78);
 	static_assert(offsetof(BGSModelNode, rootGroupA) == 0x7c);
 	static_assert(offsetof(BGSModelNode, nodes) == 0x18);
 	static_assert(offsetof(BGSModelNode, active) == 0x80);
