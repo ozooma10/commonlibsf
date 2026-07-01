@@ -221,7 +221,7 @@ namespace RE::ID
 
 	namespace BooksRead::Event
 	{
-		inline constexpr REL::ID GetEventSource{ 0 };  // 103540
+		inline constexpr REL::ID GetEventSource{ 61274 };
 	}
 
 	namespace Bounty::Event
@@ -1220,7 +1220,11 @@ namespace RE::ID
 		inline constexpr REL::ID DebugNotification{ 0 };        // 138728
 		inline constexpr REL::ID FadeOutGame{ 114430 };         // 0x1EE2740 on 1.16.244; engine impl behind the Papyrus Game.FadeOutGame native (RE-verified, osf-re ui.fader_menu)
 		inline constexpr REL::ID LookupReferenceByHandle{ 0 };  // 72986
-		inline constexpr REL::ID PlayMenuSound{ 0 };            // 167344
+		inline constexpr REL::ID PlayMenuSound{ 84314 };          // slot dispatcher  1.16.244.0 @ 0x13C2B70
+		inline constexpr REL::ID PlayMenuSoundFn{ 114459 };       // audio play call  1.16.244.0 @ 0x1EE6460
+		inline constexpr REL::ID PlayMenuSoundIntern{ 1186742 };  // BSFixedString::Get  0x28CBA80
+		inline constexpr REL::ID PlayMenuSoundRelease{ 139340 };  // BSFixedString release  0x28CAEA0
+		inline constexpr REL::ID PlayMenuSoundCtx{ 392439 };      // PTR_144af4430  0x4AF4430
 	}
 
 	namespace MissionBoard_MissionEntryChanged
@@ -1913,12 +1917,12 @@ namespace RE::ID
 
 	namespace Spaceship::TakeOffEvent
 	{
-		inline constexpr REL::ID GetEventSource{ 0 };  // 37523
+		inline constexpr REL::ID GetEventSource{ 120552 };
 	}
 
 	namespace Spaceship::GravJumpEvent
 	{
-		inline constexpr REL::ID GetEventSource{ 0 };  // 141814
+		inline constexpr REL::ID GetEventSource{ 93876 };
 	}
 
 	namespace Spaceship::LandedSetEvent
@@ -1928,52 +1932,52 @@ namespace RE::ID
 
 	namespace Spaceship::BoughtEvent
 	{
-		inline constexpr REL::ID GetEventSource{ 0 };  // 174575
+		inline constexpr REL::ID GetEventSource{ 120542 };
 	}
 
 	namespace Spaceship::ContrabandScanWarningEvent
 	{
-		inline constexpr REL::ID GetEventSource{ 0 };  // 174576
+		inline constexpr REL::ID GetEventSource{ 120555 };
 	}
 
 	namespace Spaceship::DockEvent
 	{
-		inline constexpr REL::ID GetEventSource{ 0 };  // 174577
+		inline constexpr REL::ID GetEventSource{ 120544 };
 	}
 
 	namespace Spaceship::DynamicNavmeshCompleted
 	{
-		inline constexpr REL::ID GetEventSource{ 0 };  // 174578
+		inline constexpr REL::ID GetEventSource{ 120550 };
 	}
 
 	namespace Spaceship::FarTravelEvent
 	{
-		inline constexpr REL::ID GetEventSource{ 0 };  // 174579
+		inline constexpr REL::ID GetEventSource{ 120553 };
 	}
 
 	namespace Spaceship::LandingEvent
 	{
-		inline constexpr REL::ID GetEventSource{ 0 };  // 174580
+		inline constexpr REL::ID GetEventSource{ 120551 };
 	}
 
 	namespace Spaceship::PlanetScanEvent
 	{
-		inline constexpr REL::ID GetEventSource{ 0 };  // 174581
+		inline constexpr REL::ID GetEventSource{ 120554 };
 	}
 
 	namespace Spaceship::RampDownEvent
 	{
-		inline constexpr REL::ID GetEventSource{ 0 };  // 174582
+		inline constexpr REL::ID GetEventSource{ 120538 };
 	}
 
 	namespace Spaceship::RefueledEvent
 	{
-		inline constexpr REL::ID GetEventSource{ 0 };  // 174583
+		inline constexpr REL::ID GetEventSource{ 120543 };
 	}
 
 	namespace Spaceship::RegisteredEvent
 	{
-		inline constexpr REL::ID GetEventSource{ 0 };  // 174584
+		inline constexpr REL::ID GetEventSource{ 120540 };
 	}
 
 	namespace Spaceship::ShieldEvent
@@ -1983,7 +1987,7 @@ namespace RE::ID
 
 	namespace Spaceship::ShipAddedEvent
 	{
-		inline constexpr REL::ID GetEventSource{ 0 };  // 174586
+		inline constexpr REL::ID GetEventSource{ 120539 };
 	}
 
 	namespace Spaceship::ShipCollisionEvent
@@ -1998,12 +2002,12 @@ namespace RE::ID
 
 	namespace Spaceship::SoldEvent
 	{
-		inline constexpr REL::ID GetEventSource{ 0 };  // 174589
+		inline constexpr REL::ID GetEventSource{ 120541 };
 	}
 
 	namespace Spaceship::SystemDamagedEvent
 	{
-		inline constexpr REL::ID GetEventSource{ 0 };  // 174590
+		inline constexpr REL::ID GetEventSource{ 120547 };
 	}
 
 	namespace Spaceship::SystemPowerAllocationEvent
@@ -2013,7 +2017,7 @@ namespace RE::ID
 
 	namespace Spaceship::SystemPowerChangeEvent
 	{
-		inline constexpr REL::ID GetEventSource{ 0 };  // 174592
+		inline constexpr REL::ID GetEventSource{ 120549 };
 	}
 
 	namespace Spaceship::SystemRepairedBIEvent
@@ -2023,7 +2027,7 @@ namespace RE::ID
 
 	namespace Spaceship::SystemRepairedEvent
 	{
-		inline constexpr REL::ID GetEventSource{ 0 };  // 174594
+		inline constexpr REL::ID GetEventSource{ 120546 };
 	}
 
 	namespace Spaceship::TakeDamagEvent
@@ -2225,7 +2229,7 @@ namespace RE::ID
 
 	namespace TESBookReadEvent
 	{
-		inline constexpr REL::ID GetEventSource{ 0 };  // 107141
+		inline constexpr REL::ID GetEventSource{ 64108 };
 	}
 
 	namespace TESCellFullyLoadedEvent
@@ -2379,8 +2383,8 @@ namespace RE::ID
 		inline constexpr REL::ID GetScale{ 0 };             // 106658
 		inline constexpr REL::ID GetSpaceship{ 119881 };
 		inline constexpr REL::ID GetSpaceshipParentDock{ 0 };  // 174134
-		inline constexpr REL::ID GetSpaceshipPilot{ 0 };       // 173834
-		inline constexpr REL::ID GetValue{ 0 };                // 107605
+		inline constexpr REL::ID GetSpaceshipPilot{ 119876 };
+		inline constexpr REL::ID GetValue{ 0 };  // 107605
 		inline constexpr REL::ID HasKeyword{ 42794 };
 		inline constexpr REL::ID IsCrimeToActivate{ 0 };  // 106755
 		inline constexpr REL::ID IsInSpace{ 63482 };
