@@ -25,6 +25,9 @@ namespace RE::ID
 		inline constexpr REL::ID IsSneaking{ 0 };         // 151014
 		inline constexpr REL::ID RemoveFromFaction{ 100963 };  // 1.16.244 (Skyrim RELOCATION_ID 36680); osf-re gameplay.actor_faction_taxonomy
 		inline constexpr REL::ID SetFactionRank{ 100953 };     // 1.16.244 (guard stub -> unindexed body 0x141927c88); osf-re gameplay.actor_faction_taxonomy
+		inline constexpr REL::ID SetAIEnabled{ 101266 };  // boolBits kProcessMe (Actor+0x208 bit1); console TAI (osf-re gameplay.defeat_damage_hook)
+		inline constexpr REL::ID SetGhost{ 100873 };      // ExtraGhost invuln+AI-ignore; console SetGhost (osf-re gameplay.defeat_damage_hook)
+		inline constexpr REL::ID SetLifeState{ 100787 };  // vtable slot 0x16F; writes ACTOR_LIFE_STATE bits 17-20 of [actor+0xF8] (osf-re gameplay.defeat_damage_hook)
 		inline constexpr REL::ID SetSkinTone{ 97400 };
 		inline constexpr REL::ID UpdateAppearance{ 101306 };
 		inline constexpr REL::ID UpdateChargenAppearance{ 97399 };
@@ -285,7 +288,11 @@ namespace RE::ID
 
 	namespace BSPointerHandleManagerInterface
 	{
-		inline constexpr REL::ID GetSmartPointer{ 0 };  // 72432
+		// .244 AddrLib ID 35638 = the engine by-value resolver NiPointer<T> GetSmartPointer(const handle&)
+		// (FUN_1402b65e0): args are (out, in) — the reverse of the Skyrim bool(in, out) primitive; the
+		// BSPointerHandle.h wrapper calls it accordingly. The old // 72432 was a stale Skyrim ID that
+		// resolves to a list-walk on .244 and crashed. (osf-re gameplay.defeat_damage_hook)
+		inline constexpr REL::ID GetSmartPointer{ 35638 };
 	}
 
 	namespace BSReadWriteLock
@@ -688,6 +695,15 @@ namespace RE::ID
 	namespace ClearShipHudTarget::Event
 	{
 		inline constexpr REL::ID GetEventSource{ 0 };  // 137011
+	}
+
+	namespace Console
+	{
+		// `tcai` (ToggleCombatAI) console handler. It writes the global "all combat AI
+		// disabled" gate (a raw global with NO AddrLib ID) via `40 88 3D <disp32>`
+		// (mov byte [rip+disp], dil). RE::Console::SetCombatAIProcessing resolves the gate
+		// off this handler so it relocates across builds. (osf-re gameplay.defeat_damage_hook, 1.16.244.)
+		inline constexpr REL::ID ToggleCombatAI{ 66826 };
 	}
 
 	namespace ConsoleLog
@@ -1588,6 +1604,7 @@ namespace RE::ID
 		inline constexpr REL::ID AreHostileActorsNear{ 0 };  // 154040
 		inline constexpr REL::ID Singleton{ 937584 };
 		inline constexpr REL::ID ToggleAI{ 0 };  // 154056
+		inline constexpr REL::ID StopCombatAndAlarmOnActor{ 103285 };  // manager-level combat removal -> all combatants drop the actor (core of console StopCombatAlarmOnActor; osf-re gameplay.defeat_damage_hook)
 	}
 
 	namespace REFR_LOCK

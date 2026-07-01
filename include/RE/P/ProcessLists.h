@@ -41,6 +41,17 @@ namespace RE
 			func(this, a_enable);
 		}
 
+		// Manager-level combat removal: drops a_actor from combat for ALL combatants. This is the lever
+		// per-actor Actor::StopCombat (vfunc 0x16E) lacks - others re-acquire the target after StopCombat
+		// but not after this. Core of the console StopCombatAlarmOnActor handler. Runtime-proven (osf-re
+		// gameplay.defeat_damage_hook: a defeated NPC's attackers disengage only once this is applied).
+		void StopCombatAndAlarmOnActor(Actor* a_actor, bool a_arg2 = false)  // a_arg2: console handler passes false; semantics unconfirmed
+		{
+			using func_t = decltype(&ProcessLists::StopCombatAndAlarmOnActor);
+			static REL::Relocation<func_t> func{ ID::ProcessLists::StopCombatAndAlarmOnActor };
+			func(this, a_actor, a_arg2);
+		}
+
 		// members
 		std::byte                        pad018[0x8];                   // 018
 		std::int32_t                     numberHighActors;              // 020
