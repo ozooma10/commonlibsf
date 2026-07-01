@@ -58,7 +58,7 @@ namespace RE
 		std::byte           unk28[0x40];  // 28
 		std::uint32_t       frameStamp;   // 68  - last composed frame (rig sync 0x142be93f0)
 		std::uint32_t       unk6C;        // 6C
-		void*               unk70;        // 70  - scene-graph-sync callback object (compose +0x70)
+		void*               sgSyncCallback;  // 70  - scene-graph-sync callback object (compose +0x70)
 		std::uint16_t       boneCount;    // 78  - element count of rig->local/world/prevWorld buffers
 		std::uint16_t       unk7A;        // 7A
 		std::uint16_t       rootGroupA;   // 7C  - root compose count = rootGroupA + rootGroupB
@@ -68,7 +68,6 @@ namespace RE
 	};
 	static_assert(offsetof(BGSModelNode, frameStamp) == 0x68);
 	static_assert(offsetof(BGSModelNode, sgSyncCallback) == 0x70);
-	static_assert(offsetof(BGSModelNode, rigBoneCount) == 0x78);
 	static_assert(offsetof(BGSModelNode, rootGroupA) == 0x7c);
 	static_assert(offsetof(BGSModelNode, nodes) == 0x18);
 	static_assert(offsetof(BGSModelNode, boneCount) == 0x78);
