@@ -32,7 +32,9 @@ namespace RE::ID
 
 	namespace ActorUtils
 	{
-		inline constexpr REL::ID ChangeAnimArchetype{ 0 };  // 150497
+		inline constexpr REL::ID ChangeAnimArchetype{ 100510 };  // 1.16.244 (was 0//150497 = padding); osf-re engine.animation_graphs
+		inline constexpr REL::ID PlayIdleSetter{ 102136 };       // 1.16.244 AIProcess idle-setter (7-arg); osf-re engine.animation_graphs
+		inline constexpr REL::ID PlayIdleGlobal{ 35720 };        // 1.16.244 lazily-inited global accessor arg for PlayIdleSetter
 	}
 
 	namespace ActorValue
