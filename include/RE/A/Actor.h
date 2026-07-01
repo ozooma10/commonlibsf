@@ -285,6 +285,17 @@ namespace RE
 		virtual void         Unk_1A0();                                                                              // 1A0
 		virtual void         Unk_1A1();                                                                              // 1A1
 
+		// Adds this actor to a_faction at a_rank (create-or-update the membership). The runtime
+		// override is stored on the ref ExtraDataList (ExtraFactionChanges, extra type 0x56); a
+		// negative rank marks not-a-member. What the hidden Papyrus Actor.AddToFaction native calls.
+		// 1.16.244 (osf-re gameplay.actor_faction_taxonomy).
+		void AddToFaction(TESFaction* a_faction, std::int8_t a_rank)
+		{
+			using func_t = decltype(&Actor::AddToFaction);
+			static REL::Relocation<func_t> func{ ID::Actor::AddToFaction };
+			func(this, a_faction, a_rank);
+		}
+
 		// The engine's own add-then-equip (what Papyrus Actor.EquipItem bottoms out
 		// in, via TaskQueueInterface): looks the form up in the inventory, ADDS it
 		// if missing, then ActorEquipManager::EquipObject with queueEquip=true.
@@ -309,6 +320,16 @@ namespace RE
 			using func_t = decltype(&Actor::GetActorKnowledge);
 			static REL::Relocation<func_t> func{ ID::Actor::GetActorKnowledge };
 			return func(this, a_actor);
+		}
+
+		// Returns this actor's rank in a_faction (>= 0 = member; a negative sentinel, e.g. -2,
+		// = not a member). Walks the runtime ExtraFactionChanges override (actor+0xC8, type 0x56)
+		// then the base TESNPC faction list. 1.16.244 (osf-re gameplay.actor_faction_taxonomy).
+		[[nodiscard]] std::int32_t GetFactionRank(TESFaction* a_faction, bool a_isPlayer = false)
+		{
+			using func_t = decltype(&Actor::GetFactionRank);
+			static REL::Relocation<func_t> func{ ID::Actor::GetFactionRank };
+			return func(this, a_faction, a_isPlayer);
 		}
 
 		[[nodiscard]] TESNPC* GetNPC()
@@ -372,6 +393,28 @@ namespace RE
 			using func_t = decltype(&Actor::IsSneaking);
 			static REL::Relocation<func_t> func{ ID::Actor::IsSneaking };
 			return func(this);
+		}
+
+		// Removes this actor from a_faction (no rank arg). Also clears the crime-faction override if
+		// a_faction was the crime faction. What Papyrus Actor.RemoveFromFaction calls.
+		// NOTE: the virtual Unk_175/IsInFaction slot above is MISLABELED on 1.16.244 (it is an AIProcess
+		// byte query, not a faction test); test membership via GetFactionRank(a_faction) >= 0 instead.
+		// 1.16.244 (osf-re gameplay.actor_faction_taxonomy).
+		void RemoveFromFaction(TESFaction* a_faction)
+		{
+			using func_t = decltype(&Actor::RemoveFromFaction);
+			static REL::Relocation<func_t> func{ ID::Actor::RemoveFromFaction };
+			func(this, a_faction);
+		}
+
+		// Sets this actor's rank in a_faction (creates the membership if absent, like AddToFaction, but
+		// shares the rank worker with ModFactionRank). What Papyrus Actor.SetFactionRank calls.
+		// 1.16.244 (osf-re gameplay.actor_faction_taxonomy).
+		void SetFactionRank(TESFaction* a_faction, std::int8_t a_rank)
+		{
+			using func_t = decltype(&Actor::SetFactionRank);
+			static REL::Relocation<func_t> func{ ID::Actor::SetFactionRank };
+			func(this, a_faction, a_rank);
 		}
 
 		void SetSkinTone(std::uint32_t a_index)

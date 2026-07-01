@@ -14,13 +14,17 @@ namespace RE::ID
 
 	namespace Actor
 	{
+		inline constexpr REL::ID AddToFaction{ 100961 };       // 1.16.244 (Skyrim RELOCATION_ID(36678,37686)); osf-re gameplay.actor_faction_taxonomy
 		inline constexpr REL::ID EquipItem{ 101349 };     // add-if-missing equip; 1.16.244 0x1963F20 / 1.16.242 0x1966A60 (osf-re gameplay.actor_equipment)
 		inline constexpr REL::ID EvaluatePackage{ 0 };    // 150640
 		inline constexpr REL::ID GetActorKnowledge{ 0 };  // 150669
-		inline constexpr REL::ID IsHostileToActor{ 0 };   // 150777
+		inline constexpr REL::ID GetFactionRank{ 100950 };     // 1.16.244; osf-re gameplay.actor_faction_taxonomy
+		inline constexpr REL::ID IsHostileToActor{ 100890 };  // 1.16.244 (was 0//150777 = a scalar-deleting dtor); osf-re gameplay.actor_faction_taxonomy
 		inline constexpr REL::ID IsJumping{ 0 };          // 150985
 		inline constexpr REL::ID IsOverEncumbered{ 0 };   // 150999
 		inline constexpr REL::ID IsSneaking{ 0 };         // 151014
+		inline constexpr REL::ID RemoveFromFaction{ 100963 };  // 1.16.244 (Skyrim RELOCATION_ID 36680); osf-re gameplay.actor_faction_taxonomy
+		inline constexpr REL::ID SetFactionRank{ 100953 };     // 1.16.244 (guard stub -> unindexed body 0x141927c88); osf-re gameplay.actor_faction_taxonomy
 		inline constexpr REL::ID SetSkinTone{ 97400 };
 		inline constexpr REL::ID UpdateAppearance{ 101306 };
 		inline constexpr REL::ID UpdateChargenAppearance{ 97399 };
