@@ -2401,6 +2401,8 @@ namespace RE::ID
 
 	namespace TESNPC
 	{
+		inline constexpr REL::ID ChangeHeadPart{ 68189 };              // 1.16.244 (npc, BGSHeadPart*); Papyrus Actor.ChangeHeadPart stub path (osf-re ui.menu3d_paperdoll)
+		inline constexpr REL::ID ChangeHeadPartRemoveExtras{ 68188 };  // 1.16.244 (npc, BGSHeadPart*, bool removeExtras); osf-re ui.menu3d_paperdoll
 		inline constexpr REL::ID CopyAppearance{ 68122 };
 		inline constexpr REL::ID DeriveGeneticParentAppearance{ 68123 };
 	}
