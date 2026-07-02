@@ -35,7 +35,7 @@ namespace RE
 
 	class TESObjectCELL :
 		public TESHandleForm,  // 00
-		public TESFullName     // 30
+		public TESFullName     // 38
 	{
 	public:
 		SF_RTTI_VTABLE(TESObjectCELL);
@@ -114,13 +114,19 @@ namespace RE
 		}
 
 		// members
-		REX::TEnumSet<Flag, std::uint32_t>   cellFlags;       // 040
-		std::uint16_t                        cellGameFlags;   // 044
-		std::uint8_t                         unk04E;          // 046
-		REX::TEnum<CELL_STATE, std::uint8_t> cellState;       // 047
-		std::uint64_t                        unk050;          // 048
-		BSTSmartPointer<ExtraDataList>       extraDataList;   // 050
-		CellData                             cellData;        // 058
+		// Layout re-anchored on Starfield 1.16.244 against the engine's own cell-reference walker
+		// (the FindAllReferencesOfType native's per-cell ForEachReference): the loaded-refs array
+		// is at +0x80, its guard lock at +0x118, and the attach-state byte at +0x4F. The previous
+		// member block was authored against a 0x40 member start, but TESHandleForm (0x38) +
+		// TESFullName (0x10) place members at 0x48, so `references` compiled to +0x88 and read a
+		// torn pointer as its size (a silent always-empty walk) while `lock` guarded the wrong
+		// bytes. Members between the proven anchors keep their historical order but are unverified.
+		REX::TEnumSet<Flag, std::uint32_t>   cellFlags;       // 048
+		std::uint16_t                        cellGameFlags;   // 04C
+		std::uint8_t                         unk04E;          // 04E
+		REX::TEnum<CELL_STATE, std::uint8_t> cellState;       // 04F - engine reads the attached check here (== kAttached)
+		BSTSmartPointer<ExtraDataList>       extraDataList;   // 050 - unverified
+		CellData                             cellData;        // 058 - unverified
 		std::uint32_t                        unk060;          // 060
 		float                                unk064;          // 064
 		float                                unk068;          // 068
@@ -130,7 +136,7 @@ namespace RE
 		std::uint16_t                        pad072;          // 072
 		std::uint32_t                        pad074;          // 074
 		std::uint64_t                        unk078;          // 078
-		BSTArray<NiPointer<TESObjectREFR>>   references;      // 080
+		BSTArray<NiPointer<TESObjectREFR>>   references;      // 080 - engine: size@80, data@88
 		std::uint64_t                        unk090;          // 090
 		std::uint64_t                        unk098;          // 098
 		std::uint64_t                        unk0A0;          // 0A0
@@ -150,13 +156,17 @@ namespace RE
 		std::uint64_t                        unk0F8;          // 0F8
 		std::uint64_t                        unk100;          // 100
 		std::uint64_t                        unk108;          // 108
-		std::uint64_t                        unk110;          // 110
-		TESWorldSpace*                       cellWorldspace;  // 118
-		mutable BSReadWriteLock              lock;            // 120
+		TESWorldSpace*                       cellWorldspace;  // 110 - unverified
+		mutable BSReadWriteLock              lock;            // 118 - engine: read-acquire@118, release dec@11C
+		std::uint64_t                        unk120;          // 120
 		std::uint64_t                        unk128;          // 128
 		std::uint64_t                        unk130;          // 130
-		std::uint32_t                        unk138;          // 138
+		std::uint64_t                        unk138;          // 138
 		std::uint64_t                        unk140;          // 140
+		std::uint64_t                        unk148;          // 148
 	};
+	static_assert(offsetof(TESObjectCELL, cellState) == 0x4F);
+	static_assert(offsetof(TESObjectCELL, references) == 0x80);
+	static_assert(offsetof(TESObjectCELL, lock) == 0x118);
 	static_assert(sizeof(TESObjectCELL) == 0x150);
 }
