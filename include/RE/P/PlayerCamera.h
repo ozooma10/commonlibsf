@@ -111,6 +111,13 @@ namespace RE
 			return func(this, a_cameraState);
 		}
 
+		void ToggleFreeCameraMode(std::uint32_t a_cameraStateIndex, bool a_flag)
+		{
+			using func_t = decltype(&PlayerCamera::ToggleFreeCameraMode);
+			static REL::Relocation<func_t> func{ ID::PlayerCamera::ToggleFreeCameraMode };
+			return func(this, a_cameraStateIndex, a_flag);
+		}
+
 		bool QCameraEquals(CameraState a_cameraState) const
 		{
 			return (currentState == cameraStates[a_cameraState]);

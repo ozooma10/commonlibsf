@@ -40,6 +40,20 @@ namespace RE::ID
 		inline constexpr REL::ID PlayIdleGlobal{ 35720 };        // 1.16.244 lazily-inited global accessor arg for PlayIdleSetter
 	}
 
+	// Statically-linked Wwise 2021.1 AK::SoundEngine entry points (no exported symbols).
+	namespace AkSoundEngine
+	{
+		inline constexpr REL::ID GetIDFromString{ 150371 };
+		inline constexpr REL::ID PostEvent{ 150391 };
+		inline constexpr REL::ID PostEventByName{ 150393 };
+		inline constexpr REL::ID LoadBank{ 150389 };
+		inline constexpr REL::ID LoadBankByID{ 150388 };
+		inline constexpr REL::ID UnloadBank{ 150434 };
+		inline constexpr REL::ID SetPosition{ 150420 };
+		inline constexpr REL::ID ExecuteActionOnPlayingID{ 150360 };  // stop/pause/etc one voice by AkPlayingID
+		inline constexpr REL::ID StopAll{ 150401 };                   // stop every voice on an AkGameObjectID
+	}
+
 	namespace ActorValue
 	{
 		inline constexpr REL::ID GetSingleton{ 43134 };  // 36266
@@ -1485,8 +1499,9 @@ namespace RE::ID
 		inline constexpr REL::ID Singleton{ 937788 };
 		inline constexpr REL::ID ForceFirstPerson{ 113397 };
 		inline constexpr REL::ID ForceThirdPerson{ 113398 };
-		inline constexpr REL::ID SetCameraState{ 113375 };  // generic SetCameraState(this, CameraState): rbx = cameraStates[arg] swap. RE'd 1.16.244 (old `166078` was a container dtor, rejected)
-		inline constexpr REL::ID QCameraEquals{ 0 };        // unmapped: inlined in-engine (no standalone fn); header impl is inline, so this ID is unused. (`166081` was a wrong placeholder)
+		inline constexpr REL::ID SetCameraState{ 113375 };        // generic SetCameraState(this, CameraState): rbx = cameraStates[arg] swap. RE'd 1.16.244 (old `166078` was a container dtor, rejected)
+		inline constexpr REL::ID ToggleFreeCameraMode{ 113409 };  // ToggleFreeCameraMode(this, cameraStateIndex, flag): gate==0 -> ENTER free-fly. RE'd 1.16.244 (restored; dropped by a rebase, re-add from c01ac7e)
+		inline constexpr REL::ID QCameraEquals{ 0 };              // unmapped: inlined in-engine (no standalone fn); header impl is inline, so this ID is unused. (`166081` was a wrong placeholder)
 	}
 
 	namespace PlayerCharacter
