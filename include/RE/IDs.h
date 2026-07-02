@@ -847,6 +847,16 @@ namespace RE::ID
 		inline constexpr REL::ID GetEventSource{ 0 };  // 132107
 	}
 
+	namespace CreationRenderer
+	{
+		// Console `Screenshot` worker: void(const char* a_pathNoExtension, std::uint32_t a_format
+		// /*2=PNG, 3=HDR*/, std::uint32_t a_sourceFlags /*0=LDR end-of-frame, 4=HDR*/). Builds a
+		// CreationRendererPrivate::ImageCaptureData + ImageCaptureExportToFileNode and submits it
+		// to the render graph; GPU readback + encode + file write happen engine-side. Runtime-proven
+		// on 1.16.244 (OSF RE module ui.menu3d_paperdoll, 2026-07-02).
+		inline constexpr REL::ID CaptureFrameToFile{ 39202 };
+	}
+
 	namespace CreationRendererPrivate::Renderer
 	{
 		inline constexpr REL::ID Singleton{ 944397 };  // g_RendererRoot
