@@ -1205,6 +1205,11 @@ namespace RE::ID
 		inline constexpr REL::ID WorldRoot{ 0 };  // 887308
 	}
 
+	namespace MenuCursor
+	{
+		inline constexpr REL::ID Singleton{ 937972 };  // data slot -> the static MenuCursor instance (1.16.244 0x1461de010; OSF RE module ui.menu_cursor)
+	}
+
 	namespace msvc
 	{
 		namespace type_info
