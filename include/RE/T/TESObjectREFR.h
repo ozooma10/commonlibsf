@@ -101,16 +101,16 @@ namespace RE
 
 	struct RemoveItemRequest
 	{
-		TESBoundObject*                   object{ nullptr };                      // 00
-		BSTSmartPointer<TBO_InstanceData> instanceData;                           // 08
-		ExtraDataList*                    extra{ nullptr };                       // 10
-		std::int32_t                      inventoryIndex{ -1 };                   // 18
-		std::int32_t                      count{ 1 };                             // 1C
-		ITEM_TRANSFER_REASON              reason{ ITEM_TRANSFER_REASON::kNone };  // 20
-		std::uint32_t                     pad24{ 0 };                             // 24
-		TESObjectREFR*                    moveTo{ nullptr };                      // 28
-		NiPoint3*                         dropLocation{ nullptr };                // 30
-		NiPoint3*                         dropRotation{ nullptr };                // 38
+		TESBoundObject*                   object{ nullptr };                            // 00
+		BSTSmartPointer<TBO_InstanceData> instanceData;                                 // 08
+		ExtraDataList*                    extra{ nullptr };                             // 10
+		std::int32_t                      inventoryIndex{ -1 };                         // 18
+		std::int32_t                      count{ 1 };                                   // 1C
+		ITEM_TRANSFER_REASON              reason{ ITEM_TRANSFER_REASON::kNone };        // 20
+		std::uint32_t                     pad24{ 0 };                                   // 24
+		TESObjectREFR*                    moveTo{ nullptr };                            // 28
+		NiPoint3*                         dropLocation{ nullptr };                      // 30
+		NiPoint3*                         dropRotation{ nullptr };                      // 38
 	};
 	static_assert(sizeof(RemoveItemRequest) == 0x40);
 
@@ -198,7 +198,7 @@ namespace RE
 		virtual void         Unk_88();                                                                                                                                                                                                                                                                // 088
 		virtual void         Unk_89();                                                                                                                                                                                                                                                                // 089
 		virtual void         Unk_8A();                                                                                                                                                                                                                                                                // 08A
-		virtual void         RemoveItem(std::uint32_t& a_outHandle, const RemoveItemRequest& a_request);                                                                                                                                                                                              // 08B
+		virtual void         RemoveItem(std::uint32_t& a_outHandle, const RemoveItemRequest& a_request);                                                                                                                                                                                               // 08B
 		virtual void         Unk_8C();                                                                                                                                                                                                                                                                // 08C
 		virtual void         Unk_8D();                                                                                                                                                                                                                                                                // 08D
 		virtual void         Unk_8E();                                                                                                                                                                                                                                                                // 08E

@@ -14,13 +14,20 @@ namespace RE::ID
 
 	namespace Actor
 	{
+		inline constexpr REL::ID AddToFaction{ 100961 };
 		inline constexpr REL::ID EquipItem{ 101349 };
 		inline constexpr REL::ID EvaluatePackage{ 0 };    // 150640
 		inline constexpr REL::ID GetActorKnowledge{ 0 };  // 150669
-		inline constexpr REL::ID IsHostileToActor{ 0 };   // 150777
+		inline constexpr REL::ID GetFactionRank{ 100950 };
+		inline constexpr REL::ID IsHostileToActor{ 100890 };
 		inline constexpr REL::ID IsJumping{ 0 };          // 150985
 		inline constexpr REL::ID IsOverEncumbered{ 0 };   // 150999
 		inline constexpr REL::ID IsSneaking{ 0 };         // 151014
+		inline constexpr REL::ID RemoveFromFaction{ 100963 };
+		inline constexpr REL::ID SetFactionRank{ 100953 };
+		inline constexpr REL::ID SetAIEnabled{ 101266 };
+		inline constexpr REL::ID SetGhost{ 100873 };
+		inline constexpr REL::ID SetLifeState{ 100787 };
 		inline constexpr REL::ID SetSkinTone{ 97400 };
 		inline constexpr REL::ID UpdateAppearance{ 101306 };
 		inline constexpr REL::ID UpdateChargenAppearance{ 97399 };
@@ -41,8 +48,8 @@ namespace RE::ID
 	namespace ActorEquipManager
 	{
 		inline constexpr REL::ID Singleton{ 938503 };      // 879425
-		inline constexpr REL::ID EquipObject{ 101949 };    // 151991
-		inline constexpr REL::ID UnequipObject{ 101951 };  // 152007
+		inline constexpr REL::ID EquipObject{ 101949 };
+		inline constexpr REL::ID UnequipObject{ 101951 };
 	}
 
 	namespace ActorCellChangeEvent::Event
@@ -142,7 +149,7 @@ namespace RE::ID
 	namespace BGSDefaultObjectManager
 	{
 		inline constexpr REL::ID DefaultObjectData{ 0 };  // 761776
-		inline constexpr REL::ID GetSingleton{ 0 };       // 82283
+		inline constexpr REL::ID GetSingleton{ 43134 };
 	}
 
 	namespace BGSEditorID
@@ -282,409 +289,7 @@ namespace RE::ID
 
 	namespace BSPointerHandleManagerInterface
 	{
-		inline constexpr REL::ID GetSmartPointer{ 35638 };
-	}
-
-	namespace BSReadWriteLock
-	{
-		inline constexpr REL::ID LockRead{ 123862 };
-		inline constexpr REL::ID LockWrite{ 123863 };
-		inline constexpr REL::ID UnlockRead{ 36021 };
-		inline constexpr REL::ID UnlockWrite{ 35983 };
-	}
-
-	namespace BSScript
-	{
-		namespace Array
-		{
-			inline constexpr REL::ID ctor{ 0 };  // 196577
-			inline constexpr REL::ID dtor{ 0 };  // 196579
-		}
-
-		namespace Object
-		{
-			inline constexpr REL::ID ctor{ 137778 };  // 196025
-			inline constexpr REL::ID dtor{ 0 };       // 196032 - inlined
-			inline constexpr REL::ID dtorUnkSub{ 137823 };
-			inline constexpr REL::ID GetHandle{ 0 };  // 196069 - inlined
-			inline constexpr REL::ID SetHandle{ 0 };  // 196079
-			inline constexpr REL::ID IncRef{ 0 };     // 37879
-			inline constexpr REL::ID DecRef{ 0 };     // 196057
-		}
-
-		namespace ObjectBindPolicy
-		{
-			inline constexpr REL::ID BindObject{ 0 };  // 195981
-		}
-
-		namespace ObjectTypeInfo
-		{
-			inline constexpr REL::ID ctor{ 138400 };           // 197047
-			inline constexpr REL::ID dtor{ 137885 };           // 196202
-			inline constexpr REL::ID Clear{ 0 };               // 196218
-			inline constexpr REL::ID CopyFromLinkedData{ 0 };  // 196219
-			inline constexpr REL::ID GetProperty{ 0 };         // 196241
-		}
-
-		namespace Stack
-		{
-			inline constexpr REL::ID ctor{ 0 };                   // 196325
-			inline constexpr REL::ID dtor{ 0 };                   // 196333
-			inline constexpr REL::ID GetStackFrameVariable{ 0 };  // 196367 - inlined
-			inline constexpr REL::ID GetPageForFrame{ 138020 };   // 196366
-		}
-
-		namespace StackFrame
-		{
-			inline constexpr REL::ID GetVariable{ 84986 };
-		}
-
-		namespace Internal
-		{
-			namespace NF_util
-			{
-				namespace NativeFunctionBase
-				{
-					inline constexpr REL::ID Call{ 138074 };
-					inline constexpr REL::ID GetParam{ 138061 };
-					inline constexpr REL::ID GetSourceFilename{ 138065 };
-					inline constexpr REL::ID GetParamInfo{ 138067 };
-					inline constexpr REL::ID Unk_15{ 138068 };
-				}
-			}
-		}
-	}
-
-	namespace BSService::TaskQueue
-	{
-		inline constexpr REL::ID Singleton{ 883606 };
-		inline constexpr REL::ID QueueTask{ 100121 };
-	}
-
-	namespace BSSpinLock
-	{
-		inline constexpr REL::ID Lock{ 123819 };
-		inline constexpr REL::ID TryLock{ 123818 };
-		inline constexpr REL::ID Unlock{ 35630 };
-	}
-
-	namespace BSStringPool
-	{
-		namespace Entry
-		{
-			inline constexpr REL::ID Release{ 139340 };
-		}
-
-		namespace BucketTable
-		{
-			inline constexpr REL::ID GetSingleton{ 139337 };
-		}
-
-		inline constexpr REL::ID GetEntry{ 1186742 };
-		inline constexpr REL::ID GetEntryW{ 1186743 };
-	}
-
-	namespace BSStorage
-	{
-		inline constexpr REL::ID FlushStreamBuffer{ 0 };    // 72433
-		inline constexpr REL::ID PrepareStreamBuffer{ 0 };  // 72461
-		inline constexpr REL::ID WriteString{ 0 };          // 87863
-	}
-
-	namespace BSSystemFile
-	{
-		inline constexpr REL::ID ctor{ 0 };            // 198445
-		inline constexpr REL::ID dtor{ 0 };            // 198446
-		inline constexpr REL::ID DoClose{ 0 };         // 198452
-		inline constexpr REL::ID DeleteFileA{ 0 };     // 198451
-		inline constexpr REL::ID DoOpen{ 0 };          // 198454
-		inline constexpr REL::ID DoSeek{ 0 };          // 198456
-		inline constexpr REL::ID DoSetEndOfFile{ 0 };  // 198457
-		inline constexpr REL::ID Flush{ 0 };           // 78151
-		inline constexpr REL::ID GetSize{ 0 };         // 85176
-		inline constexpr REL::ID Read{ 0 };            // 75362
-		inline constexpr REL::ID RenameFile{ 0 };      // 198459
-		inline constexpr REL::ID Truncate{ 0 };        // 195959
-		inline constexpr REL::ID Write{ 0 };           // 75363
-		inline constexpr REL::ID operatorEqCopy{ 0 };  // 198448
-	}
-
-	namespace BSTEventSource
-	{
-		inline constexpr REL::ID Notify{ 123824 };
-		inline constexpr REL::ID RegisterSink{ 123821 };
-		inline constexpr REL::ID UnregisterSink{ 123822 };
-	}
-
-	namespace BSTHeapSTLAllocatorBase
-	{
-		inline constexpr REL::ID allocate{ 0 };    // 34039
-		inline constexpr REL::ID deallocate{ 0 };  // 34440
-	}
-
-	namespace Calendar
-	{
-		inline constexpr REL::ID Singleton{ 937673 };
-	}
-
-	namespace CellAttachDetachEvent
-	{
-		inline constexpr REL::ID GetEventSource{ 0 };  // 84784
-	}
-
-	namespace ChallengeCompletedEvent::Event
-	{
-		inline constexpr REL::ID GetEventSource{ 0 };  // 86781
-	}
-
-	namespace CharGen_BrowChange
-	{
-		inline constexpr REL::ID GetEventSource{ 0 };  // 141185
-	}
-
-	namespace CharGen_BrowColorChange
-	{
-		inline constexpr REL::ID GetEventSource{ 0 };  // 141186
-	}
-
-	namespace CharGen_CancelTextEntry
-	{
-		inline constexpr REL::ID GetEventSource{ 0 };  // 141187
-	}
-
-	namespace CharGen_CloseMenu
-	{
-		inline constexpr REL::ID GetEventSource{ 0 };  // 141188
-	}
-
-	namespace CharGen_CyclePronoun
-	{
-		inline constexpr REL::ID GetEventSource{ 0 };  // 141189
-	}
-
-	namespace CharGen_DirtScarsEtcChange
-	{
-		inline constexpr REL::ID GetEventSource{ 0 };  // 141190
-	}
-
-	namespace CharGen_EndBodyChange
-	{
-		inline constexpr REL::ID GetEventSource{ 0 };  // 141191
-	}
-
-	namespace CharGen_EndTextEntry
-	{
-		inline constexpr REL::ID GetEventSource{ 0 };  // 141192
-	}
-
-	namespace CharGen_EyeColorChange
-	{
-		inline constexpr REL::ID GetEventSource{ 0 };  // 141193
-	}
-
-	namespace CharGen_FacialHairChange
-	{
-		inline constexpr REL::ID GetEventSource{ 0 };  // 141194
-	}
-
-	namespace CharGen_FacialHairColorChange
-	{
-		inline constexpr REL::ID GetEventSource{ 0 };  // 141195
-	}
-
-	namespace CharGen_HairChange
-	{
-		inline constexpr REL::ID GetEventSource{ 0 };  // 141196
-	}
-
-	namespace CharGen_HairColorChange
-	{
-		inline constexpr REL::ID GetEventSource{ 0 };  // 141197
-	}
-
-	namespace CharGen_HeadpartPlusSelectorChange
-	{
-		inline constexpr REL::ID GetEventSource{ 0 };  // 141198
-	}
-
-	namespace CharGen_HeadpartPresetChange
-	{
-		inline constexpr REL::ID GetEventSource{ 0 };  // 141199
-	}
-
-	namespace CharGen_JewelryChange
-	{
-		inline constexpr REL::ID GetEventSource{ 0 };  // 141200
-	}
-
-	namespace CharGen_JewelryColorChange
-	{
-		inline constexpr REL::ID GetEventSource{ 0 };  // 141201
-	}
-
-	namespace CharGen_MakeupChange
-	{
-		inline constexpr REL::ID GetEventSource{ 0 };  // 141202
-	}
-
-	namespace CharGen_MarkingsChange
-	{
-		inline constexpr REL::ID GetEventSource{ 0 };  // 141203
-	}
-
-	namespace CharGen_PostBlendColorOptionChange
-	{
-		inline constexpr REL::ID GetEventSource{ 0 };  // 141204
-	}
-
-	namespace CharGen_PostBlendFaceChange
-	{
-		inline constexpr REL::ID GetEventSource{ 0 };  // 141205
-	}
-
-	namespace CharGen_PostBlendIntensityChange
-	{
-		inline constexpr REL::ID GetEventSource{ 0 };  // 141206
-	}
-
-	namespace CharGen_PresetChange
-	{
-		inline constexpr REL::ID GetEventSource{ 0 };  // 141207
-	}
-
-	namespace CharGen_RollOffLocomotion
-	{
-		inline constexpr REL::ID GetEventSource{ 0 };  // 141208
-	}
-
-	namespace CharGen_RollOnLocomotion
-	{
-		inline constexpr REL::ID GetEventSource{ 0 };  // 141209
-	}
-
-	namespace CharGen_RotatePaperdoll
-	{
-		inline constexpr REL::ID GetEventSource{ 0 };  // 141210
-	}
-
-	namespace CharGen_SetAdditionalSlider
-	{
-		inline constexpr REL::ID GetEventSource{ 0 };  // 141211
-	}
-
-	namespace CharGen_SetBackground
-	{
-		inline constexpr REL::ID GetEventSource{ 0 };  // 141212
-	}
-
-	namespace CharGen_SetBlockInputUnderPopup
-	{
-		inline constexpr REL::ID GetEventSource{ 0 };  // 141213
-	}
-
-	namespace CharGen_SetBodyValues
-	{
-		inline constexpr REL::ID GetEventSource{ 0 };  // 141214
-	}
-
-	namespace CharGen_SetCameraPosition
-	{
-		inline constexpr REL::ID GetEventSource{ 0 };  // 141215
-	}
-
-	namespace CharGen_SetPronoun
-	{
-		inline constexpr REL::ID GetEventSource{ 0 };  // 141216
-	}
-
-	namespace CharGen_SetSex
-	{
-		inline constexpr REL::ID GetEventSource{ 0 };  // 141217
-	}
-
-	namespace CharGen_SetSlider
-	{
-		inline constexpr REL::ID GetEventSource{ 0 };  // 141218
-	}
-
-	namespace CharGen_SetTrait
-	{
-		inline constexpr REL::ID GetEventSource{ 0 };  // 141219
-	}
-
-	namespace CharGen_ShowChooseBackgroundMessage
-	{
-		inline constexpr REL::ID GetEventSource{ 0 };  // 141220
-	}
-
-	namespace CharGen_ShowPlayerRenameMessage
-	{
-		inline constexpr REL::ID GetEventSource{ 0 };  // 141221
-	}
-
-	namespace CharGen_SkintoneChange
-	{
-		inline constexpr REL::ID GetEventSource{ 0 };  // 141222
-	}
-
-	namespace CharGen_StartBodyChange
-	{
-		inline constexpr REL::ID GetEventSource{ 0 };  // 141223
-	}
-
-	namespace CharGen_StartTextEntry
-	{
-		inline constexpr REL::ID GetEventSource{ 0 };  // 141224
-	}
-
-	namespace CharGen_SwitchBodyType
-	{
-		inline constexpr REL::ID GetEventSource{ 0 };  // 141225
-	}
-
-	namespace CharGen_SwitchLocomotion
-	{
-		inline constexpr REL::ID GetEventSource{ 0 };  // 141226
-	}
-
-	namespace CharGen_TeethChange
-	{
-		inline constexpr REL::ID GetEventSource{ 0 };  // 141227
-	}
-
-	namespace CharGen_TeethRollOff
-	{
-		inline constexpr REL::ID GetEventSource{ 0 };  // 141228
-	}
-
-	namespace CharGen_TeethRollOn
-	{
-		inline constexpr REL::ID GetEventSource{ 0 };  // 141229
-	}
-
-	namespace CharGen_ToggleMarking
-	{
-		inline constexpr REL::ID GetEventSource{ 0 };  // 141230
-	}
-
-	namespace CharGen_TogglePreviewHabSuit
-	{
-		inline constexpr REL::ID GetEventSource{ 0 };  // 141231
-	}
-
-	namespace ClearHUDMessagesEvent
-	{
-		inline constexpr REL::ID GetEventSource{ 0 };  // 133511
-	}
-
-	namespace ClearQuickContainerEvent
-	{
-		inline constexpr REL::ID GetEventSource{ 0 };  // 103704
-	}
-
-	namespace ClearShipHudTarget::Event
-	{
-		inline constexpr REL::ID GetEventSource{ 0 };  // 137011
+		inline constexpr REL::ID ToggleCombatAI{ 66826 };
 	}
 
 	namespace ConsoleLog
@@ -1593,6 +1198,7 @@ namespace RE::ID
 		inline constexpr REL::ID AreHostileActorsNear{ 103313 };
 		inline constexpr REL::ID Singleton{ 937584 };
 		inline constexpr REL::ID ToggleAI{ 0 };  // 154056
+		inline constexpr REL::ID StopCombatAndAlarmOnActor{ 103285 };
 	}
 
 	namespace REFR_LOCK
@@ -1662,12 +1268,12 @@ namespace RE::ID
 
 	namespace RuntimeComponentDBFactory::ReferenceDetach
 	{
-		inline constexpr REL::ID GetEventSource{ 0 };  // 77128
+		inline constexpr REL::ID GetEventSource{ 40306 };
 	}
 
 	namespace RuntimeComponentDBFactory::ReferenceSet3d
 	{
-		inline constexpr REL::ID GetEventSource{ 0 };  // 88599
+		inline constexpr REL::ID GetEventSource{ 49237 };
 	}
 
 	namespace SaveLoadEvent

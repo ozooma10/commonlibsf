@@ -18,3 +18,5 @@ graph_info.json
 
 .idea
 *ReSharper*
+.xmake
+build

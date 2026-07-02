@@ -233,8 +233,8 @@ namespace RE
 		virtual bool         IsInCombat() const;                                                                     // 16C
 		virtual void         Unk_16D();                                                                              // 16D
 		virtual void         StopCombat();                                                                           // 16E
-		virtual void         Unk_16F();                                                                              // 16F
-		virtual void         SetLifeState(std::uint32_t a_state);                                                    // 170
+		virtual void         SetLifeState(ACTOR_LIFE_STATE a_lifeState);                                             // 16F
+		virtual void         Unk_170();                                                                              // 170
 		virtual void         Unk_171();                                                                              // 171
 		virtual void         Unk_172();                                                                              // 172
 		virtual void         Unk_173();                                                                              // 173
@@ -285,8 +285,13 @@ namespace RE
 		virtual void         Unk_1A0();                                                                              // 1A0
 		virtual void         Unk_1A1();                                                                              // 1A1
 
-		// adds the item to the inventory first if the actor doesn't have it (ActorEquipManager::EquipObject does nothing in that case);
-		// what Papyrus Actor.EquipItem calls
+		void AddToFaction(TESFaction* a_faction, std::int8_t a_rank)
+		{
+			using func_t = decltype(&Actor::AddToFaction);
+			static REL::Relocation<func_t> func{ ID::Actor::AddToFaction };
+			func(this, a_faction, a_rank);
+		}
+
 		void EquipItem(TESBoundObject* a_object, bool a_preventRemoval = false, bool a_silent = false)
 		{
 			using func_t = decltype(&Actor::EquipItem);
@@ -306,6 +311,13 @@ namespace RE
 			using func_t = decltype(&Actor::GetActorKnowledge);
 			static REL::Relocation<func_t> func{ ID::Actor::GetActorKnowledge };
 			return func(this, a_actor);
+		}
+
+		[[nodiscard]] std::int32_t GetFactionRank(TESFaction* a_faction, bool a_isPlayer = false)
+		{
+			using func_t = decltype(&Actor::GetFactionRank);
+			static REL::Relocation<func_t> func{ ID::Actor::GetFactionRank };
+			return func(this, a_faction, a_isPlayer);
 		}
 
 		[[nodiscard]] TESNPC* GetNPC()
@@ -369,6 +381,34 @@ namespace RE
 			using func_t = decltype(&Actor::IsSneaking);
 			static REL::Relocation<func_t> func{ ID::Actor::IsSneaking };
 			return func(this);
+		}
+
+		void RemoveFromFaction(TESFaction* a_faction)
+		{
+			using func_t = decltype(&Actor::RemoveFromFaction);
+			static REL::Relocation<func_t> func{ ID::Actor::RemoveFromFaction };
+			func(this, a_faction);
+		}
+
+		void SetFactionRank(TESFaction* a_faction, std::int8_t a_rank)
+		{
+			using func_t = decltype(&Actor::SetFactionRank);
+			static REL::Relocation<func_t> func{ ID::Actor::SetFactionRank };
+			func(this, a_faction, a_rank);
+		}
+
+		void SetAIEnabled(bool a_enable)
+		{
+			using func_t = decltype(&Actor::SetAIEnabled);
+			static REL::Relocation<func_t> func{ ID::Actor::SetAIEnabled };
+			func(this, a_enable);
+		}
+
+		void SetGhost(bool a_ghost)
+		{
+			using func_t = decltype(&Actor::SetGhost);
+			static REL::Relocation<func_t> func{ ID::Actor::SetGhost };
+			func(this, a_ghost);
 		}
 
 		void SetSkinTone(std::uint32_t a_index)

@@ -2661,6 +2661,8 @@ namespace RE
 		OpType        opType;         // 0C
 		Status        status;         // 0D
 	};
+	static_assert(offsetof(SaveLoadEvent, opType) == 0xC);
+	static_assert(offsetof(SaveLoadEvent, status) == 0xD);
 	static_assert(sizeof(SaveLoadEvent) == 0x10);
 
 	struct SecurityMenu_BackOutKey

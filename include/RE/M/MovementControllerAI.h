@@ -11,7 +11,7 @@ namespace RE
 
 		// members
 		std::byte    unk08[0x68];   // 08
-		std::uint8_t movementMode;  // 70 - 1 = animation-driven, 2 = motion-driven
+		std::uint8_t movementMode;  // 70
 		std::byte    unk71[0x07];   // 71
 	};
 	static_assert(offsetof(MovementControllerAI, movementMode) == 0x70);

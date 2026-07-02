@@ -41,6 +41,13 @@ namespace RE
 			func(this, a_enable);
 		}
 
+		void StopCombatAndAlarmOnActor(Actor* a_actor, bool a_arg2 = false)
+		{
+			using func_t = decltype(&ProcessLists::StopCombatAndAlarmOnActor);
+			static REL::Relocation<func_t> func{ ID::ProcessLists::StopCombatAndAlarmOnActor };
+			func(this, a_actor, a_arg2);
+		}
+
 		// members
 		std::byte                        pad018[0x8];                   // 018
 		std::int32_t                     numberHighActors;              // 020
