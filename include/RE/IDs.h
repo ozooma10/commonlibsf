@@ -28,7 +28,9 @@ namespace RE::ID
 
 	namespace ActorUtils
 	{
-		inline constexpr REL::ID ChangeAnimArchetype{ 0 };  // 150497
+		inline constexpr REL::ID ChangeAnimArchetype{ 100510 };
+		inline constexpr REL::ID PlayIdleSetter{ 102136 };
+		inline constexpr REL::ID PlayIdleGlobal{ 35720 };
 	}
 
 	namespace ActorValue
@@ -1588,7 +1590,7 @@ namespace RE::ID
 
 	namespace ProcessLists
 	{
-		inline constexpr REL::ID AreHostileActorsNear{ 0 };  // 154040
+		inline constexpr REL::ID AreHostileActorsNear{ 103313 };
 		inline constexpr REL::ID Singleton{ 937584 };
 		inline constexpr REL::ID ToggleAI{ 0 };  // 154056
 	}

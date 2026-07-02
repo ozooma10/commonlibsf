@@ -55,8 +55,21 @@ namespace RE
 		// members
 		Rig*                rig;          // 10
 		BSTArray<NodeEntry> nodes;        // 18
-		std::byte           unk28[0x68];  // 28
+		std::byte           unk28[0x40];  // 28
+		std::uint32_t       frameStamp;   // 68
+		std::uint32_t       unk6C;        // 6C
+		void*               sgSyncCallback;  // 70
+		std::uint16_t       rigBoneCount;    // 78
+		std::uint16_t       unk7A;        // 7A
+		std::uint16_t       rootGroupA;   // 7C
+		std::uint16_t       rootGroupB;   // 7E
+		std::uint8_t        active;       // 80
+		std::byte           unk81[0xF];   // 81
 	};
+	static_assert(offsetof(BGSModelNode, frameStamp) == 0x68);
+	static_assert(offsetof(BGSModelNode, sgSyncCallback) == 0x70);
+	static_assert(offsetof(BGSModelNode, rootGroupA) == 0x7c);
 	static_assert(offsetof(BGSModelNode, nodes) == 0x18);
+	static_assert(offsetof(BGSModelNode, active) == 0x80);
 	static_assert(sizeof(BGSModelNode) == 0x90);
 }
