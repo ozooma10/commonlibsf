@@ -2492,7 +2492,8 @@ namespace RE::ID
 
 	namespace TESWorldSpace
 	{
-		inline constexpr REL::ID GetLocationFromCoordinates{ 0 };  // 107914
+		inline constexpr REL::ID GetLocationFromCoordinates{ 0 };   // 107914
+		inline constexpr REL::ID GetPersistentCell{ 64473 };        // (ws, char create): cached cell @ws+0x1D8, recurses into parent ws (+0x1F0, flag +0xF2 bit6). RE'd 1.16.244; osf-re world.cell_references
 	}
 
 	namespace UI

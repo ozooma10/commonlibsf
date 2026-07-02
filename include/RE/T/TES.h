@@ -60,23 +60,32 @@ namespace RE
 			// gridCells is an array of gridCellCount slot pointers; a slot exposes its state at
 			// slot+0x14 (skip unless loaded) and its TESObjectCELL* at slot+0x30. The null / state /
 			// attached guards below are exactly the engine's, so a bad slot is skipped, not dereffed.
-			// Offsets are static-proven from the decompile; a live probe is still pending (osf-re
-			// world.cell_references), so the interior path above is the runtime-confirmed one.
-			if (!gridCells) {
-				return;
+			if (gridCells) {
+				for (std::uint32_t i = 0; i < gridCellCount; ++i) {
+					const auto* slot = static_cast<const std::byte*>(gridCells[i]);
+					if (!slot) {
+						continue;
+					}
+					const std::uint32_t state = *reinterpret_cast<const std::uint32_t*>(slot + 0x14);
+					if ((((state & 0x70000000u) + 0xD0000000u) & 0xEFFFFFFFu) != 0) {
+						continue;  // slot not in a loaded state
+					}
+					auto* cell = *reinterpret_cast<TESObjectCELL* const*>(slot + 0x30);
+					if (cell && cell->IsAttached()) {
+						cell->ForEachReferenceInRange(a_origin, a_radius, a_callback);
+					}
+				}
 			}
-			for (std::uint32_t i = 0; i < gridCellCount; ++i) {
-				const auto* slot = static_cast<const std::byte*>(gridCells[i]);
-				if (!slot) {
-					continue;
-				}
-				const std::uint32_t state = *reinterpret_cast<const std::uint32_t*>(slot + 0x14);
-				if ((((state & 0x70000000u) + 0xD0000000u) & 0xEFFFFFFFu) != 0) {
-					continue;  // slot not in a loaded state
-				}
-				auto* cell = *reinterpret_cast<TESObjectCELL* const*>(slot + 0x30);
-				if (cell && cell->IsAttached()) {
-					cell->ForEachReferenceInRange(a_origin, a_radius, a_callback);
+			// The engine's radius search walks one more bucket after the grid: the current
+			// worldspace's PERSISTENT cell (TESWorldSpace::GetPersistentCell, create-if-missing,
+			// exactly as the engine calls it). Persistent refs — notably player-built outpost
+			// furniture — live here, NOT in the visual grid cells, so skipping this bucket makes
+			// built furniture invisible to the walk.
+			if (worldSpace) {
+				using GetPersistentCellFn = TESObjectCELL* (*)(TESWorldSpace*, char);
+				static REL::Relocation<GetPersistentCellFn> getPersistentCell{ ID::TESWorldSpace::GetPersistentCell };
+				if (auto* persistent = getPersistentCell(worldSpace, 1)) {
+					persistent->ForEachReferenceInRange(a_origin, a_radius, a_callback);
 				}
 			}
 		}
@@ -89,9 +98,12 @@ namespace RE
 		std::uint32_t  gridCellCount;  // 044
 		std::byte      pad048[0xA0];   // 048
 		TESObjectCELL* interiorCell;   // 0E8
+		std::byte      pad0F0[0x98];   // 0F0
+		TESWorldSpace* worldSpace;     // 188 - current worldspace; its persistent cell holds player-built refs
 	};
 	static_assert(offsetof(TES, sky) == 0x28);
 	static_assert(offsetof(TES, gridCells) == 0x30);
 	static_assert(offsetof(TES, gridCellCount) == 0x44);
 	static_assert(offsetof(TES, interiorCell) == 0xE8);
+	static_assert(offsetof(TES, worldSpace) == 0x188);
 }
