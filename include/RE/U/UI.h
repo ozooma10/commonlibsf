@@ -102,6 +102,20 @@ namespace RE
 			return func(this, a_name);
 		}
 
+		// The engine's pause-request register/unregister (the function the menu
+		// open/close flag dispatch calls for menus with IMenu::kPausesGame, bit 1):
+		// ++/-- pauseRequestCount and dispatches {a_menuName, a_increment} UI events.
+		// Main::Update recomputes Main::isGameMenuPaused from the counter every
+		// frame, so this is THE supported way to pause/resume the simulation from a
+		// plugin (game thread; balance your own calls). Live-proven across repeated
+		// freeze/resume cycles on 1.16.244 (2026-07-02, OSF RE module ui.menu_pause).
+		void ModifyMenuPauseCounter(const BSFixedString& a_menuName, bool a_increment)
+		{
+			using func_t = decltype(&UI::ModifyMenuPauseCounter);
+			static REL::Relocation<func_t> func{ ID::UI::ModifyMenuPauseCounter };
+			return func(this, a_menuName, a_increment);
+		}
+
 		[[nodiscard]] bool IsMenuRegistered(const BSFixedString& a_name) const
 		{
 			return menuMap.contains(a_name);
@@ -141,7 +155,11 @@ namespace RE
 		BSTArray<Scaleform::Ptr<IMenu>> menusToAdvance;  // 440
 		std::uint64_t                   unk450[4];       // 450
 		UIMenuMap                       menuMap;         // 470
-		std::uint8_t                    pad4A8[0x38];    // 4A8
+		std::uint8_t                    pad4A8[0xC];     // 4A8
+		std::uint32_t                   pauseRequestCount; // 4B4 — # of open menus requesting the sim pause (flag bit 1);
+		                                                   //       mutated ONLY via ModifyMenuPauseCounter (130472); read by the
+		                                                   //       per-frame Main+0x448 recompute. Live-proven 2026-07-02.
+		std::uint8_t                    pad4B8[0x28];    // 4B8
 		std::uint64_t                   unk4E0;          // 4E0
 		std::uint64_t                   unk4E8;          // 4E8
 		float                           unk4F0;          // 4F0
@@ -159,6 +177,7 @@ namespace RE
 	static_assert(offsetof(UI, menuArray) == 0x430);
 	static_assert(offsetof(UI, menusToAdvance) == 0x440);
 	static_assert(offsetof(UI, menuMap) == 0x470);
+	static_assert(offsetof(UI, pauseRequestCount) == 0x4B4);
 	static_assert(offsetof(UI, advanceDelta) == 0x4F4);
 	static_assert(offsetof(UI, unk500) == 0x500);
 	static_assert(offsetof(UI, unk538) == 0x538);

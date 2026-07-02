@@ -33,18 +33,26 @@ namespace RE
 		enum Flag : std::uint32_t
 		{
 			Flag0 = 1 << 0,
-			Flag1 = 1 << 1,
 			Flag4 = 1 << 4,
 			Flag9 = 1 << 9,
 			Flag10 = 1 << 10,
 			Flag18 = 1 << 18,
 			Flag25 = 1 << 25,
 
+			kPausesGame = 1 << 1,              // PROVEN 2026-07-02 (OSF RE module ui.menu_pause, live freeze/resume cycles on 1.16.244):
+			                                   // THE simulation-pause flag. On menu open the pump's flag dispatch calls
+			                                   // UI_ModifyMenuPauseCounter (130472) -> UI+0x4B4 pause-request counter++;
+			                                   // Main::Update then recomputes Main::isGameMenuPaused = (UI+0x4B4>0) ||
+			                                   // IsOpen("MainMenu") || g_145FB4B78 every frame. Close decrements
+			                                   // symmetrically. Works on a movie-less admitted custom menu; no letterbox
+			                                   // (that is kFreezeFrameLatch). Was previously misassigned to bit 27.
 			ShowCursor = 1 << 3,               // proven: shows the cursor (runtime-toggled when the menu is shown)
 			kAdvancesMovie = 1 << 6,           // proven: UI_AdvanceActiveMenus advance gate (runtime "advance this movie now")
 			kModal = 1 << 8,                   // medium: top-of-stack application/modal selector (UI_SelectTopModalMenu 0x14253f580); leading menu-mode / input-ownership bit
 			kAdvancesUnderPauseMenu = 1 << 15, // proven: UI_AdvanceActiveMenus advances this menu even while PauseMenu is up
-			kPausesGame = 1 << 27,             // proven: pauses simulation (Main::isGameMenuPaused) + engages 16:9 freeze-frame background
+			kFreezeFrameLatch = 1 << 27,       // RENAMED 2026-07-02 (was kPausesGame — wrong: it does NOT pause the sim; live-proven
+			                                   // latch set with the calendar still advancing). Freeze-frame/letterbox latch ONLY,
+			                                   // and only consulted when this menu is the top kModal menu (OSF RE ui.menu_pause).
 		};
 
 		virtual ~IMenu()  // 00

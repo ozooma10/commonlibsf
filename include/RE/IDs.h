@@ -2501,6 +2501,7 @@ namespace RE::ID
 		inline constexpr REL::ID Singleton{ 937580 };
 		inline constexpr REL::ID IsMenuOpen{ 130475 };
 		inline constexpr REL::ID RegisterMenu{ 130463 };
+		inline constexpr REL::ID ModifyMenuPauseCounter{ 130472 };  // 2026-07-02, OSF RE module ui.menu_pause: the live-proven sim-pause enter/exit
 	}
 
 	namespace UIBlurManager
