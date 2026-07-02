@@ -1,6 +1,9 @@
 #pragma once
 
 #include "RE/B/BSTEvent.h"
+#include "RE/T/TESObjectCELL.h"
+
+#include <functional>
 
 namespace RE
 {
@@ -11,7 +14,6 @@ namespace RE
 
 	class Sky;
 	class TESActorBase;
-	class TESObjectCELL;
 
 	struct PositionPlayerEvent;
 
@@ -43,12 +45,52 @@ namespace RE
 			return func(this, a_actorBase);
 		}
 
+		void ForEachReferenceInRange(const NiPoint3A& a_origin, float a_radius,
+			std::function<BSContainer::ForEachResult(const NiPointer<TESObjectREFR>&)> a_callback) const
+		{
+			if (interiorCell) {
+				interiorCell->ForEachReferenceInRange(a_origin, a_radius, a_callback);
+				return;
+			}
+			if (gridCells) {
+				for (std::uint32_t i = 0; i < gridCellCount; ++i) {
+					const auto* slot = static_cast<const std::byte*>(gridCells[i]);
+					if (!slot) {
+						continue;
+					}
+					const std::uint32_t state = *reinterpret_cast<const std::uint32_t*>(slot + 0x14);
+					if ((((state & 0x70000000u) + 0xD0000000u) & 0xEFFFFFFFu) != 0) {
+						continue;
+					}
+					auto* cell = *reinterpret_cast<TESObjectCELL* const*>(slot + 0x30);
+					if (cell && cell->IsAttached()) {
+						cell->ForEachReferenceInRange(a_origin, a_radius, a_callback);
+					}
+				}
+			}
+			if (worldSpace) {
+				using GetPersistentCellFn = TESObjectCELL* (*)(TESWorldSpace*, char);
+				static REL::Relocation<GetPersistentCellFn> getPersistentCell{ ID::TESWorldSpace::GetPersistentCell };
+				if (auto* persistent = getPersistentCell(worldSpace, 1)) {
+					persistent->ForEachReferenceInRange(a_origin, a_radius, a_callback);
+				}
+			}
+		}
+
 		// members
-		std::byte      pad010[0x18];  // 010
-		Sky*           sky;           // 028
-		std::byte      pad030[0xB8];  // 030
-		TESObjectCELL* interiorCell;  // 0E8
+		std::byte      pad010[0x18];   // 010
+		Sky*           sky;            // 028
+		void**         gridCells;      // 030
+		std::byte      pad038[0x0C];   // 038
+		std::uint32_t  gridCellCount;  // 044
+		std::byte      pad048[0xA0];   // 048
+		TESObjectCELL* interiorCell;   // 0E8
+		std::byte      pad0F0[0x98];   // 0F0
+		TESWorldSpace* worldSpace;     // 188
 	};
 	static_assert(offsetof(TES, sky) == 0x28);
+	static_assert(offsetof(TES, gridCells) == 0x30);
+	static_assert(offsetof(TES, gridCellCount) == 0x44);
 	static_assert(offsetof(TES, interiorCell) == 0xE8);
+	static_assert(offsetof(TES, worldSpace) == 0x188);
 }

@@ -2209,7 +2209,8 @@ namespace RE::ID
 	namespace TES
 	{
 		inline constexpr REL::ID GetDeadCount{ 0 };  // 84704
-		inline constexpr REL::ID Singleton{ 0 };     // 881024
+		inline constexpr REL::ID Singleton{ 883589 };
+		inline constexpr REL::ID ForEachReferenceInRange{ 46167 };
 	}
 
 	namespace TESActivateEvent
@@ -2444,6 +2445,7 @@ namespace RE::ID
 	namespace TESWorldSpace
 	{
 		inline constexpr REL::ID GetLocationFromCoordinates{ 0 };  // 107914
+		inline constexpr REL::ID GetPersistentCell{ 64473 };
 	}
 
 	namespace UI
