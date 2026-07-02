@@ -54,12 +54,12 @@ namespace RE
 		bool                             processMiddleLow;              // 049
 		bool                             processSchedules;              // 04A
 		bool                             showSubtitles;                 // 04B
-		std::byte                        pad04C[0x6];                   // 04C
-		BSTArray<BSPointerHandle<Actor>> highActorHandles;              // 058
-		BSTArray<BSPointerHandle<Actor>> lowActorHandles;               // 068
-		BSTArray<BSPointerHandle<Actor>> middleHighActorHandles;        // 078
-		BSTArray<BSPointerHandle<Actor>> middleLowActorHandles;         // 088
-		std::byte                        pad098[0x154];                 // 098
+		std::byte                        pad04C[0xE];                   // 04C
+		BSTArray<BSPointerHandle<Actor>> highActorHandles;              // 060
+		BSTArray<BSPointerHandle<Actor>> lowActorHandles;               // 070
+		BSTArray<BSPointerHandle<Actor>> middleHighActorHandles;        // 080
+		BSTArray<BSPointerHandle<Actor>> middleLowActorHandles;         // 090
+		std::byte                        pad0A0[0x14C];                 // 0A0
 		bool                             runSchedules;                  // 1EC
 		bool                             runMovement;                   // 1ED
 		bool                             runAnimations;                 // 1EE
@@ -67,6 +67,6 @@ namespace RE
 	static_assert(offsetof(ProcessLists, numberHighActors) == 0x20);
 	static_assert(offsetof(ProcessLists, runDetection) == 0x44);
 	static_assert(offsetof(ProcessLists, showSubtitles) == 0x4B);
-	static_assert(offsetof(ProcessLists, highActorHandles) == 0x58);
+	static_assert(offsetof(ProcessLists, highActorHandles) == 0x60);
 	static_assert(offsetof(ProcessLists, runSchedules) == 0x1EC);
 }

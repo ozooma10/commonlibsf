@@ -35,7 +35,7 @@ namespace RE
 
 	class TESObjectCELL :
 		public TESHandleForm,  // 00
-		public TESFullName     // 30
+		public TESFullName     // 38
 	{
 	public:
 		SF_RTTI_VTABLE(TESObjectCELL);
@@ -114,11 +114,10 @@ namespace RE
 		}
 
 		// members
-		REX::TEnumSet<Flag, std::uint32_t>   cellFlags;       // 040
-		std::uint16_t                        cellGameFlags;   // 044
-		std::uint8_t                         unk04E;          // 046
-		REX::TEnum<CELL_STATE, std::uint8_t> cellState;       // 047
-		std::uint64_t                        unk050;          // 048
+		REX::TEnumSet<Flag, std::uint32_t>   cellFlags;       // 048
+		std::uint16_t                        cellGameFlags;   // 04C
+		std::uint8_t                         unk04E;          // 04E
+		REX::TEnum<CELL_STATE, std::uint8_t> cellState;       // 04F
 		BSTSmartPointer<ExtraDataList>       extraDataList;   // 050
 		CellData                             cellData;        // 058
 		std::uint32_t                        unk060;          // 060
@@ -150,13 +149,17 @@ namespace RE
 		std::uint64_t                        unk0F8;          // 0F8
 		std::uint64_t                        unk100;          // 100
 		std::uint64_t                        unk108;          // 108
-		std::uint64_t                        unk110;          // 110
-		TESWorldSpace*                       cellWorldspace;  // 118
-		mutable BSReadWriteLock              lock;            // 120
+		TESWorldSpace*                       cellWorldspace;  // 110
+		mutable BSReadWriteLock              lock;            // 118
+		std::uint64_t                        unk120;          // 120
 		std::uint64_t                        unk128;          // 128
 		std::uint64_t                        unk130;          // 130
-		std::uint32_t                        unk138;          // 138
+		std::uint64_t                        unk138;          // 138
 		std::uint64_t                        unk140;          // 140
+		std::uint64_t                        unk148;          // 148
 	};
+	static_assert(offsetof(TESObjectCELL, cellState) == 0x4F);
+	static_assert(offsetof(TESObjectCELL, references) == 0x80);
+	static_assert(offsetof(TESObjectCELL, lock) == 0x118);
 	static_assert(sizeof(TESObjectCELL) == 0x150);
 }
