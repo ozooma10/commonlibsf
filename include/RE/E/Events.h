@@ -3034,6 +3034,18 @@ namespace RE
 
 	struct ShowSubtitleEvent
 	{
+		// Payload RE'd + runtime-proven 1.16.244 (osf-re ui.subtitle): the producer
+		// SubtitleManager dispatch (ID 114395, 0x141ee0960) builds this on the stack
+		// and the sink HUDSubtitleDataModel::ProcessEvent (ID 86881) reads it
+		// field-for-field, handing each char pointer to the UTF-8 string converter
+		// (ID 1016925, byte-strlen + U+FFFD decode). The fields are RAW const char*
+		// (a c_str / BSFixedString::data() == pool-entry+0x18), NOT BSFixedString
+		// objects: passing an entry pointer makes the converter read the entry header
+		// as text -> mojibake. The pointers must stay valid for the synchronous
+		// Notify (the sink copies them inline before Notify returns). speakerName is
+		// the pre-resolved display name shown as the attribution prefix; the box is
+		// the standard bottom-of-screen subtitle list, NOT 3D-positioned on the
+		// speaker. isPlayer == (speaker == player) -> bPlayerSubtitle styling.
 		struct Event
 		{
 			[[nodiscard]] static BSTEventSource<ShowSubtitleEvent::Event>* GetEventSource()
@@ -3042,7 +3054,14 @@ namespace RE
 				static REL::Relocation<func_t> func{ ID::ShowSubtitleEvent::Event::GetEventSource };
 				return func();
 			}
+
+			// members (order runtime-proven: the box renders "<+0x08>: <+0x00>",
+			// i.e. "speakerName: subtitleText")
+			const char* subtitleText{ nullptr };  // 00 - UTF-8 subtitle line text (c_str)
+			const char* speakerName{ nullptr };   // 08 - UTF-8 display name (c_str), the speaker prefix
+			bool        isPlayer{ false };         // 10 - speaker == player (bPlayerSubtitle)
 		};
+		static_assert(sizeof(Event) == 0x18);
 	};
 
 	struct SkillsMenu_Accept
