@@ -34,6 +34,28 @@ namespace RE::BGSAudio
 	// hash of "External_Source" - the cookie engine uses for its own VO posts.
 	inline constexpr std::uint32_t kExternalSourceCookie = 0x24DB9834;
 
+	enum class AkActionOnEventType : std::uint32_t
+	{
+		kStop = 0,
+		kPause = 1,
+		kResume = 2,
+		kBreak = 3,
+		kReleaseEnvelope = 4,
+	};
+
+	enum class AkCurveInterpolation : std::uint32_t
+	{
+		kLog3 = 0,
+		kSine = 1,
+		kLog1 = 2,
+		kInvSCurve = 3,
+		kLinear = 4,
+		kSCurve = 5,
+		kExp1 = 6,
+		kSineRecip = 7,
+		kExp3 = 8,
+	};
+
 	//AkExternalSourceInfo from wwise 2021.1.
 	struct AkExternalSourceInfo
 	{
@@ -90,7 +112,6 @@ namespace RE::BGSAudio
 
 		// PostEvent from wwise. To play pass in_cExternals=1 and
 		// in_pExternalSources pointing at an AkExternalSourceInfo whose iExternalSrcCookie matches a placeholder in in_eventID.
-		// Returns AkPlayingID (0 = rejected — usually a_event not in any loadedd bank, or no matching external-source slot).
 		// Enqueue-only and should be safe to call from any thread.
 		static AkPlayingID PostEvent(
 			AkUniqueID            in_eventID,                     ///< Unique ID of the event
@@ -118,8 +139,6 @@ namespace RE::BGSAudio
 
 		// Unloads a SoundBank by name. a_inMemoryBankPtr must be the pointer the
 		// bank was loaded from, or nullptr for name/file-loaded banks (our case).
-		// NOTE: this build has NO memory-load (LoadBankMemoryView) overload — it was
-		// dead-code-eliminated — so a mod bank is always name/file-loaded, and this
 		// is the matching unload. Returns AKRESULT (kAkSuccess == 1). AddrLib 150434.
 
 		//unload a sound bank. a_inMemoryBankPtr must be the pointer bank loaded from, or nullptr for name/file-loaded banks
@@ -137,6 +156,32 @@ namespace RE::BGSAudio
 			using func_t = decltype(&AkSoundEngine::SetPosition);
 			static REL::Relocation<func_t> func{ ID::AkSoundEngine::SetPosition };
 			return func(a_gameObject, a_position);
+		}
+
+		static void ExecuteActionOnPlayingID(
+			AkActionOnEventType  in_ActionType,
+			AkPlayingID          in_playingID,
+			std::int32_t         in_uTransitionDuration = 0,
+			AkCurveInterpolation in_eFadeCurve = AkCurveInterpolation::kLinear)
+		{
+			using func_t = void (*)(AkActionOnEventType, AkPlayingID, std::int32_t, AkCurveInterpolation);
+			static REL::Relocation<func_t> func{ ID::AkSoundEngine::ExecuteActionOnPlayingID };
+			func(in_ActionType, in_playingID, in_uTransitionDuration, in_eFadeCurve);
+		}
+
+		static void StopPlayingID(
+			AkPlayingID          in_playingID,
+			std::int32_t         in_uTransitionDuration = 0,
+			AkCurveInterpolation in_eFadeCurve = AkCurveInterpolation::kLinear)
+		{
+			ExecuteActionOnPlayingID(AkActionOnEventType::kStop, in_playingID, in_uTransitionDuration, in_eFadeCurve);
+		}
+
+		static AKRESULT StopAll(AkGameObjectID a_gameObject)
+		{
+			using func_t = AKRESULT (*)(AkGameObjectID);
+			static REL::Relocation<func_t> func{ ID::AkSoundEngine::StopAll };
+			return func(a_gameObject);
 		}
 	};
 }
