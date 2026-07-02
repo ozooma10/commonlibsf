@@ -65,19 +65,30 @@ namespace RE
 		bool                             processMiddleLow;              // 049
 		bool                             processSchedules;              // 04A
 		bool                             showSubtitles;                 // 04B
-		std::byte                        pad04C[0x6];                   // 04C
-		BSTArray<BSPointerHandle<Actor>> highActorHandles;              // 058
-		BSTArray<BSPointerHandle<Actor>> lowActorHandles;               // 068
-		BSTArray<BSPointerHandle<Actor>> middleHighActorHandles;        // 078
-		BSTArray<BSPointerHandle<Actor>> middleLowActorHandles;         // 088
-		std::byte                        pad098[0x154];                 // 098
-		bool                             runSchedules;                  // 1EC
-		bool                             runMovement;                   // 1ED
-		bool                             runAnimations;                 // 1EE
+		std::byte                        pad04C[0xE];                   // 04C
+		// The four per-process actor lists (osf-re gameplay.process_lists, .244).
+		// CORRECTED: each is at +8 vs the Fallout-4-era layout (highActorHandles was
+		// 0x58). Layout {size(u32)@+0, cap(u32)@+4, data@+8}. Proven static (two
+		// engine fns read count@+0x60 / data@+0x68, 4-byte handles) + live (5/5
+		// resolved to Actor vtbl img+0x4CB9248). highActorHandles is the near-player,
+		// 3D-loaded, cell-spanning set; numberHighActors above == highActorHandles
+		// .size() at runtime. WARNING: lowActorHandles is large and holds
+		// PARTIALLY-LOADED actors — resolving them is safe (GetSmartPointer
+		// self-guards) but calling Actor vfuncs (GetDisplayFullName, etc.) on them
+		// faults uncatchably; only vfunc the high list. Order/offsets of low/middle
+		// per FO4 + live population (high proven; the rest strongly inferred).
+		BSTArray<BSPointerHandle<Actor>> highActorHandles;              // 060
+		BSTArray<BSPointerHandle<Actor>> lowActorHandles;               // 070
+		BSTArray<BSPointerHandle<Actor>> middleHighActorHandles;        // 080
+		BSTArray<BSPointerHandle<Actor>> middleLowActorHandles;         // 090
+		std::byte                        pad0A0[0x14C];                 // 0A0
+		bool                             runSchedules;                  // 1EC (unverified; carried from FO4-era layout)
+		bool                             runMovement;                   // 1ED (unverified)
+		bool                             runAnimations;                 // 1EE (unverified)
 	};
 	static_assert(offsetof(ProcessLists, numberHighActors) == 0x20);
 	static_assert(offsetof(ProcessLists, runDetection) == 0x44);
 	static_assert(offsetof(ProcessLists, showSubtitles) == 0x4B);
-	static_assert(offsetof(ProcessLists, highActorHandles) == 0x58);
+	static_assert(offsetof(ProcessLists, highActorHandles) == 0x60);
 	static_assert(offsetof(ProcessLists, runSchedules) == 0x1EC);
 }
