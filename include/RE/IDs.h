@@ -2240,8 +2240,9 @@ namespace RE::ID
 
 	namespace TES
 	{
-		inline constexpr REL::ID GetDeadCount{ 0 };  // 84704
-		inline constexpr REL::ID Singleton{ 0 };     // 881024
+		inline constexpr REL::ID GetDeadCount{ 0 };        // 84704
+		inline constexpr REL::ID Singleton{ 883589 };      // static TES* @ img+0x5E716F8. RE'd 1.16.244 (old `881024` was a wrong placeholder -> GetSingleton() crashed); osf-re world.cell_references
+		inline constexpr REL::ID ForEachReferenceInRange{ 46167 };  // engine TES::FilterRefsByRadius entry (interior + exterior grid); dispatch 46199 -> per-cell walker 63054. osf-re world.cell_references
 	}
 
 	namespace TESActivateEvent
