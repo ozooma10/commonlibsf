@@ -12,11 +12,11 @@ namespace RE
 			return func(this, a_unk1, a_unk2, a_name);
 		}
 
-		bool LoadGame(const char* a_name, void* a_unk1, void* a_unk2)
+		bool LoadGame(void* a_reader, bool a_unk1, bool a_unk2)
 		{
 			using func_t = decltype(&BGSSaveLoadGame::LoadGame);
 			static REL::Relocation<func_t> func{ ID::BGSSaveLoadGame::LoadGame };
-			return func(this, a_name, a_unk1, a_unk2);
+			return func(this, a_reader, a_unk1, a_unk2);
 		}
 	};
 }
