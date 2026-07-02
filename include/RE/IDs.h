@@ -29,7 +29,7 @@ namespace RE::ID
 		inline constexpr REL::ID SetGhost{ 100873 };      // ExtraGhost invuln+AI-ignore; console SetGhost (osf-re gameplay.defeat_damage_hook)
 		inline constexpr REL::ID SetLifeState{ 100787 };  // vtable slot 0x16F; writes ACTOR_LIFE_STATE bits 17-20 of [actor+0xF8] (osf-re gameplay.defeat_damage_hook)
 		inline constexpr REL::ID SetSkinTone{ 97400 };
-		inline constexpr REL::ID UpdateAppearance{ 101306 };
+		inline constexpr REL::ID UpdateAppearance{ 101306 };  // 1.16.244 runtime-proven: rebuilds head/facegen from the CURRENT base NPC; engine recipe = [actor+0x228->+8]+0x582 |= 4, then (false, 0, true) (osf-re ui.menu3d_paperdoll)
 		inline constexpr REL::ID UpdateChargenAppearance{ 97399 };
 	}
 
