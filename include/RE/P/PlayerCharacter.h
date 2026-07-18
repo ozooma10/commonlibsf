@@ -34,24 +34,28 @@ namespace RE
 		struct PerkEntryUpdatedEvent;
 	}
 
+	// Base subobjects sum to 0x698 (Actor is 0x578 since 1.14.70) — the member comments below
+	// are ABSOLUTE offsets and the layout is pinned by the offsetof asserts after the class.
+	// (Pre-2026-07 this header still assumed Actor == 0x530, so every member compiled +0x48
+	// past its comment; runtime-proven wrong on 1.16.244.)
 	class PlayerCharacter :
 		public Actor,                                                 // 000
-		public BSTEventSource<BGSActorCellEvent>,                     // 530
-		public BSTEventSource<BGSActorDeathEvent>,                    // 558
-		public BSTEventSource<PositionPlayerEvent>,                   // 580
-		public BSTEventSource<PickRefUpdateEvent>,                    // 5A8
-		public BSTEventSource<TargetHitEvent>,                        // 5D0
-		public BSTEventSink<MenuOpenCloseEvent>,                      // 5F8
-		public BSTEventSink<MenuModeChangeEvent>,                     // 600
-		public BSTEventSink<UserEventEnabledEvent>,                   // 608
-		public BSTEventSink<OtherEventEnabledEvent>,                  // 610
-		public BSTEventSink<TESFormDeleteEvent>,                      // 618
-		public BSTEventSink<TESHitEvent>,                             // 620
-		public BSTEventSink<PerkValueEvents::PerkEntryUpdatedEvent>,  // 628
-		public BSTEventSink<AnimationGraphDependentEvent>,            // 630
-		public BSTEventSink<TESQuestEvent::Event>,                    // 638
-		public BSTEventSink<QuestStatus::Event>,                      // 640
-		public IMovementPlayerControlsFilter                          // 648
+		public BSTEventSource<BGSActorCellEvent>,                     // 578
+		public BSTEventSource<BGSActorDeathEvent>,                    // 5A0
+		public BSTEventSource<PositionPlayerEvent>,                   // 5C8
+		public BSTEventSource<PickRefUpdateEvent>,                    // 5F0
+		public BSTEventSource<TargetHitEvent>,                        // 618
+		public BSTEventSink<MenuOpenCloseEvent>,                      // 640
+		public BSTEventSink<MenuModeChangeEvent>,                     // 648
+		public BSTEventSink<UserEventEnabledEvent>,                   // 650
+		public BSTEventSink<OtherEventEnabledEvent>,                  // 658
+		public BSTEventSink<TESFormDeleteEvent>,                      // 660
+		public BSTEventSink<TESHitEvent>,                             // 668
+		public BSTEventSink<PerkValueEvents::PerkEntryUpdatedEvent>,  // 670
+		public BSTEventSink<AnimationGraphDependentEvent>,            // 678
+		public BSTEventSink<TESQuestEvent::Event>,                    // 680
+		public BSTEventSink<QuestStatus::Event>,                      // 688
+		public IMovementPlayerControlsFilter                          // 690
 	{
 	public:
 		SF_RTTI_VTABLE(PlayerCharacter);
@@ -76,16 +80,7 @@ namespace RE
 			return *(REX::ADJUST_POINTER<bool>(this, 0xF24));
 		}
 
-		// members
-		std::uint64_t  unk0650;          // 0650
-		std::uint64_t  unk0658;          // 0658
-		std::uint64_t  unk0660;          // 0660
-		std::uint64_t  unk0668;          // 0668
-		std::uint64_t  unk0670;          // 0670
-		std::uint64_t  unk0678;          // 0678
-		std::uint64_t  unk0680;          // 0680
-		std::uint64_t  unk0688;          // 0688
-		std::uint64_t  unk0690;          // 0690
+		// members (absolute offsets; the block starts at 0x698, right after the bases)
 		std::uint64_t  unk0698;          // 0698
 		std::uint64_t  unk06A0;          // 06A0
 		std::uint64_t  unk06A8;          // 06A8
@@ -373,7 +368,7 @@ namespace RE
 		TESRace*	   charGenRace;      // 0F78
 		std::uint64_t  unk0F80;          // 0F80
 		std::uint64_t  unk0F88;          // 0F88
-		TESObjectREFR* commandTarget;    // 0F90 - crosshair target
+		TESObjectREFR* crosshairRef;     // 0F90 - reticle/pick target (kREFR/kACHR or null); the engine nulls it while ANY menu is open
 		std::uint64_t  unk0F98;          // 0F98
 		std::uint64_t  unk0FA0;          // 0FA0
 		std::uint64_t  unk0FA8;          // 0FA8
@@ -416,6 +411,20 @@ namespace RE
 		float          playerGravity;    // 10D0
 		std::uint32_t  unk10D4;          // 10D4
 		std::uint64_t  unk10D8;          // 10D8
+		std::uint64_t  unk10E0;          // 10E0
+		std::uint64_t  unk10E8;          // 10E8
+		std::uint64_t  unk10F0;          // 10F0
+		std::uint64_t  unk10F8;          // 10F8
+		std::uint64_t  unk1100;          // 1100
+		std::uint64_t  unk1108;          // 1108
+		std::uint64_t  unk1110;          // 1110
+		std::uint64_t  unk1118;          // 1118
+		std::uint64_t  unk1120;          // 1120
 	};
 	static_assert(sizeof(PlayerCharacter) == 0x1128);
+	// Layout guards: runtime-proven on 1.16.244 (crosshairRef via probe contrast-aim; charGenRace
+	// is the TESRace* the same probe saw at +0xF78). If Actor's size changes again, these fail
+	// loudly instead of silently shifting every member like the pre-2026-07 drift did.
+	static_assert(offsetof(PlayerCharacter, charGenRace) == 0xF78);
+	static_assert(offsetof(PlayerCharacter, crosshairRef) == 0xF90);
 }
