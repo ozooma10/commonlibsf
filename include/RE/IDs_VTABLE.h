@@ -1,7 +1,7 @@
 #pragma once
 
 #define SF_VTABLE(VTBL) \
-	inline static constexpr auto VTABLE = VTABLE::VTBL
+	inline static constexpr auto VTABLE = RE::VTABLE::VTBL
 
 namespace RE
 {

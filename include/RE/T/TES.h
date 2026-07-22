@@ -14,6 +14,8 @@ namespace RE
 
 	class Sky;
 	class TESActorBase;
+	class TESObjectCELL;
+	class TESWorldSpace;
 
 	struct PositionPlayerEvent;
 
@@ -91,19 +93,15 @@ namespace RE
 		}
 
 		// members
-		std::byte      pad010[0x18];   // 010
-		Sky*           sky;            // 028
-		void**         gridCells;      // 030 - loaded exterior grid: array of slot ptrs (slot+0x30 -> TESObjectCELL, slot+0x14 = state)
-		std::byte      pad038[0x0C];   // 038
-		std::uint32_t  gridCellCount;  // 044
-		std::byte      pad048[0xA0];   // 048
-		TESObjectCELL* interiorCell;   // 0E8
-		std::byte      pad0F0[0x98];   // 0F0
-		TESWorldSpace* worldSpace;     // 188 - current worldspace; its persistent cell holds player-built refs
+		std::byte      pad010[216];   // 010
+		TESObjectCELL* interiorCell;  // 0E8
+		std::byte      pad0F0[80];    // 0F0
+		Sky*           sky;           // 140
+		std::byte      pad148[64];    // 148
+		TESWorldSpace* worldSpace;    // 188
+		void*          unk190;        // 190
 	};
-	static_assert(offsetof(TES, sky) == 0x28);
-	static_assert(offsetof(TES, gridCells) == 0x30);
-	static_assert(offsetof(TES, gridCellCount) == 0x44);
+	static_assert(offsetof(TES, sky) == 0x140);
 	static_assert(offsetof(TES, interiorCell) == 0xE8);
 	static_assert(offsetof(TES, worldSpace) == 0x188);
 }

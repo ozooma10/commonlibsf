@@ -1,7 +1,7 @@
 #pragma once
 
 #define SF_RTTI(TYPE) \
-	inline static constexpr auto RTTI = RTTI::TYPE
+	inline static constexpr auto RTTI = RE::RTTI::TYPE
 
 #define SF_RTTI_VTABLE(ENTRY) \
 	SF_RTTI(ENTRY);           \
