@@ -29,7 +29,7 @@ namespace RE::ID
 		inline constexpr REL::ID SetGhost{ 100873 };      // ExtraGhost invuln+AI-ignore; console SetGhost (osf-re gameplay.defeat_damage_hook)
 		inline constexpr REL::ID SetLifeState{ 100787 };  // vtable slot 0x16F; writes ACTOR_LIFE_STATE bits 17-20 of [actor+0xF8] (osf-re gameplay.defeat_damage_hook)
 		inline constexpr REL::ID SetSkinTone{ 97400 };
-		inline constexpr REL::ID UpdateAppearance{ 101306 };
+		inline constexpr REL::ID UpdateAppearance{ 101306 };  // 1.16.244 runtime-proven: rebuilds head/facegen from the CURRENT base NPC; engine recipe = [actor+0x228->+8]+0x582 |= 4, then (false, 0, true) (osf-re ui.menu3d_paperdoll)
 		inline constexpr REL::ID UpdateChargenAppearance{ 97399 };
 	}
 
@@ -884,6 +884,16 @@ namespace RE::ID
 	namespace CraftingMenu_ViewingModdableItem
 	{
 		inline constexpr REL::ID GetEventSource{ 0 };  // 132107
+	}
+
+	namespace CreationRenderer
+	{
+		// Console `Screenshot` worker: void(const char* a_pathNoExtension, std::uint32_t a_format
+		// /*2=PNG, 3=HDR*/, std::uint32_t a_sourceFlags /*0=LDR end-of-frame, 4=HDR*/). Builds a
+		// CreationRendererPrivate::ImageCaptureData + ImageCaptureExportToFileNode and submits it
+		// to the render graph; GPU readback + encode + file write happen engine-side. Runtime-proven
+		// on 1.16.244 (OSF RE module ui.menu3d_paperdoll, 2026-07-02).
+		inline constexpr REL::ID CaptureFrameToFile{ 39202 };
 	}
 
 	namespace CreationRendererPrivate::Renderer
@@ -2464,6 +2474,8 @@ namespace RE::ID
 
 	namespace TESNPC
 	{
+		inline constexpr REL::ID ChangeHeadPart{ 68189 };              // 1.16.244 (npc, BGSHeadPart*); Papyrus Actor.ChangeHeadPart stub path (osf-re ui.menu3d_paperdoll)
+		inline constexpr REL::ID ChangeHeadPartRemoveExtras{ 68188 };  // 1.16.244 (npc, BGSHeadPart*, bool removeExtras); osf-re ui.menu3d_paperdoll
 		inline constexpr REL::ID CopyAppearance{ 68122 };
 		inline constexpr REL::ID DeriveGeneticParentAppearance{ 68123 };
 	}
