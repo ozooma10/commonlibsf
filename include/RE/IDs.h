@@ -2476,7 +2476,7 @@ namespace RE::ID
 	{
 		inline constexpr REL::ID ChangeHeadPart{ 68189 };              // 1.16.244 (npc, BGSHeadPart*); Papyrus Actor.ChangeHeadPart stub path (osf-re ui.menu3d_paperdoll)
 		inline constexpr REL::ID ChangeHeadPartRemoveExtras{ 68188 };  // 1.16.244 (npc, BGSHeadPart*, bool removeExtras); osf-re ui.menu3d_paperdoll
-		inline constexpr REL::ID CopyAppearance{ 68122 };
+		inline constexpr REL::ID CopyAppearance{ 68122 };  // 1.16.244 (target, source, bool sourceIsPlayer); third ABI arg proven at 0x140CD8DF0
 		inline constexpr REL::ID DeriveGeneticParentAppearance{ 68123 };
 	}
 
@@ -2496,7 +2496,11 @@ namespace RE::ID
 
 	namespace TESObjectLoadedEvent
 	{
-		inline constexpr REL::ID GetEventSource{ 0 };  // 107177
+		// 1.16.244: magic-static accessor at 0x140B9A3B0. ID 107177
+		// drifted to unrelated code. Static call-site proof includes the Actor/
+		// NPC load path at 0x14195FCCD, which constructs {formID,bool loaded}
+		// and notifies this source. osf-re gameplay.npc_appearance_loader.
+		inline constexpr REL::ID GetEventSource{ 64152 };
 	}
 
 	namespace TESObjectREFR

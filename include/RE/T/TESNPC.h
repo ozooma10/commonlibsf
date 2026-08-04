@@ -67,11 +67,11 @@ namespace RE
 			return false;
 		}
 
-		void CopyAppearance(TESNPC* a_source)
+		void CopyAppearance(TESNPC* a_source, bool a_sourceIsPlayer = false)
 		{
 			using func_t = decltype(&TESNPC::CopyAppearance);
 			static REL::Relocation<func_t> func{ ID::TESNPC::CopyAppearance };
-			return func(this, a_source);
+			return func(this, a_source, a_sourceIsPlayer);
 		}
 
 		void DeriveGeneticParentAppearance(TESNPC* a_source)
