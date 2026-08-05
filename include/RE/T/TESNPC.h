@@ -162,7 +162,8 @@ namespace RE
 		BSTHashMap2<std::uint32_t, float>*                              unk3E0;           // 3E0
 		BSTHashMap<std::uint32_t, BSTHashMap<BSFixedStringCS, float>*>* unk3E8;           // 3E8
 		BSTArray<AVMData>                                               tintAVMData;      // 3F0
-		std::uint32_t                                                   skinToneIndex;    // 400
+		std::uint8_t                                                    skinToneIndex;    // 400
+		std::uint8_t                                                    pad401[3];        // 401
 		std::uint32_t                                                   unk404;           // 404
 		BSFixedString                                                   teeth;            // 408
 		BSFixedString                                                   jewelryColor;     // 410
