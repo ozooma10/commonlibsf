@@ -1,6 +1,6 @@
 #include "RE/B/BSFaceDB.h"
 
-#include "RE/T/TESForm.h"
+#include "RE/B/BGSAVMData.h"
 
 namespace RE::BSFaceDB
 {
@@ -16,7 +16,7 @@ namespace RE::BSFaceDB
 		func(a_skinTone, std::addressof(a_category), a_unk2, std::addressof(a_values));
 	}
 
-	TESForm* FindCategoryData(const BSFixedString& a_category)
+	BGSAVMData* FindCategoryData(const BSFixedString& a_category)
 	{
 		using func_t = bool (*)(void*, const BSFixedString*, void**);
 		static REL::Relocation<func_t> find{ ID::BSFaceDB::FindCategoryData };
@@ -27,7 +27,7 @@ namespace RE::BSFaceDB
 
 		void* data = nullptr;
 		return find(categoryMap.get(), std::addressof(a_category), std::addressof(data)) ?
-			static_cast<TESForm*>(data) :
+			static_cast<BGSAVMData*>(data) :
 			nullptr;
 	}
 

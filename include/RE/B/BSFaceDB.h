@@ -5,7 +5,7 @@
 
 namespace RE
 {
-	class TESForm;
+	class BGSAVMData;
 }
 
 namespace RE::BSFaceDB
@@ -16,7 +16,7 @@ namespace RE::BSFaceDB
 		bool a_unk2,
 		BSScrapArray<BSFixedString>& a_values);
 
-	[[nodiscard]] TESForm* FindCategoryData(const BSFixedString& a_category);
+	[[nodiscard]] BGSAVMData* FindCategoryData(const BSFixedString& a_category);
 
 	[[nodiscard]] std::uint32_t FindSimpleColorIndex(
 		std::uint32_t a_storeIndex,

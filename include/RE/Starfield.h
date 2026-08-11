@@ -36,6 +36,7 @@
 #include "RE/B/BGSAttackDataForm.h"
 #include "RE/B/BGSAttractionRule.h"
 #include "RE/B/BGSAudioOcclusionPrimitive.h"
+#include "RE/B/BGSAVMData.h"
 #include "RE/B/BGSBaseForm.h"
 #include "RE/B/BGSBendableSpline.h"
 #include "RE/B/BGSBiome.h"
