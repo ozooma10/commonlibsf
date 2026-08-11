@@ -1,5 +1,6 @@
 #pragma once
 
+#include "RE/A/AVMData.h"
 #include "RE/B/BSFixedString.h"
 #include "RE/B/BSTArray.h"
 
@@ -10,6 +11,12 @@ namespace RE
 
 namespace RE::BSFaceDB
 {
+	[[nodiscard]] bool ResolveEntry(
+		std::uint32_t a_storeIndex,
+		const BSFixedString& a_category,
+		const BSFixedString& a_value,
+		AVMData::Entry& a_entry);
+
 	void GetLayerValues(
 		std::uint8_t a_skinTone,
 		const BSFixedString& a_category,

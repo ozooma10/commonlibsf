@@ -442,6 +442,13 @@ namespace RE
 			func(this, a_index);
 		}
 
+		void RefreshAppearance(bool a_arg1, std::uint32_t a_flags, bool a_changeRace)
+		{
+			using func_t = decltype(&Actor::RefreshAppearance);
+			static REL::Relocation<func_t> func{ ID::Actor::RefreshAppearance };
+			func(this, a_arg1, a_flags, a_changeRace);
+		}
+
 		void UpdateAppearance(bool a_arg1, std::uint32_t a_flags, bool a_changeRace)
 		{
 			using func_t = decltype(&Actor::UpdateAppearance);

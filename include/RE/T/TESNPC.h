@@ -83,6 +83,13 @@ namespace RE
 			return func(this, a_source, a_sourceIsPlayer);
 		}
 
+		void ChangeHeadPart(BGSHeadPart* a_headPart)
+		{
+			using func_t = decltype(&TESNPC::ChangeHeadPart);
+			static REL::Relocation<func_t> func{ ID::TESNPC::ChangeHeadPart };
+			return func(this, a_headPart);
+		}
+
 		// Deep-copies the owned appearance containers and applies the engine's
 		// faceNPC policy. Morph weights, body morphs, skin tone, and pronoun are
 		// deliberately outside this worker's contract.
@@ -150,11 +157,55 @@ namespace RE
 			});
 		}
 
+		void EnsureFacialBoneGroup(
+			std::uint32_t a_regionID,
+			const BSFixedStringCS& a_groupName)
+		{
+			using func_t = decltype(&TESNPC::EnsureFacialBoneGroup);
+			static REL::Relocation<func_t> func{ ID::TESNPC::EnsureFacialBoneGroup };
+			return func(this, a_regionID, a_groupName);
+		}
+
+		void RemoveAVMData(const BSFixedString& a_category)
+		{
+			using func_t = decltype(&TESNPC::RemoveAVMData);
+			static REL::Relocation<func_t> func{ ID::TESNPC::RemoveAVMData };
+			return func(this, a_category);
+		}
+
+		void RemoveHeadPart(BGSHeadPart* a_headPart, bool a_removeExtras)
+		{
+			using func_t = decltype(&TESNPC::RemoveHeadPart);
+			static REL::Relocation<func_t> func{ ID::TESNPC::ChangeHeadPartRemoveExtras };
+			return func(this, a_headPart, a_removeExtras);
+		}
+
+		void SetAVMData(const AVMData& a_data)
+		{
+			using func_t = decltype(&TESNPC::SetAVMData);
+			static REL::Relocation<func_t> func{ ID::TESNPC::SetAVMData };
+			return func(this, a_data);
+		}
+
 		void SetBodyMorph(std::uint32_t a_index, float a_value)
 		{
 			using func_t = decltype(&TESNPC::SetBodyMorph);
 			static REL::Relocation<func_t> func{ ID::TESNPC::SetBodyMorph };
 			return func(this, a_index, a_value);
+		}
+
+		void SetFacialBone(std::uint32_t a_id, float a_value)
+		{
+			using func_t = decltype(&TESNPC::SetFacialBone);
+			static REL::Relocation<func_t> func{ ID::TESNPC::SetFacialBone };
+			return func(this, a_id, a_value);
+		}
+
+		void SetShapeBlend(const BSFixedStringCS& a_name, float a_value)
+		{
+			using func_t = decltype(&TESNPC::SetShapeBlend);
+			static REL::Relocation<func_t> func{ ID::TESNPC::SetShapeBlend };
+			return func(this, a_name, a_value);
 		}
 
 		// members
@@ -184,8 +235,8 @@ namespace RE
 		TESFaction*                                                     crimeFaction;     // 3B0
 		TESFaction*                                                     unk3B8;           // 3B8
 		BSGuarded<BSTArray<BGSHeadPart*>, BSNonReentrantSpinLock>       headParts;        // 3C0
-		BSTArray<float>*                                                unk3D8;           // 3D8
-		BSTHashMap2<std::uint32_t, float>*                              unk3E0;           // 3E0
+		BSTArray<float>*                                                bodyMorphValues;  // 3D8
+		BSTHashMap2<std::uint32_t, float>*                              facialBoneValues; // 3E0
 		BSTHashMap<std::uint32_t, BSTHashMap<BSFixedStringCS, float>*>* unk3E8;           // 3E8
 		BSTArray<AVMData>                                               tintAVMData;      // 3F0
 		std::uint8_t                                                    skinToneIndex;    // 400

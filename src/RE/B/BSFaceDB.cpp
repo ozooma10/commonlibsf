@@ -4,6 +4,25 @@
 
 namespace RE::BSFaceDB
 {
+	bool ResolveEntry(
+		std::uint32_t a_storeIndex,
+		const BSFixedString& a_category,
+		const BSFixedString& a_value,
+		AVMData::Entry& a_entry)
+	{
+		using func_t = bool (*)(
+			std::uint32_t,
+			const BSFixedString*,
+			const BSFixedString*,
+			AVMData::Entry*);
+		static REL::Relocation<func_t> func{ ID::BSFaceDB::ResolveEntry };
+		return func(
+			a_storeIndex,
+			std::addressof(a_category),
+			std::addressof(a_value),
+			std::addressof(a_entry));
+	}
+
 	void GetLayerValues(
 		std::uint8_t a_skinTone,
 		const BSFixedString& a_category,

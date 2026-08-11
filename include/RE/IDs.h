@@ -29,6 +29,7 @@ namespace RE::ID
 		inline constexpr REL::ID SetGhost{ 100873 };      // ExtraGhost invuln+AI-ignore; console SetGhost (osf-re gameplay.defeat_damage_hook)
 		inline constexpr REL::ID SetLifeState{ 100787 };  // vtable slot 0x16F; writes ACTOR_LIFE_STATE bits 17-20 of [actor+0xF8] (osf-re gameplay.defeat_damage_hook)
 		inline constexpr REL::ID SetSkinTone{ 97400 };
+		inline constexpr REL::ID RefreshAppearance{ 101307 };  // 1.16.244 (actor, false, 0x28, false); synchronously rebuilds actor 3D from the current base NPC
 		inline constexpr REL::ID UpdateAppearance{ 101306 };  // 1.16.244 runtime-proven: rebuilds head/facegen from the CURRENT base NPC; engine recipe = [actor+0x228->+8]+0x582 |= 4, then (false, 0, true) (osf-re ui.menu3d_paperdoll)
 		inline constexpr REL::ID UpdateChargenAppearance{ 97399 };
 	}
@@ -294,6 +295,7 @@ namespace RE::ID
 	namespace BSFaceDB
 	{
 		// 1.16.244 appearance-catalog functions and globals.
+		inline constexpr REL::ID ResolveEntry{ 37340 };
 		inline constexpr REL::ID FindSimpleColorIndex{ 37341 };
 		inline constexpr REL::ID FindCategoryData{ 37347 };
 		inline constexpr REL::ID FindMappedColorIndex{ 69610 };
@@ -2507,8 +2509,13 @@ namespace RE::ID
 		inline constexpr REL::ID ChangeHeadPartRemoveExtras{ 68188 };  // 1.16.244 (npc, BGSHeadPart*, bool removeExtras); osf-re ui.menu3d_paperdoll
 		inline constexpr REL::ID CopyAppearance{ 68122 };  // 1.16.244 (target, source, bool sourceIsPlayer); third ABI arg proven at 0x140CD8DF0
 		inline constexpr REL::ID DeriveGeneticParentAppearance{ 68123 };
+		inline constexpr REL::ID EnsureFacialBoneGroup{ 68212 };
+		inline constexpr REL::ID RemoveAVMData{ 68088 };
 		inline constexpr REL::ID ScalarDeletingDestructor{ 68093 };
+		inline constexpr REL::ID SetAVMData{ 68087 };
 		inline constexpr REL::ID SetBodyMorph{ 68208 };  // 1.16.244 (npc, index, value); index is caller-bounded
+		inline constexpr REL::ID SetFacialBone{ 68210 };
+		inline constexpr REL::ID SetShapeBlend{ 68207 };
 	}
 
 	namespace TESNPCFormFactory
