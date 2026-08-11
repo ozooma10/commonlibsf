@@ -195,6 +195,7 @@
 #include "RE/B/BSCoreTypes.h"
 #include "RE/B/BSExtraData.h"
 #include "RE/B/BSFadeNode.h"
+#include "RE/B/BSFaceDB.h"
 #include "RE/B/BSFixedString.h"
 #include "RE/B/BSFloat3DCurve.h"
 #include "RE/B/BSFloatCurve.h"

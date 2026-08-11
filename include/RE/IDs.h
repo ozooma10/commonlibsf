@@ -291,6 +291,22 @@ namespace RE::ID
 		inline constexpr REL::ID IterateAdvance{ 39372 };
 	}
 
+	namespace BSFaceDB
+	{
+		// 1.16.244 appearance-catalog functions and globals.
+		inline constexpr REL::ID FindSimpleColorIndex{ 37341 };
+		inline constexpr REL::ID FindCategoryData{ 37347 };
+		inline constexpr REL::ID FindMappedColorIndex{ 69610 };
+		inline constexpr REL::ID GetLayerValues{ 97404 };
+		inline constexpr REL::ID HasModulationEntries{ 97406 };
+		inline constexpr REL::ID CategoryMapEntries{ 884864 };
+		inline constexpr REL::ID HairColorCategory{ 886309 };
+		inline constexpr REL::ID FacialHairColorCategory{ 886310 };
+		inline constexpr REL::ID TeethCategory{ 886313 };
+		inline constexpr REL::ID JewelryColorCategory{ 886314 };
+		inline constexpr REL::ID EyeColorCategory{ 886315 };
+	}
+
 	namespace BSInputEnableLayer
 	{
 		inline constexpr REL::ID DecRef{ 45194 };  // engine release: dec m_refCount; 2->1 LayerFreed, 1->0 free object
@@ -2567,6 +2583,14 @@ namespace RE::ID
 	namespace TESQuestRewardEvent
 	{
 		inline constexpr REL::ID GetEventSource{ 0 };  // 95698
+	}
+
+	namespace TESRace
+	{
+		// 1.16.244 chargen descriptor accessors.
+		inline constexpr REL::ID GetBoneGroupName{ 68803 };
+		inline constexpr REL::ID FindShapeDescriptorByName{ 68807 };
+		inline constexpr REL::ID GetBoneRegionDescriptor{ 68808 };
 	}
 
 	namespace TESResetEvent

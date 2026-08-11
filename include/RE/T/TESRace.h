@@ -130,6 +130,10 @@ namespace RE
 
 		~TESRace() override;  // 00
 
+		[[nodiscard]] const BSFixedStringCS* GetBoneGroupName(SEX a_sex, std::uint32_t a_index);
+		[[nodiscard]] void*                  FindShapeDescriptorByName(SEX a_sex, const char* a_name);
+		[[nodiscard]] void*                  GetBoneRegionDescriptor(SEX a_sex, std::uint32_t a_id);
+
 		// members
 		BGSEditorID                formEditorID;                     // 0E8
 		BGSMaterialType*           bloodImpactMaterial;              // 0F8
