@@ -99,8 +99,7 @@ namespace RE
 			};
 		}
 
-		// Holder of the main-thread command stream ([this+0] is the stream at
-		// Main+0x40). Reached through a global pointer, not UI() or Main.
+		// Holder of the main-thread command stream ([this+0] is the stream at Main+0x40). Reached through a global pointer, not UI() or Main.
 		class TaskQueue
 		{
 		public:
@@ -108,6 +107,18 @@ namespace RE
 			{
 				static REL::Relocation<TaskQueue**> singleton{ ID::BSService::TaskQueue::Singleton };
 				return *singleton;
+			}
+
+			[[nodiscard]] static bool IsQueueEnabled()
+			{
+				static REL::Relocation<std::uint8_t*> enabled{ ID::BSService::TaskQueue::Enabled };
+				return *enabled == 1;
+			}
+
+			[[nodiscard]] static std::uint32_t GetDrainOwnerThreadID()
+			{
+				static REL::Relocation<std::uint32_t*> drainOwnerTid{ ID::BSService::TaskQueue::DrainOwnerThreadID };
+				return *drainOwnerTid;
 			}
 
 			// Raw engine call. STEALS the caller's reference when it enqueues
