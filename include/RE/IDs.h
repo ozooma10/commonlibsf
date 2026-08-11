@@ -351,6 +351,16 @@ namespace RE::ID
 		inline constexpr REL::ID UnlockWrite{ 35983 };
 	}
 
+	namespace BSResourceNiBinaryStream
+	{
+		inline constexpr REL::ID ctor{ 147134 };
+		inline constexpr REL::ID dtor{ 147137 };
+		inline constexpr REL::ID Seek{ 147138 };
+		inline constexpr REL::ID DoRead{ 147139 };
+		inline constexpr REL::ID DoWrite{ 147140 };
+		inline constexpr REL::ID GetBufferInfo{ 147141 };
+	}
+
 	namespace BSScript
 	{
 		namespace Array
@@ -2476,10 +2486,19 @@ namespace RE::ID
 
 	namespace TESNPC
 	{
+		inline constexpr REL::ID CopyOwnedAppearance{ 68104 };  // 1.16.244 (target, source, bool sourceIsPlayer); deep-copies owned appearance containers and applies faceNPC policy
 		inline constexpr REL::ID ChangeHeadPart{ 68189 };              // 1.16.244 (npc, BGSHeadPart*); Papyrus Actor.ChangeHeadPart stub path (osf-re ui.menu3d_paperdoll)
 		inline constexpr REL::ID ChangeHeadPartRemoveExtras{ 68188 };  // 1.16.244 (npc, BGSHeadPart*, bool removeExtras); osf-re ui.menu3d_paperdoll
 		inline constexpr REL::ID CopyAppearance{ 68122 };  // 1.16.244 (target, source, bool sourceIsPlayer); third ABI arg proven at 0x140CD8DF0
 		inline constexpr REL::ID DeriveGeneticParentAppearance{ 68123 };
+		inline constexpr REL::ID ScalarDeletingDestructor{ 68093 };
+		inline constexpr REL::ID SetBodyMorph{ 68208 };  // 1.16.244 (npc, index, value); index is caller-bounded
+	}
+
+	namespace TESNPCFormFactory
+	{
+		inline constexpr REL::ID Create{ 68242 };     // 1.16.244 (factory, bool); exact bool semantics remain unresolved
+		inline constexpr REL::ID Singleton{ 824718 };  // 1.16.244 inline concrete TESNPC factory object
 	}
 
 	namespace TESNPCData

@@ -38,6 +38,7 @@ namespace RE
 	public:
 		SF_RTTI_VTABLE(TESNPC);
 		SF_FORMTYPE(NPC_);
+		inline static constexpr auto PRIMARY_VTABLE = VTABLE[15];  // 1.16.244 complete-object vtable, ID 420893
 
 		enum class PRONOUN_TYPE
 		{
@@ -56,6 +57,14 @@ namespace RE
 
 		~TESNPC() override;  // 00
 
+		[[nodiscard]] static TESNPC* Create(bool a_arg)
+		{
+			using func_t = TESNPC* (*)(void*, bool);
+			static REL::Relocation<void*> factory{ ID::TESNPCFormFactory::Singleton };
+			static REL::Relocation<func_t> func{ ID::TESNPCFormFactory::Create };
+			return func(factory.get(), a_arg);
+		}
+
 		[[nodiscard]] bool ContainsKeyword(std::string_view a_editorID)
 		{
 			if (ContainsKeywordString(a_editorID))
@@ -71,6 +80,16 @@ namespace RE
 		{
 			using func_t = decltype(&TESNPC::CopyAppearance);
 			static REL::Relocation<func_t> func{ ID::TESNPC::CopyAppearance };
+			return func(this, a_source, a_sourceIsPlayer);
+		}
+
+		// Deep-copies the owned appearance containers and applies the engine's
+		// faceNPC policy. Morph weights, body morphs, skin tone, and pronoun are
+		// deliberately outside this worker's contract.
+		void CopyOwnedAppearance(TESNPC* a_source, bool a_sourceIsPlayer = false)
+		{
+			using func_t = decltype(&TESNPC::CopyOwnedAppearance);
+			static REL::Relocation<func_t> func{ ID::TESNPC::CopyOwnedAppearance };
 			return func(this, a_source, a_sourceIsPlayer);
 		}
 
@@ -129,6 +148,13 @@ namespace RE
 			return std::ranges::any_of(factions, [&](const auto& faction) {
 				return faction.faction == a_faction && faction.rank > -1;
 			});
+		}
+
+		void SetBodyMorph(std::uint32_t a_index, float a_value)
+		{
+			using func_t = decltype(&TESNPC::SetBodyMorph);
+			static REL::Relocation<func_t> func{ ID::TESNPC::SetBodyMorph };
+			return func(this, a_index, a_value);
 		}
 
 		// members
