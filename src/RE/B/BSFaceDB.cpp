@@ -4,6 +4,17 @@
 
 namespace RE::BSFaceDB
 {
+	void GetCategoryValues(
+		std::uint32_t a_storeIndex,
+		const BSFixedString& a_category,
+		BSScrapArray<BSFixedString>& a_values)
+	{
+		using func_t = void (*)(
+			std::uint32_t, const BSFixedString*, BSScrapArray<BSFixedString>*);
+		static REL::Relocation<func_t> func{ ID::BSFaceDB::GetCategoryValues };
+		func(a_storeIndex, std::addressof(a_category), std::addressof(a_values));
+	}
+
 	bool ResolveEntry(
 		std::uint32_t a_storeIndex,
 		const BSFixedString& a_category,

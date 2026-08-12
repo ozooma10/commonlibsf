@@ -11,6 +11,11 @@ namespace RE
 
 namespace RE::BSFaceDB
 {
+	void GetCategoryValues(
+		std::uint32_t a_storeIndex,
+		const BSFixedString& a_category,
+		BSScrapArray<BSFixedString>& a_values);
+
 	[[nodiscard]] bool ResolveEntry(
 		std::uint32_t a_storeIndex,
 		const BSFixedString& a_category,

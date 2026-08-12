@@ -295,6 +295,7 @@ namespace RE::ID
 	namespace BSFaceDB
 	{
 		// 1.16.244 appearance-catalog functions and globals.
+		inline constexpr REL::ID GetCategoryValues{ 37338 };
 		inline constexpr REL::ID ResolveEntry{ 37340 };
 		inline constexpr REL::ID FindSimpleColorIndex{ 37341 };
 		inline constexpr REL::ID FindCategoryData{ 37347 };
