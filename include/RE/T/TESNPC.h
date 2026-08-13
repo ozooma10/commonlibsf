@@ -9,10 +9,12 @@
 #include "RE/B/BSTArray.h"
 #include "RE/B/BSTEvent.h"
 #include "RE/B/BSTScatterTable.h"
+#include "RE/M/MemoryManager.h"
 #include "RE/N/NiPoint.h"
 #include "RE/T/TESActorBase.h"
 #include "RE/T/TESRace.h"
 #include "RE/T/TESRaceForm.h"
+#include "REX/TScopeExit.h"
 
 namespace RE
 {
@@ -63,6 +65,28 @@ namespace RE
 			static REL::Relocation<void*> factory{ ID::TESNPCFormFactory::Singleton };
 			static REL::Relocation<func_t> func{ ID::TESNPCFormFactory::Create };
 			return func(factory.get(), a_arg);
+		}
+
+		// Constructs a complete TESNPC in engine-allocated storage while the
+		// current thread's TESForm registration path is suppressed. The caller
+		// owns the returned object; no FormID is assigned by this utility.
+		[[nodiscard]] static TESNPC* CreateUnregistered()
+		{
+			using constructor_t = TESNPC* (*)(TESNPC*);
+			using set_registration_suppressed_t = void (*)(void*, bool);
+			static REL::Relocation<constructor_t> constructor{ ID::TESNPC::ctor };
+			static REL::Relocation<set_registration_suppressed_t> setRegistrationSuppressed{ ID::TLS::SetFormRegistrationSuppressed };
+
+			auto* storage = RE::malloc<TESNPC>();
+			if (!storage) {
+				return nullptr;
+			}
+
+			setRegistrationSuppressed(nullptr, true);
+			const REX::TScopeExit restoreRegistration([&] {
+				setRegistrationSuppressed(nullptr, false);
+			});
+			return constructor(storage);
 		}
 
 		[[nodiscard]] bool ContainsKeyword(std::string_view a_editorID)

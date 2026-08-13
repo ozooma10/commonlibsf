@@ -2505,6 +2505,7 @@ namespace RE::ID
 
 	namespace TESNPC
 	{
+		inline constexpr REL::ID ctor{ 68092 };  // 1.16.244 complete TESNPC constructor; initializes caller-provided engine storage
 		inline constexpr REL::ID CopyOwnedAppearance{ 68104 };  // 1.16.244 (target, source, bool sourceIsPlayer); deep-copies owned appearance containers and applies faceNPC policy
 		inline constexpr REL::ID ChangeHeadPart{ 68189 };              // 1.16.244 (npc, BGSHeadPart*); Papyrus Actor.ChangeHeadPart stub path (osf-re ui.menu3d_paperdoll)
 		inline constexpr REL::ID ChangeHeadPartRemoveExtras{ 68188 };  // 1.16.244 (npc, BGSHeadPart*, bool removeExtras); osf-re ui.menu3d_paperdoll
@@ -2517,6 +2518,11 @@ namespace RE::ID
 		inline constexpr REL::ID SetBodyMorph{ 68208 };  // 1.16.244 (npc, index, value); index is caller-bounded
 		inline constexpr REL::ID SetFacialBone{ 68210 };
 		inline constexpr REL::ID SetShapeBlend{ 68207 };
+	}
+
+	namespace TLS
+	{
+		inline constexpr REL::ID SetFormRegistrationSuppressed{ 46263 };  // 1.16.244 (unused, bool); controls the thread-local TESForm registration gate
 	}
 
 	namespace TESNPCFormFactory
