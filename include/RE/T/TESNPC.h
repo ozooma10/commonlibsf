@@ -261,7 +261,7 @@ namespace RE
 		BSGuarded<BSTArray<BGSHeadPart*>, BSNonReentrantSpinLock>       headParts;        // 3C0
 		BSTArray<float>*                                                bodyMorphValues;  // 3D8
 		BSTHashMap2<std::uint32_t, float>*                              facialBoneValues; // 3E0
-		BSTHashMap<std::uint32_t, BSTHashMap<BSFixedStringCS, float>*>* unk3E8;           // 3E8
+		BSTHashMap<std::uint32_t, BSTHashMap<BSFixedStringCS, float>*>* facialBoneGroupValues;  // 3E8
 		BSTArray<AVMData>                                               tintAVMData;      // 3F0
 		std::uint8_t                                                    skinToneIndex;    // 400
 		std::uint8_t                                                    pad401[3];        // 401
