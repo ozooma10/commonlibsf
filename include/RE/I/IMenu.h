@@ -85,9 +85,9 @@ namespace RE
 		}
 
 		// add
-		virtual const char*   GetName() const = 0;      // 03
-		virtual const char*   GetRootPath() const = 0;  // 04
-		virtual std::uint64_t GetUnk05() = 0;           // 05
+		virtual const char*   GetName() const = 0;       // 03
+		virtual const char*   GetRootPath() const = 0;   // 04
+		virtual std::uint64_t GetViewScaleMode() = 0;    // 05
 
 		virtual bool LoadMovie(bool a_addEventDispatcher, bool a_arg2)  // 06
 		{
@@ -112,10 +112,10 @@ namespace RE
 			return func(this);
 		}
 
-		virtual bool Unk0A()  // 0A
+		virtual bool IsMovieLoaded()  // 0A
 		{
-			using func_t = decltype(&IMenu::Unk0A);
-			static REL::Relocation<func_t> func{ ID::IMenu::Unk0A };
+			using func_t = decltype(&IMenu::IsMovieLoaded);
+			static REL::Relocation<func_t> func{ ID::IMenu::IsMovieLoaded };
 			return func(this);
 		}
 
@@ -123,28 +123,28 @@ namespace RE
 		virtual void Unk_0C(void) {}  // 0C
 		virtual void Unk_0D(void) {}  // 0D
 
-		virtual bool Unk0E(void* a_arg1, bool a_arg2)  // 0E
+		virtual void OnMenuStackChanged(const BSFixedString& a_topMenuName, bool a_isTopMenu)  // 0E
 		{
-			using func_t = decltype(&IMenu::Unk0E);
-			static REL::Relocation<func_t> func{ ID::IMenu::Unk0E };
-			return func(this, a_arg1, a_arg2);
+			using func_t = decltype(&IMenu::OnMenuStackChanged);
+			static REL::Relocation<func_t> func{ ID::IMenu::OnMenuStackChanged };
+			return func(this, a_topMenuName, a_isTopMenu);
 		}
 
-		virtual void Unk0F() {};  // 0F
+		virtual void OnMenuDisplayStateChanged() {}  // 0F
 
-		virtual std::uint64_t Unk10()  // 10
+		virtual void OnAddedToMenuStack()  // 10
 		{
-			using func_t = decltype(&IMenu::Unk10);
-			static REL::Relocation<func_t> func{ ID::IMenu::Unk10 };
+			using func_t = decltype(&IMenu::OnAddedToMenuStack);
+			static REL::Relocation<func_t> func{ ID::IMenu::OnAddedToMenuStack };
 			return func(this);
-		};
+		}
 
-		virtual std::uint64_t Unk11()  // 11
+		virtual void OnRemovedFromMenuStack()  // 11
 		{
-			using func_t = decltype(&IMenu::Unk11);
-			static REL::Relocation<func_t> func{ ID::IMenu::Unk11 };
+			using func_t = decltype(&IMenu::OnRemovedFromMenuStack);
+			static REL::Relocation<func_t> func{ ID::IMenu::OnRemovedFromMenuStack };
 			return func(this);
-		};
+		}
 
 		virtual std::uint64_t Unk12()  // 12
 		{
@@ -165,19 +165,19 @@ namespace RE
 			return true;
 		};
 
-		virtual bool Unk15(void* a_arg1)  // 15
+		virtual bool WantsMovieEventForward(const InputEvent* a_event)  // 15
 		{
-			using func_t = decltype(&IMenu::Unk15);
-			static REL::Relocation<func_t> func{ ID::IMenu::Unk15 };
-			return func(this, a_arg1);
+			using func_t = decltype(&IMenu::WantsMovieEventForward);
+			static REL::Relocation<func_t> func{ ID::IMenu::WantsMovieEventForward };
+			return func(this, a_event);
 		};
 
-		virtual bool Unk16()  // 16
+		virtual bool CanHandleWhenDisabled([[maybe_unused]] const ButtonEvent* a_event)  // 16
 		{
 			return false;
 		};
 
-		virtual bool ProcessInputUserEvent()  // 17
+		virtual bool OnButtonEventRelease([[maybe_unused]] const BSFixedString& a_eventName)  // 17
 		{
 			return false;
 		};

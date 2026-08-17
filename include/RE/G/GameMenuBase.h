@@ -35,19 +35,19 @@ namespace RE
 		virtual ~GameMenuBase() = default;  // 00
 
 		// override
-		virtual std::uint64_t Unk10() override
+		virtual void OnAddedToMenuStack() override
 		{
-			using func_t = decltype(&GameMenuBase::Unk10);
-			static REL::Relocation<func_t> func{ ID::GameMenuBase::Unk10 };
+			using func_t = decltype(&GameMenuBase::OnAddedToMenuStack);
+			static REL::Relocation<func_t> func{ ID::GameMenuBase::OnAddedToMenuStack };
 			return func(this);
-		};
+		}
 
-		virtual std::uint64_t Unk11() override
+		virtual void OnRemovedFromMenuStack() override
 		{
-			using func_t = decltype(&GameMenuBase::Unk11);
-			static REL::Relocation<func_t> func{ ID::GameMenuBase::Unk11 };
+			using func_t = decltype(&GameMenuBase::OnRemovedFromMenuStack);
+			static REL::Relocation<func_t> func{ ID::GameMenuBase::OnRemovedFromMenuStack };
 			return func(this);
-		};
+		}
 
 		// add
 		virtual bool Unk1B() { return true; }  //1B

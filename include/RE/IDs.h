@@ -1045,9 +1045,9 @@ namespace RE::ID
 
 	namespace GameMenuBase
 	{
-		inline constexpr REL::ID ctor{ 0 };   // 130577
-		inline constexpr REL::ID Unk10{ 0 };  // 141505
-		inline constexpr REL::ID Unk11{ 0 };  // 141506
+		inline constexpr REL::ID ctor{ 0 };                            // 130577
+		inline constexpr REL::ID OnAddedToMenuStack{ 93620 };          // 0x141667080 — proven vtable override on 1.16.244
+		inline constexpr REL::ID OnRemovedFromMenuStack{ 93621 };      // 0x1416670c0 — proven vtable override on 1.16.244
 	}
 
 	namespace GameScript
@@ -1142,13 +1142,13 @@ namespace RE::ID
 		inline constexpr REL::ID LoadMovie{ 130618 };            // 0x142551ab0 — runtime-proven live, module ui.menu_movie_load
 		inline constexpr REL::ID ProcessMessage{ 130624 };       // 0x142552070 — proven, module ui.menu_movie_load
 		inline constexpr REL::ID Unk09{ 42815 };
-		inline constexpr REL::ID Unk0A{ 130619 };                // 0x142551d20 — runtime-proven (array-admission predicate), module ui.menu_movie_load
-		inline constexpr REL::ID Unk0E{ 130622 };
-		inline constexpr REL::ID Unk10{ 130620 };                // 0x142551d30 — runtime-proven live (post-insert bit-6 setter), module ui.menu_movie_load
-		inline constexpr REL::ID Unk11{ 130621 };
+		inline constexpr REL::ID IsMovieLoaded{ 130619 };        // 0x142551d20 — runtime-proven (array-admission predicate), module ui.menu_movie_load
+		inline constexpr REL::ID OnMenuStackChanged{ 130622 };
+		inline constexpr REL::ID OnAddedToMenuStack{ 130620 };   // 0x142551d30 — runtime-proven live (post-insert bit-6 setter), module ui.menu_movie_load
+		inline constexpr REL::ID OnRemovedFromMenuStack{ 130621 };
 		inline constexpr REL::ID Unk12{ 42816 };
 		inline constexpr REL::ID Unk13{ 39540 };
-		inline constexpr REL::ID Unk15{ 130627 };
+		inline constexpr REL::ID WantsMovieEventForward{ 130627 };
 		inline constexpr REL::ID Unk18{ 130625 };
 		inline constexpr REL::ID Unk19{ 130634 };
 		inline constexpr REL::ID Unk1A{ 130630 };
