@@ -110,6 +110,18 @@ namespace RE
 				return *singleton;
 			}
 
+			[[nodiscard]] static bool IsQueueEnabled()
+			{
+				static REL::Relocation<std::uint8_t*> enabled{ ID::BSService::TaskQueue::Enabled };
+				return *enabled == 1;
+			}
+
+			[[nodiscard]] static std::uint32_t GetDrainOwnerThreadID()
+			{
+				static REL::Relocation<std::uint32_t*> drainOwnerTid{ ID::BSService::TaskQueue::DrainOwnerThreadID };
+				return *drainOwnerTid;
+			}
+
 			// Raw engine call. STEALS the caller's reference when it enqueues
 			// (a_task is nulled); when queueing is disabled or the caller is
 			// the thread currently draining, the reference is left and the

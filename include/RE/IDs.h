@@ -415,8 +415,10 @@ namespace RE::ID
 
 	namespace BSService::TaskQueue
 	{
-		inline constexpr REL::ID Singleton{ 883606 };  // .244 0x5E71728 (.242 0x5E796A8) g_TaskQueueHolder: ptr -> stream holder ([holder] = command stream at Main+0x40)
-		inline constexpr REL::ID QueueTask{ 100121 };  // .244 RVA 0x18CA630 (.242 0x18CD0D0) (holder, QueuedDelegate**) - steals the ref when it enqueues
+		inline constexpr REL::ID Singleton{ 883606 };           // g_TaskQueueHolder: ptr -> stream holder ([holder] = command stream at Main+0x40); 1.16.244 0x5E71728 (1.16.242 0x5E796A8)
+		inline constexpr REL::ID QueueTask{ 100121 };           // (holder, QueuedDelegate**) - steals the ref when it enqueues; 1.16.244 0x18CA630 (1.16.242 0x18CD0D0)
+		inline constexpr REL::ID Enabled{ 810305 };             // u8 queue gate: engine clears it during early boot and around LoadGame; QueueTask falls back to inline execution while 0
+		inline constexpr REL::ID DrainOwnerThreadID{ 923104 };  // u32 TID of the thread currently draining the command stream (0 when idle); lets callers prove they run inside the drain
 	}
 
 	namespace BSSpinLock
