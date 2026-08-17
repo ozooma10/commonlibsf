@@ -1134,23 +1134,24 @@ namespace RE::ID
 
 	namespace IMenu
 	{
-		inline constexpr REL::ID dtor{ 0 };                      // 187216
+		inline constexpr REL::ID ctor{ 130615 };                 // complete IMenu constructor; stable across 1.16.236, 1.16.242, and 1.16.244
+		inline constexpr REL::ID dtor{ 130617 };                 // complete IMenu destructor; 130616 is the scalar-deleting destructor
 		inline constexpr REL::ID ShouldHandleEvent{ 91901 };     // 0x142553390 on 1.16.244 — proven, module ui.menu_input
 		inline constexpr REL::ID OnThumbstickEvent{ 130633 };    // 0x142553670 — proven, module ui.menu_input
 		inline constexpr REL::ID OnButtonEvent{ 130632 };        // 0x1425533d0 — proven, module ui.menu_input
 		inline constexpr REL::ID LoadMovie{ 130618 };            // 0x142551ab0 — runtime-proven live, module ui.menu_movie_load
 		inline constexpr REL::ID ProcessMessage{ 130624 };       // 0x142552070 — proven, module ui.menu_movie_load
-		inline constexpr REL::ID Unk09{ 0 };                     // 80440
+		inline constexpr REL::ID Unk09{ 42815 };
 		inline constexpr REL::ID Unk0A{ 130619 };                // 0x142551d20 — runtime-proven (array-admission predicate), module ui.menu_movie_load
-		inline constexpr REL::ID Unk0E{ 0 };                     // 187242
+		inline constexpr REL::ID Unk0E{ 130622 };
 		inline constexpr REL::ID Unk10{ 130620 };                // 0x142551d30 — runtime-proven live (post-insert bit-6 setter), module ui.menu_movie_load
-		inline constexpr REL::ID Unk11{ 0 };              // 187243
-		inline constexpr REL::ID Unk12{ 0 };              // 80451
-		inline constexpr REL::ID Unk13{ 0 };              // 76183
-		inline constexpr REL::ID Unk15{ 0 };              // 187225
-		inline constexpr REL::ID Unk18{ 0 };              // 1275268
-		inline constexpr REL::ID Unk19{ 0 };              // 187245
-		inline constexpr REL::ID Unk1A{ 0 };              // 187232
+		inline constexpr REL::ID Unk11{ 130621 };
+		inline constexpr REL::ID Unk12{ 42816 };
+		inline constexpr REL::ID Unk13{ 39540 };
+		inline constexpr REL::ID Unk15{ 130627 };
+		inline constexpr REL::ID Unk18{ 130625 };
+		inline constexpr REL::ID Unk19{ 130634 };
+		inline constexpr REL::ID Unk1A{ 130630 };
 	}
 
 	namespace INIPrefSettingCollection

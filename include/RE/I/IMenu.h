@@ -251,4 +251,6 @@ namespace RE
 	};
 	static_assert(offsetof(IMenu, uiMovie) == 0x088);
 	static_assert(offsetof(IMenu, menuName) == 0x0B0);
+	static_assert(offsetof(IMenu, flags) == 0x0C0);
+	static_assert(offsetof(IMenu, flagsUpdated) == 0x0D2);
 }
