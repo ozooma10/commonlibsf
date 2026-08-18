@@ -389,6 +389,7 @@
 #include "RE/S/SettingCollectionList.h"
 #include "RE/S/SettingCollectionMap.h"
 #include "RE/S/Sexes.h"
+#include "RE/S/ShipHudTarget.h"
 #include "RE/S/SimpleAllocMemoryPagePolicy.h"
 #include "RE/S/Sky.h"
 #include "RE/S/SpellItem.h"

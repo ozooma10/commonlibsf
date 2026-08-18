@@ -719,7 +719,7 @@ namespace RE::ID
 
 	namespace ClearShipHudTarget::Event
 	{
-		inline constexpr REL::ID GetEventSource{ 0 };  // 137011
+		inline constexpr REL::ID GetEventSource{ 89263 };  // 1.16.242 + 1.16.244; called by ShipHudTarget::Set(0)
 	}
 
 	namespace ConsoleLog
@@ -1930,6 +1930,12 @@ namespace RE::ID
 	namespace ShipHud_UpdateTargetPanelRect
 	{
 		inline constexpr REL::ID GetEventSource{ 0 };  // 141821
+	}
+
+	namespace ShipHudTarget
+	{
+		inline constexpr REL::ID Set{ 97892 };
+		inline constexpr REL::ID Current{ 883585 };
 	}
 
 	namespace ShipHudQuickContainer_TransferItem
