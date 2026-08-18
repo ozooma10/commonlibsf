@@ -44,6 +44,11 @@ namespace SFSE::InputMap
 
 	std::uint32_t GamepadKeycodeToMask(std::uint32_t a_keyCode);
 
+	// Converts the Win32 virtual-key codes stored in keyboard ControlMap entries to
+	// the DirectInput set-1 scan codes used by SFSE keycode helpers. Returns 0 for
+	// an unbound or unmappable key.
+	std::uint32_t VirtualKeyToKeycode(std::uint32_t a_virtualKey);
+
 	std::string GetKeyName(std::uint32_t a_keyCode);
 
 	std::string GetKeyboardKeyName(std::uint32_t a_keyCode);

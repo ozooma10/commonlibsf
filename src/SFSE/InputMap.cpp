@@ -4,6 +4,12 @@
 #include "REX/W32/USER32.h"
 #include "REX/W32/XINPUT.h"
 
+#include <Windows.h>
+
+#ifdef MAX_PATH
+#	undef MAX_PATH
+#endif
+
 namespace SFSE
 {
 	std::uint32_t InputMap::GamepadMaskToKeycode(const std::uint32_t a_keyMask)
@@ -84,6 +90,33 @@ namespace SFSE
 		default:
 			return 0xFF;  // Invalid
 		}
+	}
+
+	std::uint32_t InputMap::VirtualKeyToKeycode(const std::uint32_t a_virtualKey)
+	{
+		if (a_virtualKey == 0xFF || a_virtualKey == 0x7FFFFFFF) {
+			return 0;
+		}
+
+		switch (a_virtualKey) {
+		case VK_PAUSE:
+			return REX::W32::DIK_PAUSE;
+		case VK_NUMLOCK:
+			return REX::W32::DIK_NUMLOCK;
+		case VK_SNAPSHOT:
+			return REX::W32::DIK_SYSRQ;
+		default:
+			break;
+		}
+
+		const auto scanCode = ::MapVirtualKeyExW(a_virtualKey, MAPVK_VK_TO_VSC_EX, ::GetKeyboardLayout(0));
+		if (scanCode == 0) {
+			return 0;
+		}
+
+		const auto prefix = (scanCode >> 8) & 0xFF;
+		const auto set1 = scanCode & 0xFF;
+		return prefix == 0xE0 || prefix == 0xE1 ? set1 | 0x80 : set1;
 	}
 
 	std::string InputMap::GetKeyName(const std::uint32_t a_keyCode)

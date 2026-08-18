@@ -842,9 +842,17 @@ namespace RE::ID
 		inline constexpr REL::ID GetEventSource{ 0 };  // 131197
 	}
 
+	namespace ControlMap
+	{
+		inline constexpr REL::ID Singleton{ 938003 };              // 1.16.244: ControlMap**
+		inline constexpr REL::ID InputContextNameTable{ 360965 };  // 1.16.244: const char*[0x51]
+	}
+
 	namespace ControlsRemappedEvent
 	{
 		inline constexpr REL::ID GetEventSource{ 0 };  // 136133
+		inline constexpr REL::ID Dispatch{ 88944 };             // 1.16.244: remap commit notification dispatch
+		inline constexpr REL::ID EventSourceStorage{ 947462 };  // 1.16.244: lazily initialized event-source storage
 	}
 
 	namespace CraftingMenu_CloseMenu

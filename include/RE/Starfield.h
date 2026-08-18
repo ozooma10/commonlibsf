@@ -246,6 +246,7 @@
 #include "RE/C/ConeProjectile.h"
 #include "RE/C/Console.h"
 #include "RE/C/ConsoleLog.h"
+#include "RE/C/ControlMap.h"
 #include "RE/C/CreationRenderer.h"
 #include "RE/D/DebuggerMessages.h"
 #include "RE/D/DecalData.h"
