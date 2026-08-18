@@ -2656,6 +2656,8 @@ namespace RE::ID
 		inline constexpr REL::ID IsMenuOpen{ 130475 };
 		inline constexpr REL::ID RegisterMenu{ 130463 };
 		inline constexpr REL::ID ModifyMenuPauseCounter{ 130472 };  // 2026-07-02, OSF RE module ui.menu_pause: the live-proven sim-pause enter/exit
+		inline constexpr REL::ID UpdateMenus{ 99438 };               // 1.16.244 main-loop UI update; contains both AdvanceActiveMenus calls
+		inline constexpr REL::ID AdvanceActiveMenus{ 130455 };       // 1.16.244 active-menu Scaleform advance
 	}
 
 	namespace UIBlurManager
