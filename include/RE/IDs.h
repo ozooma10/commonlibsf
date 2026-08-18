@@ -1058,6 +1058,14 @@ namespace RE::ID
 		inline constexpr REL::ID GetForForm{ 47393 };  // generic form-component lookup helper
 	}
 
+	namespace FreeCameraInputContext
+	{
+		inline constexpr REL::ID Manager{ 938003 };
+		inline constexpr REL::ID Descriptor{ 894502 };
+		inline constexpr REL::ID PushContext{ 124144 };
+		inline constexpr REL::ID PopContext{ 124143 };
+	}
+
 	namespace GameMenuBase
 	{
 		inline constexpr REL::ID ctor{ 0 };                            // 130577
