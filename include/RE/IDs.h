@@ -380,6 +380,17 @@ namespace RE::ID
 		inline constexpr REL::ID GetBufferInfo{ 147141 };
 	}
 
+	namespace BSScaleformManager
+	{
+		inline constexpr REL::ID Singleton{ 938002 };  // 1.16.244: BSScaleformManager**
+		inline constexpr REL::ID Translate{ 130701 };  // 1.16.244: manager-level wide-string translation helper
+	}
+
+	namespace BSScaleformTranslator::ScaleformImpl
+	{
+		inline constexpr REL::ID Translate{ 130928 };  // 1.16.244: direct translator implementation
+	}
+
 	namespace BSScript
 	{
 		namespace Array

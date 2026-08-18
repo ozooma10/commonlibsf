@@ -213,6 +213,7 @@
 #include "RE/B/BSReflection.h"
 #include "RE/B/BSResourceEnums.h"
 #include "RE/B/BSResourceNiBinaryStream.h"
+#include "RE/B/BSScaleformManager.h"
 #include "RE/B/BSScriptUtil.h"
 #include "RE/B/BSService.h"
 #include "RE/B/BSStorage.h"
