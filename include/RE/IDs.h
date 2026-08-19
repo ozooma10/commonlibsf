@@ -774,9 +774,16 @@ namespace RE::ID
 		inline constexpr REL::ID GetEventSource{ 0 };  // 131197
 	}
 
+	namespace ControlMap
+	{
+		inline constexpr REL::ID Singleton{ 938003 };
+		inline constexpr REL::ID InputContextNameTable{ 360965 };
+	}
+
 	namespace ControlsRemappedEvent
 	{
 		inline constexpr REL::ID GetEventSource{ 0 };  // 136133
+		inline constexpr REL::ID Dispatch{ 88944 };
 	}
 
 	namespace CraftingMenu_CloseMenu
