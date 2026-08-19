@@ -323,6 +323,12 @@ namespace RE::ID
 		inline constexpr REL::ID UnlockWrite{ 35983 };
 	}
 
+	namespace BSScaleformManager
+	{
+		inline constexpr REL::ID Singleton{ 938002 };
+		inline constexpr REL::ID Translate{ 130701 };
+	}
+
 	namespace BSScript
 	{
 		namespace Array
