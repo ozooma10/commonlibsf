@@ -3089,11 +3089,14 @@ namespace RE
 
 		struct GravJumpEvent
 		{
+			inline static constexpr BSTEventSourceBinding<GravJumpEvent> EVENT_SOURCE_BINDING{
+				ID::Spaceship::GravJumpEvent::GetEventSource,
+				VTABLE::BSTGlobalEvent__EventSource_Spaceship__GravJumpEvent_[0]
+			};
+
 			[[nodiscard]] static BSTEventSource<Spaceship::GravJumpEvent>* GetEventSource()
 			{
-				using func_t = decltype(&Spaceship::GravJumpEvent::GetEventSource);
-				static REL::Relocation<func_t> func{ ID::Spaceship::GravJumpEvent::GetEventSource };
-				return func();
+				return EVENT_SOURCE_BINDING.Get();
 			}
 
 			NiPointer<TESObjectREFR> ship;
@@ -3494,11 +3497,15 @@ namespace RE
 
 	struct StarMapMenu_ExecuteRoute
 	{
+		inline static constexpr BSTEventSourceBinding<StarMapMenu_ExecuteRoute> EVENT_SOURCE_BINDING{
+			ID::StarMapMenu_ExecuteRoute::GetEventSource,
+			VTABLE::BSTGlobalEvent__EventSource_StarMapMenu_ExecuteRoute_[0],
+			ID::StarMapMenu_ExecuteRoute::EventSource
+		};
+
 		[[nodiscard]] static BSTEventSource<StarMapMenu_ExecuteRoute>* GetEventSource()
 		{
-			using func_t = decltype(&StarMapMenu_ExecuteRoute::GetEventSource);
-			static REL::Relocation<func_t> func{ ID::StarMapMenu_ExecuteRoute::GetEventSource };
-			return func();
+			return EVENT_SOURCE_BINDING.Get();
 		}
 	};
 
@@ -3960,11 +3967,15 @@ namespace RE
 
 	struct TESLoadGameEvent
 	{
+		inline static constexpr BSTEventSourceBinding<TESLoadGameEvent> EVENT_SOURCE_BINDING{
+			ID::TESLoadGameEvent::GetEventSource,
+			VTABLE::BSTEventSource_TESLoadGameEvent_[0],
+			ID::TESLoadGameEvent::EventSource
+		};
+
 		[[nodiscard]] static BSTEventSource<TESLoadGameEvent>* GetEventSource()
 		{
-			using func_t = decltype(&TESLoadGameEvent::GetEventSource);
-			static REL::Relocation<func_t> func{ ID::TESLoadGameEvent::GetEventSource };
-			return func();
+			return EVENT_SOURCE_BINDING.Get();
 		}
 	};
 
