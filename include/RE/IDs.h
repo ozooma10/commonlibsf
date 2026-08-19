@@ -1388,6 +1388,16 @@ namespace RE::ID
 		inline constexpr REL::ID ToEulerAnglesXYZ{ 0 };  // 210095
 	}
 
+	namespace PauseMenu
+	{
+		inline constexpr REL::ID RebuildActionList{ 93641 };
+	}
+
+	namespace PauseMenuListDataModel
+	{
+		inline constexpr REL::ID QueueAction{ 87656 };
+	}
+
 	namespace PauseMenu_ActionCanceled
 	{
 		inline constexpr REL::ID GetEventSource{ 0 };  // 141614
@@ -1425,7 +1435,8 @@ namespace RE::ID
 
 	namespace PauseMenu_StartAction
 	{
-		inline constexpr REL::ID GetEventSource{ 0 };  // 141621
+		inline constexpr REL::ID GetEventSource{ 93711 };
+		inline constexpr REL::ID ExtractActionType{ 93697 };
 	}
 
 	namespace PauseMenu_StartLoad
