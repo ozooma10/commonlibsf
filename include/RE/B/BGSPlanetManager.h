@@ -1,6 +1,10 @@
 #pragma once
 
+#include "RE/B/BSCoreTypes.h"
 #include "RE/B/BSTSingleton.h"
+
+#include <limits>
+#include <optional>
 
 namespace RE
 {
@@ -49,6 +53,18 @@ namespace RE
 			static REL::Relocation<func_t> func{ ID::BGSPlanet::ResolvePlanetFromRef };
 			std::int32_t                   secondary = 0;
 			return func(a_ref, a_outPlanet, a_outSecondary ? a_outSecondary : &secondary);
+		}
+
+		[[nodiscard]] inline std::optional<TESFormID> GetCurrentBodyFormID()
+		{
+			using func_t = TESFormID* (*)(TESFormID*);
+			static REL::Relocation<func_t> func{ ID::BGSPlanet::GetCurrentBodyFormID };
+
+			TESFormID result = (std::numeric_limits<TESFormID>::max)();
+			if (func(&result) != &result || result == 0 || result == (std::numeric_limits<TESFormID>::max)()) {
+				return std::nullopt;
+			}
+			return result;
 		}
 	}
 }

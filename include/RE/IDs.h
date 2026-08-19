@@ -165,6 +165,7 @@ namespace RE::ID
 
 	namespace BGSPlanet
 	{
+		inline constexpr REL::ID GetCurrentBodyFormID{ 97914 };
 		inline constexpr REL::ID ProgressUpdater{ 52157 };
 		inline constexpr REL::ID ScanLevelWriter{ 52173 };
 		inline constexpr REL::ID ResolvePlanetFromRef{ 52188 };
@@ -253,7 +254,11 @@ namespace RE::ID
 
 	namespace BSGalaxy
 	{
+		inline constexpr REL::ID GetBodyFormID{ 124772 };
 		inline constexpr REL::ID GetKnowledgeManager{ 126578 };
+		inline constexpr REL::ID GetNumericSystemID{ 124767 };
+		inline constexpr REL::ID GetPlanetOrdinal{ 124770 };
+		inline constexpr REL::ID GetSystemFormID{ 124608 };
 	}
 
 	namespace BSGalaxy::PlayerKnowledge
