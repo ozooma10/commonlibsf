@@ -3367,6 +3367,10 @@ namespace RE
 
 	struct StarMap
 	{
+		class GalaxyState;
+		class Route;
+		class StarMapMenu;
+
 		struct PlanetTraitKnownEvent
 		{
 			[[nodiscard]] static BSTEventSource<StarMap::PlanetTraitKnownEvent>* GetEventSource()

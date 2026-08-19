@@ -2135,6 +2135,10 @@ namespace RE::ID
 	{
 		inline constexpr REL::ID RefreshPanelData{ 93988 };
 		inline constexpr REL::ID ScanHandler{ 94011 };
+		// 1.16.244 proven 2026-08-19: GalaxyState's non-entering system selector
+		// and Quick Select cleanup used by the stock Set Course path.
+		inline constexpr REL::ID SelectGalaxySystem{ 94292 };
+		inline constexpr REL::ID CloseGalaxyQuickSelect{ 94308 };
 	}
 
 	namespace StarMap::PlanetTraitKnownEvent
@@ -2199,7 +2203,11 @@ namespace RE::ID
 
 	namespace StarMapMenu_ExecuteRoute
 	{
-		inline constexpr REL::ID GetEventSource{ 0 };  // 142945
+		// 1.16.244 proven 2026-08-19: acquiring magic-static getter returning the
+		// global BSTEventSource<StarMapMenu_ExecuteRoute> at ID 948974.
+		// The old comment-trail ID 142945 is the UI event registration constructor.
+		inline constexpr REL::ID GetEventSource{ 94774 };
+		inline constexpr REL::ID EventSource{ 948974 };
 	}
 
 	namespace StarMapMenu_OnCancel
