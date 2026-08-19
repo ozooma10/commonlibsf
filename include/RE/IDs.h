@@ -854,6 +854,21 @@ namespace RE::ID
 		inline constexpr REL::ID Singleton{ 944397 };
 	}
 
+	namespace CreationRendererPrivate::ScaleformBeginRenderPass
+	{
+		inline constexpr REL::ID ExecuteRenderPass{ 145955 };
+	}
+
+	namespace CreationRendererPrivate::ScaleformCompositeRenderPass
+	{
+		inline constexpr REL::ID ExecuteRenderPass{ 145827 };
+	}
+
+	namespace CreationRendererPrivate::ScaleformEndRenderPass
+	{
+		inline constexpr REL::ID ExecuteRenderPass{ 145956 };
+	}
+
 	namespace CriticalHitEvent::Event
 	{
 		inline constexpr REL::ID GetEventSource{ 0 };  // 153653
@@ -2522,6 +2537,8 @@ namespace RE::ID
 		inline constexpr REL::ID Singleton{ 937580 };
 		inline constexpr REL::ID IsMenuOpen{ 130475 };
 		inline constexpr REL::ID RegisterMenu{ 130463 };
+		inline constexpr REL::ID UpdateMenus{ 99438 };
+		inline constexpr REL::ID AdvanceActiveMenus{ 130455 };
 	}
 
 	namespace UIBlurManager
