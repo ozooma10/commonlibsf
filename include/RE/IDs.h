@@ -2419,6 +2419,7 @@ namespace RE::ID
 	namespace TESLoadGameEvent
 	{
 		inline constexpr REL::ID GetEventSource{ 64149 };  // 1868757
+		inline constexpr REL::ID EventSource{ 838425 };  // 1.16.242 + 1.16.244: BSTEventSource<TESLoadGameEvent>
 	}
 
 	namespace TESLockChangedEvent
