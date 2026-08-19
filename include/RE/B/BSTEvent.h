@@ -3,6 +3,9 @@
 #include "RE/B/BSTArray.h"
 #include "RE/B/BSTSingleton.h"
 
+#include <cstdint>
+#include <cstring>
+
 namespace RE
 {
 	enum class BSEventNotifyControl : std::uint32_t
@@ -33,6 +36,44 @@ namespace RE
 
 	template <class>
 	class BSTEventSource;
+
+	// A typed acquiring getter plus the identities needed to validate its result.
+	// Use source ID 0 when the global source's exact address is not known.
+	template <class Event>
+	class BSTEventSourceBinding
+	{
+	public:
+		constexpr BSTEventSourceBinding(REL::ID a_getter, REL::ID a_vtable, REL::ID a_source = REL::ID{ 0 }) noexcept :
+			_getter(a_getter), _vtable(a_vtable), _source(a_source)
+		{}
+
+		[[nodiscard]] constexpr REL::ID GetGetterID() const noexcept { return _getter; }
+		[[nodiscard]] constexpr REL::ID GetVtableID() const noexcept { return _vtable; }
+		[[nodiscard]] constexpr REL::ID GetSourceID() const noexcept { return _source; }
+
+		[[nodiscard]] BSTEventSource<Event>* Get() const
+		{
+			using func_t = BSTEventSource<Event>* (*)();
+			REL::Relocation<func_t> func{ _getter };
+			return func();
+		}
+
+		[[nodiscard]] bool Matches(const BSTEventSource<Event>* a_source) const
+		{
+			if (!a_source || (_source.id() != 0 && reinterpret_cast<std::uintptr_t>(a_source) != _source.address())) {
+				return false;
+			}
+
+			std::uintptr_t vtable = 0;
+			std::memcpy(&vtable, a_source, sizeof(vtable));
+			return vtable == _vtable.address();
+		}
+
+	private:
+		REL::ID _getter;
+		REL::ID _vtable;
+		REL::ID _source;
+	};
 
 	template <class Event>
 	class BSTEventSink : public BSTEventDetail::SinkBase
