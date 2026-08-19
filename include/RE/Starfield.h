@@ -402,6 +402,7 @@
 #include "RE/S/SpellItem.h"
 #include "RE/S/Stack.h"
 #include "RE/S/StackFrame.h"
+#include "RE/S/StarMap.h"
 #include "RE/S/Store.h"
 #include "RE/S/Stream.h"
 #include "RE/S/StreamBase.h"
