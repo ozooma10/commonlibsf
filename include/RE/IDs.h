@@ -1087,7 +1087,7 @@ namespace RE::ID
 
 	namespace GameMenuBase
 	{
-		inline constexpr REL::ID ctor{ 0 };                            // 130577
+		inline constexpr REL::ID ctor{ 130577 };                       // 1.16.244
 		inline constexpr REL::ID OnAddedToMenuStack{ 93620 };          // 0x141667080 — proven vtable override on 1.16.244
 		inline constexpr REL::ID OnRemovedFromMenuStack{ 93621 };      // 0x1416670c0 — proven vtable override on 1.16.244
 	}
