@@ -334,7 +334,7 @@ namespace RE::ID
 
 	namespace BSInputEventUser
 	{
-		inline constexpr REL::ID Unk09{ 0 };  // 178899
+		inline constexpr REL::ID Unk09{ 124088 };  // 1.16.244: native input vtable slot 9, held/release event gate
 	}
 
 	namespace BSLog
@@ -1092,7 +1092,6 @@ namespace RE::ID
 
 	namespace GameMenuBase
 	{
-		inline constexpr REL::ID ctor{ 0 };                            // 130577
 		inline constexpr REL::ID OnAddedToMenuStack{ 93620 };          // 0x141667080 — proven vtable override on 1.16.244
 		inline constexpr REL::ID OnRemovedFromMenuStack{ 93621 };      // 0x1416670c0 — proven vtable override on 1.16.244
 	}
@@ -1896,7 +1895,7 @@ namespace RE::ID
 
 		namespace MemoryHeapPT
 		{
-			inline constexpr REL::ID Singleton{ 0 };  // 820297
+			inline constexpr REL::ID Singleton{ 877797 };  // 1.16.244: 0x145D7C3D8, native menu Allocate/Free heap
 		}
 	}
 

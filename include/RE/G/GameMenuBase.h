@@ -27,9 +27,15 @@ namespace RE
 
 		GameMenuBase()
 		{
-			using func_t = GameMenuBase* (*)(GameMenuBase*);
-			static REL::Relocation<func_t> func{ ID::GameMenuBase::ctor };
+			// 1.16.244 native factories inline GameMenuBase initialization after
+			// the complete IMenu ctor (e.g. 0x1415E1F81 and 0x141666F0B).
+			// ID 130577 is a movie-manager removal routine, not a constructor.
+			using func_t = IMenu* (*)(IMenu*);
+			static REL::Relocation<func_t> func{ ID::IMenu::ctor };
 			func(this);
+			unk128 = 0;
+			unk130 = 0;  // GameMenuBase pause-request state at +0x130 starts inactive.
+			// The concrete derived ctor installs its own vtables after this returns.
 		}
 
 		virtual ~GameMenuBase() = default;  // 00
