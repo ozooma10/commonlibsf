@@ -958,17 +958,17 @@ namespace RE::ID
 
 	namespace CreationRendererPrivate::ScaleformBeginRenderPass
 	{
-		inline constexpr REL::ID ExecuteRenderPass{ 145955 };  // 1.16.244, runtime-proven; osf-re rendering.ui_pass
+		inline constexpr REL::ID ExecuteRenderPass{ 145955 };
 	}
 
 	namespace CreationRendererPrivate::ScaleformCompositeRenderPass
 	{
-		inline constexpr REL::ID ExecuteRenderPass{ 145827 };  // 1.16.244, runtime-proven; osf-re rendering.ui_pass
+		inline constexpr REL::ID ExecuteRenderPass{ 145827 };
 	}
 
 	namespace CreationRendererPrivate::ScaleformEndRenderPass
 	{
-		inline constexpr REL::ID ExecuteRenderPass{ 145956 };  // 1.16.244, runtime-proven; osf-re rendering.ui_pass
+		inline constexpr REL::ID ExecuteRenderPass{ 145956 };
 	}
 
 	namespace CriticalHitEvent::Event

@@ -2008,11 +2008,11 @@ namespace RE
 
 		[[nodiscard]] std::uint32_t GetActionType() const
 		{
-			std::uint32_t actionType = 0;
+			std::uint32_t result{};
 			using func_t = std::uint32_t* (*)(std::uint32_t*, const PauseMenu_StartAction*);
 			static REL::Relocation<func_t> func{ ID::PauseMenu_StartAction::ExtractActionType };
-			func(&actionType, this);
-			return actionType;
+			func(std::addressof(result), this);
+			return result;
 		}
 	};
 
