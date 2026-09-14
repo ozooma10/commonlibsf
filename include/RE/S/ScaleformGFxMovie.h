@@ -31,7 +31,30 @@ namespace RE::Scaleform::GFx
 			kValue
 		};
 
-		virtual ~Movie() = default;  // 01
+		// Scaleform stage scaling (ActionScript Stage.scaleMode).
+		enum class ScaleModeType : std::int32_t
+		{
+			kNoScale = 0,   // Keep the authored stage size.
+			kShowAll = 1,   // Fit the entire stage, preserving its aspect ratio.
+			kExactFit = 2,  // Stretch to fill the viewport.
+			kNoBorder = 3   // Fill the viewport, preserving aspect ratio and cropping as needed.
+		};
+
+		// Scaleform stage placement (ActionScript Stage.align).
+		enum class AlignType : std::int32_t
+		{
+			kCenter = 0,
+			kTopCenter = 1,
+			kBottomCenter = 2,
+			kCenterLeft = 3,
+			kCenterRight = 4,
+			kTopLeft = 5,
+			kTopRight = 6,
+			kBottomLeft = 7,
+			kBottomRight = 8
+		};
+
+		virtual ~Movie() = default;  // 00
 
 		// members
 		Ptr<ASMovieRootBase> asMovieRoot;

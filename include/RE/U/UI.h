@@ -43,7 +43,8 @@ namespace RE
 
 		struct UIMenuEntry
 		{
-			using Create_t = Scaleform::Ptr<IMenu>*(Scaleform::Ptr<IMenu>*);
+			// MSVC supplies hidden return storage for this non-trivial value type.
+			using Create_t = Scaleform::Ptr<IMenu>();
 
 			Scaleform::Ptr<IMenu> menu;             // 00
 			Create_t*             initFunc;         // 08

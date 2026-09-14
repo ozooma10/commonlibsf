@@ -1198,6 +1198,9 @@ namespace RE::ID
 		inline constexpr REL::ID Unk18{ 130625 };
 		inline constexpr REL::ID Unk19{ 130634 };
 		inline constexpr REL::ID Unk1A{ 130630 };
+		// Byte-vector reallocation/insert specialization used by PauseMenu's
+		// initializer at 0x141668C60 on 1.16.244. Receives the vector, not IMenu.
+		inline constexpr REL::ID ReallocateInputContexts{ 121667 };  // 0x1421EA260
 	}
 
 	namespace INIPrefSettingCollection

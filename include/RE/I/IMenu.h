@@ -3,11 +3,16 @@
 #include "RE/B/BSFixedString.h"
 #include "RE/B/BSInputEventUser.h"
 #include "RE/B/BSTEvent.h"
+#include "RE/C/ControlMap.h"
 #include "RE/S/SWFToCodeFunctionHandler.h"
 #include "RE/S/ScaleformGFxMovie.h"
 #include "RE/S/ScaleformGFxValue.h"
 #include "RE/S/ScaleformMemoryHeap.h"
 #include "RE/U/UIMessageQueue.h"
+
+#include <cstddef>
+#include <span>
+#include <type_traits>
 
 #define SF_MENU_NAME(NAME) \
 	static constexpr std::string_view MENU_NAME = NAME
@@ -24,8 +29,26 @@ namespace RE
 	public:
 		SF_RTTI_VTABLE(IMenu);
 
-		// Bit semantics proven on 1.16.244 (MenuFlagsProbe live capture + static
-		// causal RE; evidence in context_repo module ui.menu_flags). NOTE: this
+		using ScaleModeType = Scaleform::GFx::Movie::ScaleModeType;
+		using InputContextID = ControlMap::InputContextID;
+
+		// Native byte-vector storage. IMenu's engine constructor/destructor own
+		// the buffer; growth uses a size-aware allocator via AddInputContext.
+		// Keep this trivially destructible to avoid freeing the buffer twice.
+		struct InputContextStorage
+		{
+			InputContextID* begin;        // 00
+			InputContextID* end;          // 08
+			InputContextID* capacityEnd;  // 10
+		};
+		static_assert(sizeof(InputContextID) == 0x1);
+		static_assert(sizeof(InputContextStorage) == 0x18);
+		static_assert(offsetof(InputContextStorage, end) == 0x08);
+		static_assert(offsetof(InputContextStorage, capacityEnd) == 0x10);
+		static_assert(std::is_trivially_destructible_v<InputContextStorage>);
+
+		// Named bit semantics checked on 1.16.244 through static analysis and
+		// runtime probes; evidence in docs/imenu.md and context_repo ui.menu_*. NOTE: this
 		// field at +0xC0 mixes static per-menu config bits (set in each menu's
 		// ctor via SetFlags) with two RUNTIME-TOGGLED state bits: kShowCursor (3)
 		// and kAdvancesMovie (6) are set/cleared live as menus show/advance, so a
@@ -33,7 +56,6 @@ namespace RE
 		enum Flag : std::uint32_t
 		{
 			Flag0 = 1 << 0,
-			Flag4 = 1 << 4,
 			Flag9 = 1 << 9,
 			Flag10 = 1 << 10,
 			Flag18 = 1 << 18,
@@ -47,8 +69,9 @@ namespace RE
 			                                   // symmetrically. Works on a movie-less admitted custom menu; no letterbox
 			                                   // (that is kFreezeFrameLatch). Was previously misassigned to bit 27.
 			ShowCursor = 1 << 3,               // proven: shows the cursor (runtime-toggled when the menu is shown)
+			kBlocksLowerMenuInput = 1 << 4,   // static: forces input handled before dispatch reaches lower menus; see docs/imenu.md
 			kAdvancesMovie = 1 << 6,           // proven: UI_AdvanceActiveMenus advance gate (runtime "advance this movie now")
-			kModal = 1 << 8,                   // medium: top-of-stack application/modal selector (UI_SelectTopModalMenu 0x14253f580); leading menu-mode / input-ownership bit
+			kModal = 1 << 8,                   // topmost application-modal selector (UI_SelectTopModalMenu 0x14253f580); input blocking uses bit 4
 			kAdvancesUnderPauseMenu = 1 << 15, // proven: UI_AdvanceActiveMenus advances this menu even while PauseMenu is up
 			kFreezeFrameLatch = 1 << 27,       // RENAMED 2026-07-02 (was kPausesGame — wrong: it does NOT pause the sim; live-proven
 			                                   // latch set with the calendar still advancing). Freeze-frame/letterbox latch ONLY,
@@ -87,7 +110,8 @@ namespace RE
 		// add
 		virtual const char*   GetName() const = 0;       // 03
 		virtual const char*   GetRootPath() const = 0;   // 04
-		virtual std::uint64_t GetViewScaleMode() = 0;    // 05
+		// LoadMovie passes this 32-bit result to Movie::SetViewScaleMode.
+		virtual ScaleModeType GetViewScaleMode() = 0;   // 05
 
 		virtual bool LoadMovie(bool a_addEventDispatcher, bool a_arg2)  // 06
 		{
@@ -96,7 +120,8 @@ namespace RE
 			return func(this, a_addEventDispatcher, a_arg2);
 		}
 
-		virtual void Unk07() {}  // 07
+		// Post-creation setup; the open path calls this before stack admission.
+		virtual void PostCreate() {}  // 07
 
 		virtual UI_MESSAGE_RESULT ProcessMessage(UIMessageData& a_message)  // 08
 		{
@@ -215,6 +240,22 @@ namespace RE
 			flagsUpdated = true;
 		}
 
+		// Configure requested contexts during menu setup. The engine applies
+		// them to ControlMap; this does not push an input context directly.
+		void AddInputContext(InputContextID a_context);
+
+		// The view is invalidated by native updates or AddInputContext growth.
+		[[nodiscard]] std::span<const InputContextID> GetInputContexts() const noexcept
+		{
+			if (!inputContexts.begin) {
+				return {};
+			}
+			return { inputContexts.begin, static_cast<std::size_t>(inputContexts.end - inputContexts.begin) };
+		}
+
+		// Optional registration-time check for the native growth routine.
+		[[nodiscard]] static bool IsInputContextAppendSupported();
+
 		SF_SCALEFORM_HEAP_REDEFINE_NEW(IMenu);
 
 		// members
@@ -231,19 +272,19 @@ namespace RE
 		std::uint32_t                         unk0C4;        // 0C4
 		std::uint32_t                         unk0C8;        // 0C8
 		std::uint32_t                         unk0CC;        // 0CC
-		std::uint16_t                         unk0D0;        // 0D0
+		std::uint8_t                          unk0D0;        // 0D0
+		bool                                  inputContextsChanged;  // 0D1
 		bool                                  flagsUpdated;  // 0D2
 		std::uint8_t                          unk0D3;        // 0D3
 		std::uint32_t                         unk0D4;        // 0D4
-		std::uint64_t                         unk0D8;        // 0D8
-		std::uint64_t                         unk0E0;        // 0E0
-		std::uint64_t                         unk0E8;        // 0E8
+		InputContextStorage                   inputContexts;  // 0D8 - requested contexts; mutate through AddInputContext
 		std::uint64_t                         unk0F0;        // 0F0
 		std::uint64_t                         unk0F8;        // 0F8
 		std::uint64_t                         unk100;        // 100
 		std::uint32_t                         unk108;        // 108
 		std::uint32_t                         unk10C;        // 10C
-		std::uint64_t                         unk110;        // 110
+		std::uint8_t                          depthPriority;  // 110 - higher values sort above lower ones; set before stacking
+		std::byte                             unk111[0x7];    // 111
 		std::uint64_t                         unk118;        // 118
 		std::uint64_t                         unk120;        // 120
 		std::uint64_t                         unk128;        // 128
@@ -252,5 +293,10 @@ namespace RE
 	static_assert(offsetof(IMenu, uiMovie) == 0x088);
 	static_assert(offsetof(IMenu, menuName) == 0x0B0);
 	static_assert(offsetof(IMenu, flags) == 0x0C0);
+	static_assert(offsetof(IMenu, inputContextsChanged) == 0x0D1);
 	static_assert(offsetof(IMenu, flagsUpdated) == 0x0D2);
+	static_assert(offsetof(IMenu, inputContexts) == 0x0D8);
+	static_assert(offsetof(IMenu, unk0F0) == 0x0F0);
+	static_assert(offsetof(IMenu, depthPriority) == 0x110);
+	static_assert(offsetof(IMenu, unk118) == 0x118);
 }
