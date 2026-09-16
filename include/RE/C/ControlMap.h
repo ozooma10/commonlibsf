@@ -7,6 +7,7 @@
 
 #include <array>
 #include <span>
+#include <string>
 #include <string_view>
 
 namespace RE
@@ -108,6 +109,30 @@ namespace RE
 			kAlternate = 1,
 			kUnbound = 2
 		};
+
+		// Formats one newline-terminated defaults row using the native formatter.
+		// Token strings accept the native binding syntax; numeric keyboard codes are
+		// virtual-key codes. This only returns text and does not register a mapping.
+		[[nodiscard]] static std::string FormatMappingRow(
+			const char* a_event, const char* a_keyboard, const char* a_mouse, const char* a_gamepad,
+			bool a_keyboardVisible, bool a_mouseVisible, bool a_gamepadVisible,
+			std::uint32_t a_controlMask, std::uint32_t a_groupMask, bool a_required);
+
+		[[nodiscard]] static std::string FormatMappingRow(
+			const char* a_event, std::uint32_t a_keyboard, std::uint32_t a_mouse, std::uint32_t a_gamepad,
+			bool a_keyboardVisible, bool a_mouseVisible, bool a_gamepadVisible,
+			std::uint32_t a_controlMask, std::uint32_t a_groupMask, bool a_required);
+
+		// Native initialization/reset operations. Loading/parsing destroys existing
+		// mappings and invalidates their views; these do not register a single action.
+		void LoadMappings();  // Builds and parses the engine's baked defaults.
+
+		// Consumes complete NUL-terminated defaults synchronously. Native callers load
+		// saved overrides separately, then resolve links; parsing alone does neither.
+		void ParseMappings(const char* a_text);
+
+		// Resolves inherited bindings and restores native ordering after construction.
+		void ResolveLinkedMappings();
 
 		struct UserEventMapping
 		{

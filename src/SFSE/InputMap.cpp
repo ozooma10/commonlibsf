@@ -196,6 +196,25 @@ namespace SFSE
 		return result;
 	}
 
+	std::uint32_t InputMap::GetKeyboardVirtualKey(std::string_view a_name)
+	{
+		std::wstring name;
+		if (a_name.empty() || !REX::UTF8_TO_UTF16(a_name, name)) return 0xFFFFFFFF;
+		static REL::Relocation<const wchar_t*> table{ RE::ID::BSWin32KeyboardDevice::KeyNameTable };
+		std::wstring_view rows{ table.get() };
+		while (!rows.empty()) {
+			const auto end = rows.find(L'\n');
+			const auto row = rows.substr(0, end);
+			const auto tab = row.find(L'\t');
+			if (tab == name.size() && ::_wcsnicmp(row.data(), name.c_str(), tab) == 0) {
+				return static_cast<std::uint32_t>(std::wcstoul(row.data() + tab + 1, nullptr, 16));
+			}
+			if (end == rows.npos) break;
+			rows.remove_prefix(end + 1);
+		}
+		return 0xFFFFFFFF;
+	}
+
 	std::string InputMap::GetMouseButtonName(const std::uint32_t a_keyCode)
 	{
 		switch (a_keyCode) {

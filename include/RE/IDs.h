@@ -332,6 +332,24 @@ namespace RE::ID
 		inline constexpr REL::ID Singleton{ 938036 };
 	}
 
+	namespace BSInputDevice
+	{
+		inline constexpr REL::ID dtor{ 124249 };
+		inline constexpr REL::ID GetKeyNameFromCode{ 124283 };
+		inline constexpr REL::ID GetKeyCodeFromName{ 124284 };
+		inline constexpr REL::ID GetMappedKeyCode{ 124285 };
+	}
+
+	namespace BSInputDeviceManager
+	{
+		inline constexpr REL::ID Singleton{ 937644 };
+	}
+
+	namespace BSInputEventSingleUser
+	{
+		inline constexpr REL::ID PerformInputProcessing{ 88658 };
+	}
+
 	namespace BSInputEventUser
 	{
 		inline constexpr REL::ID Unk09{ 124088 };  // 1.16.244: native input vtable slot 9, held/release event gate
@@ -858,10 +876,21 @@ namespace RE::ID
 		inline constexpr REL::ID GetEventSource{ 0 };  // 131197
 	}
 
+	namespace BSWin32KeyboardDevice
+	{
+		inline constexpr REL::ID KeyNameTable{ 361050 };  // 1.16.244: baked UTF-16 keyboard definitions
+	}
+
 	namespace ControlMap
 	{
+		inline constexpr REL::ID FormatMappingRow{ 124100 };             // 1.16.244: native binding-token formatter
+		inline constexpr REL::ID FormatMappingRowWithKeyCodes{ 124101 }; // 1.16.244: numeric overload of the row formatter
+		inline constexpr REL::ID MappingRowStringDtor{ 35706 };          // 1.16.244: native temporary string cleanup
 		inline constexpr REL::ID Singleton{ 938003 };              // 1.16.244: ControlMap**
 		inline constexpr REL::ID InputContextNameTable{ 360965 };  // 1.16.244: const char*[0x51]
+		inline constexpr REL::ID LoadMappings{ 124116 };          // 1.16.244: build and parse baked defaults
+		inline constexpr REL::ID ParseMappings{ 124117 };         // 1.16.244: rebuild from complete default definitions
+		inline constexpr REL::ID ResolveLinkedMappings{ 124124 }; // 1.16.244: resolve inherited bindings and ordering
 	}
 
 	namespace ControlsRemappedEvent
