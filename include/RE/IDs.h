@@ -352,6 +352,8 @@ namespace RE::ID
 
 	namespace BSInputEventUser
 	{
+		inline constexpr REL::ID ctor{ 74686 };                     // 1.16.244: initialize native held-action state
+		inline constexpr REL::ID ScalarDeletingDestructor{ 74688 }; // flag 0 releases state without freeing object storage
 		inline constexpr REL::ID Unk09{ 124088 };  // 1.16.244: native input vtable slot 9, held/release event gate
 	}
 
@@ -535,6 +537,8 @@ namespace RE::ID
 	namespace BSTArray
 	{
 		inline constexpr REL::ID U32PushGrow{ 35755 };
+		inline constexpr REL::ID AppendIndex{ 123859 };             // 1.16.244: grow through the supplied allocator functor, return index or UINT32_MAX
+		inline constexpr REL::ID HeapAllocatorFunctorVtable{ 392794 };
 	}
 
 	namespace BSTEventSource
@@ -1193,6 +1197,11 @@ namespace RE::ID
 		inline constexpr REL::ID GetEventSource{ 0 };  // 133042
 	}
 
+	namespace IDEvent
+	{
+		inline constexpr REL::ID QUserEvent{ 124035 }; // 1.16.244: returns a borrowed BSFixedString reference, including DISABLED
+	}
+
 	namespace idLogging
 	{
 		inline constexpr REL::ID Singleton{ 0 };  // 895197
@@ -1362,6 +1371,20 @@ namespace RE::ID
 	{
 		inline constexpr REL::ID Singleton{ 883591 };
 		inline constexpr REL::ID WorldRoot{ 0 };  // 887308
+		// Authored roles: global input initialization/teardown containing the MenuControls lifecycle calls.
+		inline constexpr REL::ID InitializeInputSingletons{ 99490 }; // 1.16.244
+		inline constexpr REL::ID ShutdownInputSingletons{ 99491 };   // 1.16.244
+	}
+
+	namespace MenuControls
+	{
+		// 1.16.244: native handler initialization, removal, dispatch and both teardown paths.
+		inline constexpr REL::ID Singleton{ 938076 };
+		inline constexpr REL::ID InitializeHandlers{ 114215 };
+		inline constexpr REL::ID CleanupHandlers{ 114216 };
+		inline constexpr REL::ID UnregisterHandler{ 114217 };
+		inline constexpr REL::ID PerformInputProcessing{ 114220 };
+		inline constexpr REL::ID ScalarDeletingDestructor{ 99538 };
 	}
 
 	namespace MenuCursor

@@ -51,8 +51,14 @@ namespace RE
 		virtual ~InputEvent() = default;  // 00
 
 		// add
-		virtual bool                HasIDCode() const { return false; }
-		virtual const BSFixedString QUserEvent() const { return ""; }
+		virtual bool HasIDCode() const { return false; }
+		// Native callers receive a borrowed address in RAX, not a returned value.
+		virtual const BSFixedString& QUserEvent() const
+		{
+			// Process lifetime: even an empty BSFixedString destructor calls the engine.
+			static const auto* empty = new BSFixedString;
+			return *empty;
+		}
 
 		// members
 		DeviceType    deviceType{ DeviceType::kNone };             // 08
@@ -76,9 +82,11 @@ namespace RE
 		// override (InputEvent)
 		virtual bool HasIDCode() const override { return true; }
 
-		virtual const BSFixedString QUserEvent() const override
+		virtual const BSFixedString& QUserEvent() const override
 		{
-			return disabled ? "DISABLED" : strUserEvent;
+			using func_t = const BSFixedString& (*)(const IDEvent*);
+			static REL::Relocation<func_t> func{ ID::IDEvent::QUserEvent };
+			return func(this);
 		}
 
 		// members
