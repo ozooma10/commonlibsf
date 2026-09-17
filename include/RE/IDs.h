@@ -354,6 +354,7 @@ namespace RE::ID
 	{
 		inline constexpr REL::ID ctor{ 74686 };                     // 1.16.244: initialize native held-action state
 		inline constexpr REL::ID ScalarDeletingDestructor{ 74688 }; // flag 0 releases state without freeing object storage
+		inline constexpr REL::ID DispatchEvent{ 124087 };           // 1.16.244: 0x22DAE00, admission, typed dispatch and held-action bookkeeping
 		inline constexpr REL::ID Unk09{ 124088 };  // 1.16.244: native input vtable slot 9, held/release event gate
 	}
 
@@ -895,6 +896,7 @@ namespace RE::ID
 		inline constexpr REL::ID LoadMappings{ 124116 };          // 1.16.244: build and parse baked defaults
 		inline constexpr REL::ID ParseMappings{ 124117 };         // 1.16.244: rebuild from complete default definitions
 		inline constexpr REL::ID ResolveLinkedMappings{ 124124 }; // 1.16.244: resolve inherited bindings and ordering
+		inline constexpr REL::ID ValidateMapping{ 124132 };       // 1.16.244: 0x22EEA90, single-context candidate validation
 	}
 
 	namespace ControlsRemappedEvent
@@ -2003,6 +2005,13 @@ namespace RE::ID
 	namespace SecurityMenu_TryUseKey
 	{
 		inline constexpr REL::ID GetEventSource{ 0 };  // 140250
+	}
+
+	namespace SettingsDataModel
+	{
+		inline constexpr REL::ID EvaluateRemapCandidate{ 88672 }; // 1.16.244: 0x150E950, global pending candidate evaluation
+		inline constexpr REL::ID Singleton{ 939451 };  // 1.16.244: 0x61EF3F8, complete-object pointer
+		inline constexpr REL::ID CancelRemap{ 88684 }; // 1.16.244: 0x15108E0, clears the global pending remap and publishes its state
 	}
 
 	namespace ShipCameraStateToggled

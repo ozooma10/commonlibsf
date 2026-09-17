@@ -158,6 +158,14 @@ namespace RE
 
 		SF_HEAP_REDEFINE_NEW(BSInputEventUser);
 
+		// Dispatch one event through native admission and per-type virtuals, maintaining held actions.
+		void DispatchEvent(const InputEvent* a_event)
+		{
+			using func_t = decltype(&BSInputEventUser::DispatchEvent);
+			static REL::Relocation<func_t> func{ ID::BSInputEventUser::DispatchEvent };
+			func(this, a_event);
+		}
+
 		// members
 		std::uint8_t pad08[0x30];                        // 08
 		bool         inputEventHandlingEnabled{ true };  // 38

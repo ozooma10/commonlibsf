@@ -401,6 +401,7 @@
 #include "RE/S/SettingCollection.h"
 #include "RE/S/SettingCollectionList.h"
 #include "RE/S/SettingCollectionMap.h"
+#include "RE/S/SettingsDataModel.h"
 #include "RE/S/Sexes.h"
 #include "RE/S/ShipHudTarget.h"
 #include "RE/S/SimpleAllocMemoryPagePolicy.h"
