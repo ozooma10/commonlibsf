@@ -408,13 +408,24 @@ namespace RE::ID
 
 	namespace BSScaleformManager
 	{
+		inline constexpr REL::ID Ctor{ 130697 };  // 1.16.244: initializes and publishes the translator
 		inline constexpr REL::ID Singleton{ 938002 };  // 1.16.244: BSScaleformManager**
 		inline constexpr REL::ID Translate{ 130701 };  // 1.16.244: manager-level wide-string translation helper
 	}
 
-	namespace BSScaleformTranslator::ScaleformImpl
+	namespace BSScaleformTranslator
 	{
-		inline constexpr REL::ID Translate{ 130928 };  // 1.16.244: direct translator implementation
+		inline constexpr REL::ID LoadTranslations{ 130926 };  // 1.16.244: wrapper + wide stream parser
+		namespace ScaleformImpl
+		{
+			inline constexpr REL::ID Translate{ 130928 };  // 1.16.244: direct wide-string translation helper
+			inline constexpr REL::ID TranslateInfo{ 130927 };  // 1.16.244: virtual GFx TranslateInfo entry point
+		}
+	}
+
+	namespace BSFixedStringWCS
+	{
+		inline constexpr REL::ID Assign{ 139356 };  // 1.16.244: assign to an initialized pooled-string slot
 	}
 
 	namespace BSScript
@@ -2009,6 +2020,9 @@ namespace RE::ID
 
 	namespace SettingsDataModel
 	{
+		inline constexpr REL::ID PublishBindings{ 88747 };  // 1.16.244: synchronous binding-definition iteration
+		inline constexpr REL::ID PublishBinding{ 88748 };  // 1.16.244: internal row visitor, not an instance method
+		inline constexpr REL::ID BindingDefinitions{ 918356 };  // 1.16.244: borrowed BSTArray<BindingDefinition>
 		inline constexpr REL::ID EvaluateRemapCandidate{ 88672 }; // 1.16.244: 0x150E950, global pending candidate evaluation
 		inline constexpr REL::ID Singleton{ 939451 };  // 1.16.244: 0x61EF3F8, complete-object pointer
 		inline constexpr REL::ID CancelRemap{ 88684 }; // 1.16.244: 0x15108E0, clears the global pending remap and publishes its state

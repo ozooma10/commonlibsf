@@ -47,6 +47,13 @@ target("commonlibsf-control-map-tests", function()
     add_files("tests/control_map_tests.cpp")
 end)
 
+target("commonlibsf-translation-tests", function()
+    set_kind("binary")
+    set_default(false)
+    add_deps("commonlibsf")
+    add_files("tests/scaleform_translation_tests.cpp")
+end)
+
 rule("commonlibsf.plugin", function()
     add_deps("commonlib.plugin")
 

@@ -5,6 +5,8 @@
 
 namespace RE
 {
+	class BSScaleformTranslator;
+
 	class BSScaleformManager :
 		public BSTSingletonSDM<BSScaleformManager>  // 00
 	{
@@ -17,6 +19,13 @@ namespace RE
 			return *singleton;
 		}
 
+		// Borrowed for the manager's lifetime; null while its constructor loads resources.
+		[[nodiscard]] BSScaleformTranslator* GetTranslator() const
+		{
+			return *reinterpret_cast<BSScaleformTranslator* const*>(reinterpret_cast<const std::byte*>(this) + 0x20);
+		}
+
+		// a_result must be uninitialized return storage (or an empty string slot).
 		BSFixedStringW* Translate(BSFixedStringW* a_result, const wchar_t* a_key)
 		{
 			using func_t = BSFixedStringW* (*)(BSScaleformManager*, BSFixedStringW*, const wchar_t*);

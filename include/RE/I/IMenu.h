@@ -55,12 +55,12 @@ namespace RE
 		// static ctor read will not show them. Unnamed bits stay FlagN (unproven).
 		enum Flag : std::uint32_t
 		{
-			Flag0 = 1 << 0,
 			Flag9 = 1 << 9,
 			Flag10 = 1 << 10,
 			Flag18 = 1 << 18,
 			Flag25 = 1 << 25,
 
+			kUsesMenuMode = 1 << 0,            // static: contributes to UI+0x4B0; zero/nonzero edges emit MenuModeChangeEvent (docs/imenu.md)
 			kPausesGame = 1 << 1,              // PROVEN 2026-07-02 (OSF RE module ui.menu_pause, live freeze/resume cycles on 1.16.244):
 			                                   // THE simulation-pause flag. On menu open the pump's flag dispatch calls
 			                                   // UI_ModifyMenuPauseCounter (130472) -> UI+0x4B4 pause-request counter++;

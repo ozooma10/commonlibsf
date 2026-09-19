@@ -2,9 +2,12 @@
 
 #include "RE/B/BSInputEventSingleUser.h"
 #include "RE/B/BSTEvent.h"
+#include "RE/B/BSTArray.h"
+#include "RE/C/ControlMap.h"
 #include "RE/I/IDataModel.h"
 
 #include <cstddef>
+#include <span>
 
 namespace RE
 {
@@ -44,6 +47,32 @@ namespace RE
 	{
 	public:
 		SF_RTTI_VTABLE(SettingsDataModel);
+
+		// Panel metadata, not a ControlMap mapping. Variant contents remain opaque.
+		struct BindingDefinition
+		{
+			ControlMap::InputContextID context;          // 00
+			std::byte                 pad01[3];         // 01
+			std::uint32_t             contextOrder;     // 04
+			std::uint32_t             sortIndex;        // 08
+			bool                      required;         // 0C
+			std::byte                 pad0D[3];         // 0D
+			BSFixedString             event;            // 10
+			std::uint32_t             variantCount;     // 18
+			std::uint32_t             variantCapacity;  // 1C
+			const void*               variants;         // 20
+		};
+		static_assert(offsetof(BindingDefinition, event) == 0x10);
+		static_assert(offsetof(BindingDefinition, variants) == 0x20);
+		static_assert(sizeof(BindingDefinition) == 0x28);
+
+		// Borrowed on the settings/UI lane only. Empty before panel creation;
+		// publication/rebuild can reallocate storage. Do not retain this view.
+		[[nodiscard]] static std::span<const BindingDefinition> GetBindingDefinitions()
+		{
+			static REL::Relocation<const BSTArray<BindingDefinition>*> definitions{ ID::SettingsDataModel::BindingDefinitions };
+			return { definitions->data(), definitions->size() };
+		}
 
 		~SettingsDataModel() override;
 

@@ -37,6 +37,21 @@ not synchronize concurrent access.
 check of the growth routine's first 13 bytes. It is a prologue check, not proof
 of compatibility with another game version.
 
+## Menu-mode flag
+
+`IMenu::kUsesMenuMode` replaces `Flag0`, keeping its value `1 << 0`.
+It contributes to the engine's menu-mode counter at `UI+0x4B0`. The native
+open/close flag dispatch increments/decrements that counter through Address
+Library ID 130471; zero/nonzero transitions emit `MenuModeChangeEvent`.
+One consumer is `ConsoleHotkeyManager`, which requires this counter to be
+zero before executing INI console-command hotkeys.
+
+This is a descriptive name supported by static analysis of Starfield
+1.16.244.0, not a recovered Bethesda symbol. The counter is separate from
+the simulation-pause counter used by `kPausesGame`. Exact call sites and
+validation are recorded in the OSF RE context module `ui.menu_input`.
+Console-command-hotkey suppression remains unverified at runtime.
+
 ## Input propagation flag
 
 `IMenu::kBlocksLowerMenuInput` replaces `Flag4`, keeping its value `1 << 4`.
