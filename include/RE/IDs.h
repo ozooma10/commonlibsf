@@ -272,6 +272,19 @@ namespace RE::ID
 		inline constexpr REL::ID IterateAdvance{ 39372 };
 	}
 
+	namespace BSInputDevice
+	{
+		inline constexpr REL::ID dtor{ 124249 };
+		inline constexpr REL::ID GetKeyNameFromCode{ 124283 };
+		inline constexpr REL::ID GetKeyCodeFromName{ 124284 };
+		inline constexpr REL::ID GetMappedKeyCode{ 124285 };
+	}
+
+	namespace BSInputDeviceManager
+	{
+		inline constexpr REL::ID Singleton{ 937644 };
+	}
+
 	namespace BSInputEnableLayer
 	{
 	}
@@ -284,9 +297,17 @@ namespace RE::ID
 		inline constexpr REL::ID Singleton{ 938036 };
 	}
 
+	namespace BSInputEventSingleUser
+	{
+		inline constexpr REL::ID PerformInputProcessing{ 88658 };
+	}
+
 	namespace BSInputEventUser
 	{
-		inline constexpr REL::ID Unk09{ 0 };  // 178899
+		inline constexpr REL::ID ctor{ 74686 };
+		inline constexpr REL::ID ScalarDeletingDestructor{ 74688 };
+		inline constexpr REL::ID DispatchEvent{ 124087 };
+		inline constexpr REL::ID Unk09{ 124088 };
 	}
 
 	namespace BSLog
@@ -448,6 +469,8 @@ namespace RE::ID
 	namespace BSTArray
 	{
 		inline constexpr REL::ID U32PushGrow{ 35755 };
+		inline constexpr REL::ID AppendIndex{ 123859 };
+		inline constexpr REL::ID HeapAllocatorFunctorVtable{ 392794 };
 	}
 
 	namespace BSTEventSource
@@ -461,6 +484,11 @@ namespace RE::ID
 	{
 		inline constexpr REL::ID allocate{ 0 };    // 34039
 		inline constexpr REL::ID deallocate{ 0 };  // 34440
+	}
+
+	namespace BSWin32KeyboardDevice
+	{
+		inline constexpr REL::ID KeyNameTable{ 361050 };
 	}
 
 	namespace Calendar
@@ -780,9 +808,24 @@ namespace RE::ID
 		inline constexpr REL::ID GetEventSource{ 0 };  // 131197
 	}
 
+	namespace ControlMap
+	{
+		inline constexpr REL::ID FormatMappingRow{ 124100 };
+		inline constexpr REL::ID FormatMappingRowWithKeyCodes{ 124101 };
+		inline constexpr REL::ID MappingRowStringDtor{ 35706 };
+		inline constexpr REL::ID Singleton{ 938003 };
+		inline constexpr REL::ID InputContextNameTable{ 360965 };
+		inline constexpr REL::ID LoadMappings{ 124116 };
+		inline constexpr REL::ID ParseMappings{ 124117 };
+		inline constexpr REL::ID ResolveLinkedMappings{ 124124 };
+		inline constexpr REL::ID ValidateMapping{ 124132 };
+	}
+
 	namespace ControlsRemappedEvent
 	{
 		inline constexpr REL::ID GetEventSource{ 0 };  // 136133
+		inline constexpr REL::ID Dispatch{ 88944 };
+		inline constexpr REL::ID EventSourceStorage{ 947462 };
 	}
 
 	namespace CraftingMenu_CloseMenu
@@ -1069,6 +1112,11 @@ namespace RE::ID
 		inline constexpr REL::ID GetEventSource{ 0 };  // 133042
 	}
 
+	namespace IDEvent
+	{
+		inline constexpr REL::ID QUserEvent{ 124035 };
+	}
+
 	namespace idLogging
 	{
 		inline constexpr REL::ID Singleton{ 0 };  // 895197
@@ -1234,6 +1282,18 @@ namespace RE::ID
 	{
 		inline constexpr REL::ID Singleton{ 883591 };
 		inline constexpr REL::ID WorldRoot{ 0 };  // 887308
+		inline constexpr REL::ID InitializeInputSingletons{ 99490 };
+		inline constexpr REL::ID ShutdownInputSingletons{ 99491 };
+	}
+
+	namespace MenuControls
+	{
+		inline constexpr REL::ID Singleton{ 938076 };
+		inline constexpr REL::ID InitializeHandlers{ 114215 };
+		inline constexpr REL::ID CleanupHandlers{ 114216 };
+		inline constexpr REL::ID UnregisterHandler{ 114217 };
+		inline constexpr REL::ID PerformInputProcessing{ 114220 };
+		inline constexpr REL::ID ScalarDeletingDestructor{ 99538 };
 	}
 
 	namespace msvc
@@ -1842,6 +1902,16 @@ namespace RE::ID
 	namespace SecurityMenu_TryUseKey
 	{
 		inline constexpr REL::ID GetEventSource{ 0 };  // 140250
+	}
+
+	namespace SettingsDataModel
+	{
+		inline constexpr REL::ID PublishBindings{ 88747 };
+		inline constexpr REL::ID PublishBinding{ 88748 };
+		inline constexpr REL::ID BindingDefinitions{ 918356 };
+		inline constexpr REL::ID EvaluateRemapCandidate{ 88672 };
+		inline constexpr REL::ID Singleton{ 939451 };
+		inline constexpr REL::ID CancelRemap{ 88684 };
 	}
 
 	namespace ShipCameraStateToggled

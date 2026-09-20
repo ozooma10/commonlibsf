@@ -44,6 +44,12 @@ namespace SFSE::InputMap
 
 	std::uint32_t GamepadKeycodeToMask(std::uint32_t a_keyCode);
 
+	// Virtual-key to DirectInput scan code; returns 0 if unmappable.
+	std::uint32_t VirtualKeyToKeycode(std::uint32_t a_virtualKey);
+
+	// Returns 0xFFFFFFFF for an unknown name.
+	std::uint32_t GetKeyboardVirtualKey(std::string_view a_name);
+
 	std::string GetKeyName(std::uint32_t a_keyCode);
 
 	std::string GetKeyboardKeyName(std::uint32_t a_keyCode);
