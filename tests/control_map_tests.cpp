@@ -1,7 +1,7 @@
 #include "SFSE/Impl/PCH.h"
 
 #include "RE/B/BSInputDeviceManager.h"
-#include "RE/B/BSInputEventUserStandalone.h"
+#include "RE/B/BSInputEventUser.h"
 #include "RE/C/ControlMap.h"
 #include "RE/M/MenuControls.h"
 #include "RE/S/SettingsDataModel.h"

@@ -13,13 +13,13 @@ namespace RE
 
 		// add
 		virtual void          Initialize() = 0;                                                                 // 01
-		virtual void          Process(float a_deltaTime) = 0;                                                   // 02
-		virtual void          Release() = 0;                                                                    // 03
+		virtual void          Poll(float a_pollDelta) = 0;                                                      // 02
+		virtual void          Shutdown() = 0;                                                                   // 03
 		virtual bool          GetKeyNameFromCode(std::uint32_t a_keyCode, BSFixedStringCS& a_name) const;       // 04
 		virtual std::uint32_t GetKeyCodeFromName(const char* a_name) const;                                     // 05
 		virtual bool          GetMappedKeyCode(std::uint32_t a_keyCode, std::uint32_t& a_mappedKeyCode) const;  // 06
 		virtual bool          IsEnabled() const { return true; }                                                // 07
-		virtual void          Reset() = 0;                                                                      // 08
+		virtual void          ClearInputState() = 0;                                                            // 08
 
 		// members
 		std::uint8_t unk08[0x78];  // 08

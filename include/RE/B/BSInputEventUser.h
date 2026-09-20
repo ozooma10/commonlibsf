@@ -54,9 +54,8 @@ namespace RE
 		virtual bool                 HasIDCode() const { return false; }
 		virtual const BSFixedString& QUserEvent() const
 		{
-			// Avoid calling the engine string pool during static destruction.
-			static const auto* empty = new BSFixedString;
-			return *empty;
+			static const BSFixedString empty;
+			return empty;
 		}
 
 		// members

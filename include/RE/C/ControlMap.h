@@ -4,6 +4,7 @@
 #include "RE/B/BSInputEventUser.h"
 #include "RE/B/BSTArray.h"
 #include "RE/B/BSTSingleton.h"
+#include "RE/U/UserEvents.h"
 
 #include <array>
 #include <span>
@@ -18,90 +19,7 @@ namespace RE
 	public:
 		SF_RTTI_VTABLE(ControlMap);
 
-		enum class InputContextID : std::uint8_t
-		{
-			kMainGameplay = 0x00,
-			kConsoleOpening = 0x01,
-			kBasicMenuNav = 0x02,
-			kVirtualController = 0x03,
-			kMenu3DModelRotation = 0x04,
-			kMenu3DModelZoom = 0x05,
-			kQuickContainer = 0x06,
-			kMultiActivate_A = 0x07,
-			kMultiActivate_X = 0x08,
-			kMultiActivate_Y = 0x09,
-			kMultiActivate_B = 0x0A,
-			kLeftThumbstick = 0x0B,
-			kRightThumbstick = 0x0C,
-			kCursor = 0x0D,
-			kCursor_LeftStick = 0x0E,
-			kBook = 0x0F,
-			kDataSlateButtons = 0x10,
-			kConsole = 0x11,
-			kDebugOverlay = 0x12,
-			kTFC = 0x13,
-			kDebug = 0x14,
-			kDebugCamera = 0x15,
-			kWorkshop = 0x16,
-			kWorkshop_QuickMenu = 0x17,
-			kTerminal = 0x18,
-			kPhotoMode = 0x19,
-			kSecurity = 0x1A,
-			kScope = 0x1B,
-			kSitWait = 0x1C,
-			kDataMenu = 0x1D,
-			kDataMenu_Shortcuts = 0x1E,
-			kShieldFocus = 0x1F,
-			kZeroG = 0x20,
-			kShipHUD = 0x21,
-			kShipHUD_Cancel = 0x22,
-			kShip_QuickContainer = 0x23,
-			kShipHUD_Targeting = 0x24,
-			kShipHUD_Alt = 0x25,
-			kSpaceship_Interaction = 0x26,
-			kShipFlightCam_FreeRot = 0x27,
-			kStarMap = 0x28,
-			kStarMap_JumpWindow = 0x29,
-			kStarMap_SystemInspect = 0x2A,
-			kSurfaceMap = 0x2B,
-			kSpaceshipEditor = 0x2C,
-			kShipBuilder_Empty = 0x2D,
-			kShipBuilder_Add = 0x2E,
-			kShipBuilder_Edit = 0x2F,
-			kShipBuilder_Color = 0x30,
-			kShipBuilder_FlightCheck = 0x31,
-			kShipBuilder_ExitConfirm = 0x32,
-			kShipBuilder_Selection = 0x33,
-			kShipBuilder_Upgrade = 0x34,
-			kShipInfo = 0x35,
-			kShipInfo_BuySell = 0x36,
-			kShipInfo_Modify = 0x37,
-			kMonocle = 0x38,
-			kMonocleKBMZoom = 0x39,
-			kLevelUp = 0x3A,
-			kNewMission = 0x3B,
-			kMovementOverride = 0x3C,
-			kTextInput = 0x3D,
-			kMissionFromStarMap = 0x3E,
-			kSpaceshipEditorSimplified = 0x3F,
-			kShipBuilder_Add_Simple = 0x40,
-			kShipBuilder_Empty_Simple = 0x41,
-			kShipBuilder_Edit_Simple = 0x42,
-			kShipBuilder_Selection_Simple = 0x43,
-			kShipHUD_Monocle = 0x44,
-			kBasicMenuNav_JustCancel = 0x45,
-			kStarMap_QuickSelect = 0x46,
-			kCreations = 0x47,
-			kLogin = 0x48,
-			kVehicle = 0x49,
-			kVehicle_Hangar = 0x4A,
-			kAlmanac = 0x4B,
-			kOpenAlmanac = 0x4C,
-			kShipHUD_CruiseMode = 0x4D,
-			kStopContextProcessing = 0x4E,
-			kCount = 0x4F,
-			kNone = 0x50
-		};
+		using InputContextID = UserEvents::INPUT_CONTEXT_ID;
 
 		enum class BindingSlot : std::uint8_t
 		{
@@ -123,7 +41,7 @@ namespace RE
 			std::uint32_t contextMask;        // 18
 			std::uint8_t  metadata;           // 1C
 			bool          visibleInControls;  // 1D
-			bool          defaultWasUnbound;  // 1E
+			bool          usesLinkedBinding;  // 1E
 			std::uint8_t  unk1F;              // 1F
 			bool          required;           // 20
 			std::byte     pad21[7];           // 21
@@ -221,98 +139,6 @@ namespace RE
 			const auto*                                name = names.get()[index];
 			return name ? std::string_view{ name } : std::string_view{};
 		}
-
-		[[nodiscard]] static constexpr std::uint32_t GetControlsMenuOrder(InputContextID a_id) noexcept
-		{
-			for (std::uint32_t i = 0; i < CONTROLS_MENU_INPUT_CONTEXT_ORDER.size(); ++i) {
-				if (CONTROLS_MENU_INPUT_CONTEXT_ORDER[i] == a_id) {
-					return i;
-				}
-			}
-
-			return static_cast<std::uint32_t>(CONTROLS_MENU_INPUT_CONTEXT_ORDER.size()) +
-			       static_cast<std::uint8_t>(a_id);
-		}
-
-		[[nodiscard]] static constexpr InputContextID GetControlsMenuCategory(InputContextID a_id) noexcept
-		{
-			const auto id = static_cast<std::uint8_t>(a_id);
-			if (id >= 0x06 && id <= 0x0A) {
-				return InputContextID::kQuickContainer;
-			}
-			if (id >= 0x02 && id <= 0x05) {
-				return InputContextID::kBasicMenuNav;
-			}
-			if (a_id == InputContextID::kShipHUD || a_id == InputContextID::kShipHUD_Cancel) {
-				return InputContextID::kShipHUD;
-			}
-			if (a_id == InputContextID::kSpaceship_Interaction || a_id == InputContextID::kShipFlightCam_FreeRot) {
-				return InputContextID::kSpaceship_Interaction;
-			}
-			return a_id;
-		}
-
-		inline static constexpr std::array CONTROLS_MENU_INPUT_CONTEXT_ORDER{
-			InputContextID::kMainGameplay,
-			InputContextID::kShipHUD,
-			InputContextID::kShipHUD_Cancel,
-			InputContextID::kShip_QuickContainer,
-			InputContextID::kShipHUD_Targeting,
-			InputContextID::kShipHUD_Alt,
-			InputContextID::kSpaceship_Interaction,
-			InputContextID::kShipFlightCam_FreeRot,
-			InputContextID::kShipHUD_CruiseMode,
-			InputContextID::kBasicMenuNav,
-			InputContextID::kVirtualController,
-			InputContextID::kMenu3DModelRotation,
-			InputContextID::kMenu3DModelZoom,
-			InputContextID::kQuickContainer,
-			InputContextID::kMultiActivate_A,
-			InputContextID::kMultiActivate_X,
-			InputContextID::kMultiActivate_Y,
-			InputContextID::kMultiActivate_B,
-			InputContextID::kLeftThumbstick,
-			InputContextID::kRightThumbstick,
-			InputContextID::kCursor,
-			InputContextID::kCursor_LeftStick,
-			InputContextID::kBook,
-			InputContextID::kDataSlateButtons,
-			InputContextID::kWorkshop,
-			InputContextID::kWorkshop_QuickMenu,
-			InputContextID::kTerminal,
-			InputContextID::kPhotoMode,
-			InputContextID::kSecurity,
-			InputContextID::kScope,
-			InputContextID::kSitWait,
-			InputContextID::kDataMenu,
-			InputContextID::kDataMenu_Shortcuts,
-			InputContextID::kShieldFocus,
-			InputContextID::kZeroG,
-			InputContextID::kStarMap,
-			InputContextID::kStarMap_JumpWindow,
-			InputContextID::kStarMap_SystemInspect,
-			InputContextID::kSurfaceMap,
-			InputContextID::kSpaceshipEditor,
-			InputContextID::kShipBuilder_Empty,
-			InputContextID::kShipBuilder_Add,
-			InputContextID::kShipBuilder_Edit,
-			InputContextID::kShipBuilder_Color,
-			InputContextID::kShipBuilder_FlightCheck,
-			InputContextID::kShipBuilder_ExitConfirm,
-			InputContextID::kShipBuilder_Selection,
-			InputContextID::kShipBuilder_Upgrade,
-			InputContextID::kSpaceshipEditorSimplified,
-			InputContextID::kShipBuilder_Add_Simple,
-			InputContextID::kShipBuilder_Empty_Simple,
-			InputContextID::kShipBuilder_Edit_Simple,
-			InputContextID::kShipBuilder_Selection_Simple,
-			InputContextID::kShipInfo,
-			InputContextID::kShipInfo_BuySell,
-			InputContextID::kShipInfo_Modify,
-			InputContextID::kMonocle,
-			InputContextID::kVehicle
-		};
-		static_assert(CONTROLS_MENU_INPUT_CONTEXT_ORDER.size() == 58);
 
 		// members
 		std::array<InputContext*, MAPPABLE_INPUT_CONTEXT_COUNT> inputContexts;        // 010

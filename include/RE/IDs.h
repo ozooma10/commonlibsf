@@ -331,6 +331,11 @@ namespace RE::ID
 		inline constexpr REL::ID UnlockSubroutine{ 37393 };
 	}
 
+	namespace BSPCKeyboardDevice
+	{
+		inline constexpr REL::ID KeyNameTable{ 361050 };
+	}
+
 	namespace BSPointerHandleManagerInterface
 	{
 		inline constexpr REL::ID GetSmartPointer{ 35638 };
@@ -484,11 +489,6 @@ namespace RE::ID
 	{
 		inline constexpr REL::ID allocate{ 0 };    // 34039
 		inline constexpr REL::ID deallocate{ 0 };  // 34440
-	}
-
-	namespace BSWin32KeyboardDevice
-	{
-		inline constexpr REL::ID KeyNameTable{ 361050 };
 	}
 
 	namespace Calendar

@@ -205,7 +205,6 @@
 #include "RE/B/BSInputEventReceiver.h"
 #include "RE/B/BSInputEventSingleUser.h"
 #include "RE/B/BSInputEventUser.h"
-#include "RE/B/BSInputEventUserStandalone.h"
 #include "RE/B/BSIntrusiveRefCounted.h"
 #include "RE/B/BSKeyboardDevice.h"
 #include "RE/B/BSLock.h"

@@ -201,7 +201,7 @@ namespace SFSE
 		std::wstring name;
 		if (a_name.empty() || !REX::UTF8_TO_UTF16(a_name, name))
 			return 0xFFFFFFFF;
-		static REL::Relocation<const wchar_t*> table{ RE::ID::BSWin32KeyboardDevice::KeyNameTable };
+		static REL::Relocation<const wchar_t*> table{ RE::ID::BSPCKeyboardDevice::KeyNameTable };
 		std::wstring_view                      rows{ table.get() };
 		while (!rows.empty()) {
 			const auto end = rows.find(L'\n');
