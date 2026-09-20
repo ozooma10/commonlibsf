@@ -40,13 +40,6 @@ target("commonlibsf", function()
     set_pcxxheader("include/SFSE/Impl/PCH.h")
 end)
 
-target("commonlibsf-control-map-tests", function()
-    set_kind("binary")
-    set_default(false)
-    add_deps("commonlibsf")
-    add_files("tests/control_map_tests.cpp")
-end)
-
 rule("commonlibsf.plugin", function()
     add_deps("commonlib.plugin")
 
