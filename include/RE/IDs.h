@@ -1166,6 +1166,7 @@ namespace RE::ID
 
 	namespace GameVM
 	{
+		inline constexpr REL::ID Ctor{ 116472 };
 		inline constexpr REL::ID Singleton{ 937585 };
 		inline constexpr REL::ID BindEverythingToScript{ 117899 };
 	}
