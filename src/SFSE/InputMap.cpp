@@ -4,12 +4,6 @@
 #include "REX/W32/USER32.h"
 #include "REX/W32/XINPUT.h"
 
-#include <Windows.h>
-
-#ifdef MAX_PATH
-#	undef MAX_PATH
-#endif
-
 namespace SFSE
 {
 	std::uint32_t InputMap::GamepadMaskToKeycode(const std::uint32_t a_keyMask)
@@ -92,33 +86,6 @@ namespace SFSE
 		}
 	}
 
-	std::uint32_t InputMap::VirtualKeyToKeycode(const std::uint32_t a_virtualKey)
-	{
-		if (a_virtualKey == 0xFF || a_virtualKey == 0x7FFFFFFF) {
-			return 0;
-		}
-
-		switch (a_virtualKey) {
-		case VK_PAUSE:
-			return REX::W32::DIK_PAUSE;
-		case VK_NUMLOCK:
-			return REX::W32::DIK_NUMLOCK;
-		case VK_SNAPSHOT:
-			return REX::W32::DIK_SYSRQ;
-		default:
-			break;
-		}
-
-		const auto scanCode = ::MapVirtualKeyExW(a_virtualKey, MAPVK_VK_TO_VSC_EX, ::GetKeyboardLayout(0));
-		if (scanCode == 0) {
-			return 0;
-		}
-
-		const auto prefix = (scanCode >> 8) & 0xFF;
-		const auto set1 = scanCode & 0xFF;
-		return prefix == 0xE0 || prefix == 0xE1 ? set1 | 0x80 : set1;
-	}
-
 	std::string InputMap::GetKeyName(const std::uint32_t a_keyCode)
 	{
 		if (a_keyCode >= kMacro_MouseButtonOffset && a_keyCode < kMacro_GamepadOffset) {
@@ -194,25 +161,6 @@ namespace SFSE
 		std::string result;
 		REX::UTF16_TO_UTF8(keyNameW, result);
 		return result;
-	}
-
-	std::uint32_t InputMap::GetKeyboardVirtualKey(std::string_view a_name)
-	{
-		std::wstring name;
-		if (a_name.empty() || !REX::UTF8_TO_UTF16(a_name, name)) return 0xFFFFFFFF;
-		static REL::Relocation<const wchar_t*> table{ RE::ID::BSWin32KeyboardDevice::KeyNameTable };
-		std::wstring_view rows{ table.get() };
-		while (!rows.empty()) {
-			const auto end = rows.find(L'\n');
-			const auto row = rows.substr(0, end);
-			const auto tab = row.find(L'\t');
-			if (tab == name.size() && ::_wcsnicmp(row.data(), name.c_str(), tab) == 0) {
-				return static_cast<std::uint32_t>(std::wcstoul(row.data() + tab + 1, nullptr, 16));
-			}
-			if (end == rows.npos) break;
-			rows.remove_prefix(end + 1);
-		}
-		return 0xFFFFFFFF;
 	}
 
 	std::string InputMap::GetMouseButtonName(const std::uint32_t a_keyCode)
