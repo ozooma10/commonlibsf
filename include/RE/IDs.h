@@ -1452,6 +1452,15 @@ namespace RE::ID
 		inline constexpr REL::ID GetEventSource{ 0 };  // 167118
 	}
 
+	namespace MessageMenuManager
+	{
+		// 1.16.244, osf-re ui.message_box. Names describe the recovered roles.
+		inline constexpr REL::ID Singleton{ 938019 };          // pointer slot, RVA 0x61DE720
+		inline constexpr REL::ID ShowOneButton{ 114231 };       // RVA 0x1ED62B0; consumes the request
+		inline constexpr REL::ID RequestStringAssign{ 36345 }; // RVA 0x2D31D0; inline/heap string
+		inline constexpr REL::ID RequestDestroy{ 43998 };      // RVA 0x4DF060; three strings + callback
+	}
+
 	namespace Misc
 	{
 		inline constexpr REL::ID DebugNotification{ 0 };        // 138728

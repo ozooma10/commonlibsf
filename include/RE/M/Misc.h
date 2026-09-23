@@ -9,6 +9,12 @@
 
 namespace RE
 {
+	// Queues the vanilla DEBUG / localized OK message box. Call after UI
+	// initialization, on the game/UI thread. Copies the text into engine-owned
+	// storage; returning does not mean the player has dismissed the box.
+	// Uses MessageMenuManager directly, not the Papyrus Debug.MessageBox thunk.
+	void DebugMessageBox(const char* a_message);
+
 	// DO NOT CALL: ID::Misc::DebugNotification is {0} and this FO4-shaped free
 	// function no longer exists on 1.16.x. The Papyrus Debug.Notification native
 	// (1.16.244 0x142003A60) inlines the work: it fires a ShowHUDMessageEvent
