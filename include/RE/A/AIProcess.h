@@ -11,6 +11,7 @@
 
 namespace RE
 {
+	class Actor;
 	class ActorKnowledge;
 	class bhkCharacterController;
 	class DialogueItem;
@@ -181,6 +182,25 @@ namespace RE
 	class AIProcess
 	{
 	public:
+		// Descriptive names. Native world-space input to AimAtLocation; copies
+		// the point, retains no caller pointer. Call on the actor's process on
+		// the engine thread, with valid middleHigh and an exclusively owned target.
+		void SetAimTarget(Actor* a_actor, const NiPoint3* a_worldPoint)
+		{
+			using func_t = decltype(&AIProcess::SetAimTarget);
+			static REL::Relocation<func_t> func{ ID::AIProcess::SetAimTarget };
+			func(this, a_actor, a_worldPoint);
+		}
+
+		// Cancels the process target AND any queued target copy. May also stop
+		// an active native aim helper; do not clear another caller's ownership.
+		void ClearAimTarget(Actor* a_actor)
+		{
+			using func_t = decltype(&AIProcess::ClearAimTarget);
+			static REL::Relocation<func_t> func{ ID::AIProcess::ClearAimTarget };
+			func(this, a_actor);
+		}
+
 		float GetActorLightLevel() const
 		{
 			return high ? high->lightLevel : 0.0f;

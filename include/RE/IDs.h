@@ -18,6 +18,7 @@ namespace RE::ID
 		inline constexpr REL::ID EquipItem{ 101349 };     // add-if-missing equip; 1.16.244 0x1963F20 / 1.16.242 0x1966A60 (osf-re gameplay.actor_equipment)
 		inline constexpr REL::ID EvaluatePackage{ 0 };    // 150640
 		inline constexpr REL::ID GetActorKnowledge{ 0 };  // 150669
+		inline constexpr REL::ID GetAimPitch{ 101068 };  // 1.16.244 static + owned runtime; osf-re gameplay.projectile_launch
 		inline constexpr REL::ID GetFactionRank{ 100950 };     // 1.16.244; osf-re gameplay.actor_faction_taxonomy
 		inline constexpr REL::ID IsHostileToActor{ 100890 };  // 1.16.244 (was 0//150777 = a scalar-deleting dtor); osf-re gameplay.actor_faction_taxonomy
 		inline constexpr REL::ID IsJumping{ 0 };          // 150985
@@ -32,6 +33,12 @@ namespace RE::ID
 		inline constexpr REL::ID RefreshAppearance{ 101307 };  // 1.16.244 (actor, false, 0x28, false); synchronously rebuilds actor 3D from the current base NPC
 		inline constexpr REL::ID UpdateAppearance{ 101306 };  // 1.16.244 runtime-proven: rebuilds head/facegen from the CURRENT base NPC; engine recipe = [actor+0x228->+8]+0x582 |= 4, then (false, 0, true) (osf-re ui.menu3d_paperdoll)
 		inline constexpr REL::ID UpdateChargenAppearance{ 97399 };
+	}
+
+	namespace AIProcess
+	{
+		inline constexpr REL::ID SetAimTarget{ 102220 };    // 1.16.244 static + owned runtime; osf-re gameplay.projectile_launch
+		inline constexpr REL::ID ClearAimTarget{ 102221 };  // Removes deferred target too; same proof.
 	}
 
 	namespace ActorUtils
