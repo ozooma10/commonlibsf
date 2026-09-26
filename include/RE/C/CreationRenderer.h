@@ -134,4 +134,172 @@ namespace RE::CreationRendererPrivate
 	{
 		return deviceProperties ? deviceProperties->dxActiveGPU : nullptr;
 	}
+
+	// RENDER-GRAPH PASS PLUMBING. A render pass's slot-7 ExecuteRenderPass is
+	// `void(void* pass, GraphContext* graph, PassIO* io)`. Everything below is
+	// non-polymorphic and unnamed in RTTI and assert strings: the type names are
+	// descriptive CommonLibSF names, NOT engine names, and only the listed members
+	// are mapped. Every pointer is borrowed for the duration of one Execute call.
+	// Evidence: OSF RE context_repo module `rendering.ui_pass` (2026-09-25 notes),
+	// runtime-proven on game 1.16.244 with frame generation OFF; FG and upscaler
+	// graph variants have not been checked.
+	struct CommandContext;
+
+	namespace detail
+	{
+		// PLACEHOLDERS for unnamed hop structs; partial layouts.
+		struct GraphBatch;          // GraphContext + 0x138
+		struct CommandContextOwner;  // CommandContext + 0x30; may be DeviceProperties (unproven)
+	}
+
+	// 12-byte graph resource handle; GraphResourcePool::Resolve compares all 12 bytes.
+	struct GraphResourceHandle
+	{
+		std::uint32_t words[3];  // 00
+	};
+	static_assert(sizeof(GraphResourceHandle) == 0xC);
+
+	// One pass input/output. Only the leading handle is decoded.
+	struct PassIOEntry
+	{
+		GraphResourceHandle handle;     // 00
+		std::byte           pad0C[0x14];  // 0C
+	};
+	static_assert(sizeof(PassIOEntry) == 0x20);
+
+	// Pass entry array. Entries are stored inline when capacity is negative,
+	// otherwise behind the pointer at +0x10. Observed sizes: ScaleformBegin 3,
+	// ScaleformEnd 1, ScaleformComposite 2.
+	struct PassIOArray
+	{
+		[[nodiscard]] std::span<const PassIOEntry> GetEntries() const noexcept
+		{
+			const auto* data = capacity < 0 ?
+				reinterpret_cast<const PassIOEntry*>(&storage) :
+				reinterpret_cast<const PassIOEntry*>(storage);
+			return { data, data ? size : 0 };
+		}
+
+		// members
+		std::uint32_t  size;      // 00
+		std::uint32_t  pad04;     // 04
+		std::int32_t   capacity;  // 08
+		std::uint32_t  pad0C;     // 0C
+		std::uintptr_t storage;   // 10 (first inline entry, or the entry pointer)
+	};
+	static_assert(offsetof(PassIOArray, capacity) == 0x08);
+	static_assert(offsetof(PassIOArray, storage) == 0x10);
+
+	// The graph's current resource pool. Records are 0xD8 bytes.
+	struct GraphResourcePool
+	{
+		// Returns the record's borrowed payload (no AddRef), or null when no record
+		// matches. For texture IO entries the payload is a GraphRenderTarget; other
+		// IO roles are not decoded.
+		[[nodiscard]] void* Resolve(const GraphResourceHandle& a_handle)
+		{
+			using func_t = void* (*)(GraphResourcePool*, const GraphResourceHandle*);
+			static REL::Relocation<func_t> func{ ID::CreationRendererPrivate::GraphResourcePool::Resolve };
+			return func(this, &a_handle);
+		}
+
+		// members
+		std::byte     pad00[0x08];  // 00
+		std::uint32_t recordCount;  // 08
+		std::uint32_t pad0C;        // 0C
+		std::byte*    records;      // 10
+	};
+	static_assert(offsetof(GraphResourcePool, recordCount) == 0x08);
+	static_assert(offsetof(GraphResourcePool, records) == 0x10);
+
+	// Execute's third argument.
+	struct PassIO
+	{
+		PassIOArray*       entries;  // 00
+		GraphResourcePool* pool;     // 08
+	};
+	static_assert(offsetof(PassIO, pool) == 0x08);
+
+	struct GraphTexture
+	{
+		std::byte                 pad00[0x38];  // 00
+		REX::W32::ID3D12Resource* resource;     // 38
+	};
+	static_assert(offsetof(GraphTexture, resource) == 0x38);
+
+	// Resolved payload of a color-target IO entry.
+	struct GraphRenderTarget
+	{
+		std::byte     pad00[0x08];     // 00
+		void*         rtvDescriptors;  // 08 (*this is the CPU RTV the native pass binds)
+		std::byte     pad10[0x04];     // 10
+		std::uint32_t width;           // 14
+		std::uint32_t height;          // 18
+		std::byte     pad1C[0x3C];     // 1C
+		GraphTexture* texture;         // 58
+	};
+	static_assert(offsetof(GraphRenderTarget, rtvDescriptors) == 0x08);
+	static_assert(offsetof(GraphRenderTarget, width) == 0x14);
+	static_assert(offsetof(GraphRenderTarget, height) == 0x18);
+	static_assert(offsetof(GraphRenderTarget, texture) == 0x58);
+
+	// Execute's second argument.
+	struct GraphContext
+	{
+		// Acquires and initializes a context on a cache miss, so it MUTATES graph
+		// state: call it only where a native pass would.
+		[[nodiscard]] CommandContext* GetOrCreateCommandContext()
+		{
+			using func_t = CommandContext* (*)(GraphContext*);
+			static REL::Relocation<func_t> func{ ID::CreationRendererPrivate::GraphContext::GetOrCreateCommandContext };
+			return func(this);
+		}
+
+		// The context a native pass already opened, or null. Side-effect free; on
+		// a hit GetOrCreateCommandContext returns this same pointer.
+		[[nodiscard]] CommandContext* GetOpenCommandContext() const noexcept;
+
+		// members
+		std::byte          pad000[0x138];  // 000
+		detail::GraphBatch* batch;         // 138
+	};
+	static_assert(offsetof(GraphContext, batch) == 0x138);
+
+	struct CommandContext
+	{
+		// The engine's own reset: zeros cachedBindings and, unless the command pool
+		// flags byte (+0x20) has bits other than 0x02 set, rebinds the native
+		// descriptor heap pair. Unique static proof; not yet exercised at runtime.
+		void InvalidateCachedBindingsAndBindHeaps()
+		{
+			using func_t = void (*)(CommandContext*);
+			static REL::Relocation<func_t> func{ ID::CreationRendererPrivate::CommandContext::InvalidateCachedBindingsAndBindHeaps };
+			func(this);
+		}
+
+		// members
+		void*                                cachedBindings[6];  // 00 (root/layout, PSO, four binding groups)
+		detail::CommandContextOwner*         owner;              // 30
+		void*                                commandPool;        // 38
+		std::byte                            pad40[0x20];        // 40
+		REX::W32::ID3D12GraphicsCommandList* commandList;        // 60
+	};
+	static_assert(offsetof(CommandContext, owner) == 0x30);
+	static_assert(offsetof(CommandContext, commandPool) == 0x38);
+	static_assert(offsetof(CommandContext, commandList) == 0x60);
+
+	namespace detail
+	{
+		struct GraphBatch
+		{
+			std::byte       pad000[0x120];  // 000
+			CommandContext* cachedContext;  // 120
+		};
+		static_assert(offsetof(GraphBatch, cachedContext) == 0x120);
+	}
+
+	inline CommandContext* GraphContext::GetOpenCommandContext() const noexcept
+	{
+		return batch ? batch->cachedContext : nullptr;
+	}
 }

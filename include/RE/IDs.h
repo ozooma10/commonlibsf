@@ -997,6 +997,23 @@ namespace RE::ID
 		inline constexpr REL::ID CaptureFrameToFile{ 39202 };
 	}
 
+	namespace CreationRendererPrivate::CommandContext
+	{
+		// Zeros the six cached binding identities and rebinds the native heap pair.
+		// Unique static proof only; not runtime-exercised (osf-re rendering.ui_pass).
+		inline constexpr REL::ID InvalidateCachedBindingsAndBindHeaps{ 142968 };
+	}
+
+	namespace CreationRendererPrivate::GraphContext
+	{
+		inline constexpr REL::ID GetOrCreateCommandContext{ 144161 };  // 1.16.244 0x2A7D600 (osf-re rendering.ui_pass)
+	}
+
+	namespace CreationRendererPrivate::GraphResourcePool
+	{
+		inline constexpr REL::ID Resolve{ 145523 };  // 1.16.244 0x2B15480 (osf-re rendering.ui_pass)
+	}
+
 	namespace CreationRendererPrivate::Renderer
 	{
 		inline constexpr REL::ID Singleton{ 944397 };  // g_RendererRoot
