@@ -39,6 +39,8 @@ namespace RE::ID
 	{
 		inline constexpr REL::ID SetAimTarget{ 102220 };    // 1.16.244 static + owned runtime; osf-re gameplay.projectile_launch
 		inline constexpr REL::ID ClearAimTarget{ 102221 };  // Removes deferred target too; same proof.
+		inline constexpr REL::ID SetLookTarget{ 102223 };   // .244 native priority/handle reservation; gameplay.projectile_launch
+		inline constexpr REL::ID ClearLookTarget{ 102225 }; // Matching-priority release; same proof.
 	}
 
 	namespace ActorUtils
