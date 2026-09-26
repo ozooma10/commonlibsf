@@ -32,10 +32,22 @@ namespace RE
 	class ProjectileLaunchData
 	{
 	public:
+		// Descriptive wrapper for the native beam rotation conversion (.244).
+		// Input is radians: direction = {sin(yaw)*cos(pitch),
+		// cos(yaw)*cos(pitch), -sin(pitch)}. This is not inherited velocity.
+		[[nodiscard]] static NiPoint3 DirectionFromAngles(float a_yaw, float a_pitch)
+		{
+			using func_t = void (*)(float, float, NiPoint3*);
+			static REL::Relocation<func_t> func{ REL::ID(107240) };
+			NiPoint3 result{};
+			func(a_yaw, a_pitch, &result);
+			return result;
+		}
+
 		// members
 		Location                                             origin;                   // 00
 		NiPoint3                                             contactNormal;            // 18
-		NiPoint3                                             destination;              // 24
+		NiPoint3                                             angles;                   // 24 - pitch, rotation Y, yaw; NOT a destination point
 		BGSProjectile*                                       projectileBase;           // 30
 		TESObjectREFR*                                       shooter;                  // 38
 		CombatController*                                    shooterCombatController;  // 40
