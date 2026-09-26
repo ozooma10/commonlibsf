@@ -1034,6 +1034,11 @@ namespace RE::ID
 		inline constexpr REL::ID ExecuteRenderPass{ 145956 };
 	}
 
+	namespace CreationRendererPrivate::ScaleformRenderTarget
+	{
+		inline constexpr REL::ID Current{ 937260 };  // 1.16.244 0x5FC2F70 (osf-re rendering.ui_pass)
+	}
+
 	namespace CriticalHitEvent::Event
 	{
 		inline constexpr REL::ID GetEventSource{ 0 };  // 153653

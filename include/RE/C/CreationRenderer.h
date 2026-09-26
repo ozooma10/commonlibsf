@@ -243,6 +243,34 @@ namespace RE::CreationRendererPrivate
 	static_assert(offsetof(GraphRenderTarget, height) == 0x18);
 	static_assert(offsetof(GraphRenderTarget, texture) == 0x58);
 
+	// The targets Scaleform's HAL is drawing into.
+	struct ScaleformRenderTargetData
+	{
+		std::byte          pad00[0x20];   // 00
+		GraphRenderTarget* colorTarget;   // 20 (the UI layer; Begin's IO 0)
+		GraphRenderTarget* secondTarget;  // 28 (Begin's IO 1)
+	};
+	static_assert(offsetof(ScaleformRenderTargetData, colorTarget) == 0x20);
+	static_assert(offsetof(ScaleformRenderTargetData, secondTarget) == 0x28);
+
+	// Scaleform's cached HAL render target. ScaleformBegin's target setter
+	// (1.16.244 0x29CE9F0) rebinds it each frame and End leaves it untouched, so at
+	// End it still names the UI layer. Other Scaleform-to-texture paths use the same
+	// setter; in-game they were never seen replacing it between Begin and End.
+	struct ScaleformRenderTarget
+	{
+		[[nodiscard]] static ScaleformRenderTarget* GetCurrent()
+		{
+			static REL::Relocation<ScaleformRenderTarget**> current{ ID::CreationRendererPrivate::ScaleformRenderTarget::Current };
+			return *current;
+		}
+
+		// members
+		std::byte                  pad00[0x20];  // 00
+		ScaleformRenderTargetData* data;         // 20
+	};
+	static_assert(offsetof(ScaleformRenderTarget, data) == 0x20);
+
 	// Execute's second argument.
 	struct GraphContext
 	{
