@@ -3,6 +3,7 @@
 #include "RE/B/BSTEvent.h"
 #include "RE/N/NiSmartPointer.h"
 #include "RE/S/SceneGraph.h"
+#include "REX/W32/BASE.h"
 
 namespace RE
 {
@@ -13,6 +14,14 @@ namespace RE
 	{
 	public:
 		SF_RTTI_VTABLE(Main);
+
+		// The game's top-level window (engine type name unknown: no RTTI, no strings).
+		// The engine destroys and recreates the HWND when the window mode changes, so
+		// read it when needed instead of caching it.
+		struct Window
+		{
+			REX::W32::HWND hwnd;  // 00
+		};
 
 		virtual ~Main();  // 00
 
@@ -41,10 +50,13 @@ namespace RE
 		bool      quitGame;          // 028
 		std::byte pad029[0x005];     // 029
 		bool      resetGame;         // 02E
-		std::byte pad02F[0x419];     // 02F
+		std::byte pad02F[0x001];     // 02F
+		Window*   window;            // 030
+		std::byte pad038[0x410];     // 038
 		bool      isGameMenuPaused;  // 448
 	};
 	static_assert(offsetof(Main, quitGame) == 0x028);
 	static_assert(offsetof(Main, resetGame) == 0x02E);
+	static_assert(offsetof(Main, window) == 0x030);
 	static_assert(offsetof(Main, isGameMenuPaused) == 0x448);
 }
