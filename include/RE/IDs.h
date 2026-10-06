@@ -168,6 +168,11 @@ namespace RE::ID
 		inline constexpr REL::ID HandleEntryPoint{ 0 };  // 110912
 	}
 
+	namespace BGSGameplayOption
+	{
+		inline constexpr REL::ID GetIndex{ 39520 };  // 1.16.242/244; osf-re ui.gameplay_options
+	}
+
 	namespace BGSInventoryInterface
 	{
 		inline constexpr REL::ID Singleton{ 883301 };      // 825787
@@ -1141,7 +1146,7 @@ namespace RE::ID
 
 	namespace FORM_ENUM_STRING
 	{
-		inline constexpr REL::ID FormEnumString{ 0 };  // 761416
+		inline constexpr REL::ID FormEnumString{ 809219 };  // 1.16.242/244; osf-re ui.gameplay_options
 	}
 
 	//No RTTI for this, not sure what BGS Subsystem this likely belongs to? but lets us get a formcomponent
@@ -2052,6 +2057,8 @@ namespace RE::ID
 
 	namespace SettingsDataModel
 	{
+		inline constexpr REL::ID SetGameplayOptionIndex{ 88744 };  // 1.16.242/244; osf-re ui.gameplay_options
+		inline constexpr REL::ID SaveSettings{ 88689 };  // 1.16.242/244; osf-re ui.gameplay_options
 		inline constexpr REL::ID PublishBindings{ 88747 };  // 1.16.244: synchronous binding-definition iteration
 		inline constexpr REL::ID PublishBinding{ 88748 };  // 1.16.244: internal row visitor, not an instance method
 		inline constexpr REL::ID BindingDefinitions{ 918356 };  // 1.16.244: borrowed BSTArray<BindingDefinition>

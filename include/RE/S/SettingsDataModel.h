@@ -5,6 +5,7 @@
 #include "RE/B/BSTArray.h"
 #include "RE/C/ControlMap.h"
 #include "RE/I/IDataModel.h"
+#include "RE/T/TESForm.h"
 
 #include <cstddef>
 #include <span>
@@ -88,6 +89,34 @@ namespace RE
 			using func_t = decltype(&SettingsDataModel::CancelRemap);
 			static REL::Relocation<func_t> func{ ID::SettingsDataModel::CancelRemap };
 			func();
+		}
+
+		// Call on the native settings/UI lane with an engine-published choice index.
+		// Updates the form and PEOData synchronously; SaveSettings dispatches the change.
+		void SetGameplayOptionIndex(TESFormID a_formID, std::uint32_t a_index)
+		{
+			// The native worker takes a command capture, then the complete model pointer.
+			struct Change
+			{
+				TESFormID     formID;
+				std::uint32_t index;
+			};
+			static_assert(sizeof(Change) == 0x8);
+			using func_t = void (*)(const Change*, SettingsDataModel*);
+			static REL::Relocation<func_t> func{ ID::SettingsDataModel::SetGameplayOptionIndex };
+			const Change change{ a_formID, a_index };
+			func(&change, this);
+		}
+
+		// Call on the native settings/UI lane. Flushes all pending settings changes;
+		// GameplayOptionChanged dispatch is synchronous, but Papyrus listeners are not.
+		void SaveSettings()
+		{
+			// The native worker dereferences a captured model pointer, not a direct this.
+			using func_t = void (*)(SettingsDataModel* const*);
+			static REL::Relocation<func_t> func{ ID::SettingsDataModel::SaveSettings };
+			auto* const model = this;
+			func(&model);
 		}
 
 		// Event payloads and handlers have not been exposed yet.

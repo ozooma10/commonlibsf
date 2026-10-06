@@ -58,20 +58,21 @@ namespace RE
 		std::uint64_t          unk0058;                                           // 0058
 		std::uint64_t          unk0060;                                           // 0060
 		std::uint64_t          unk0068;                                           // 0068
-		FormArray              formArrays[std::to_underlying(FormType::kTotal)];  // 0070
-		TESRegionList*         regionList;                                        // 1498
-		std::uint64_t          unk14A0;                                           // 14A0
-		std::uint64_t          unk14A8;                                           // 14A8
-		std::uint64_t          unk14B0;                                           // 14B0
-		std::uint64_t          unk14B8;                                           // 14B8
-		std::uint64_t          unk14C0;                                           // 14C0
-		std::uint64_t          unk14C8;                                           // 14C8
-		std::uint64_t          unk14D0;                                           // 14D0
-		std::uint64_t          unk14D8;                                           // 14D8
-		std::uint64_t          unk14E0;                                           // 14E0
-		std::uint64_t          unk14E8;                                           // 14E8
-		BSSimpleList<TESFile*> files;                                             // 14F0
-		std::byte              pad1500[0x80];                                     // 1500 - pre-1.16.242 headers put compiledFileCollection here; live qword dump showed garbage at that offset
+		std::uint64_t          unk0070;                                           // 0070
+		// 1.16.242/244 constructor: 220 entries, stride 0x18, beginning at +0x78.
+		FormArray              formArrays[std::to_underlying(FormType::kTotal)];  // 0078
+		TESRegionList*         regionList;                                        // 1518
+		std::uint64_t          unk1520;                                           // 1520
+		std::uint64_t          unk1528;                                           // 1528
+		std::uint64_t          unk1530;                                           // 1530
+		std::uint64_t          unk1538;                                           // 1538
+		std::uint64_t          unk1540;                                           // 1540
+		std::uint64_t          unk1548;                                           // 1548
+		std::uint64_t          unk1550;                                           // 1550
+		std::uint64_t          unk1558;                                           // 1558
+		std::uint64_t          unk1560;                                           // 1560
+		std::uint64_t          unk1568;                                           // 1568
+		BSSimpleList<TESFile*> files;                                             // 1570
 		// Live-proven 2026-06-10 (1.16.242): runtime scan anchored on
 		// 'Starfield.esm' at files[0]->fileName found the collection at +0x1580.
 		TESFileCollection      compiledFileCollection;                            // 1580
@@ -126,5 +127,8 @@ namespace RE
 		std::uint64_t          unk1730;                                           // 1730
 		std::uint64_t          unk1738;                                           // 1738
 	};
+	static_assert(offsetof(TESDataHandler, formArrays) == 0x78);
+	static_assert(offsetof(TESDataHandler, regionList) == 0x1518);
+	static_assert(offsetof(TESDataHandler, compiledFileCollection) == 0x1580);
 	static_assert(sizeof(TESDataHandler) == 0x1740);
 }

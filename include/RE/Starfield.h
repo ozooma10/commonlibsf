@@ -81,6 +81,7 @@
 #include "RE/B/BGSForcedLocRefType.h"
 #include "RE/B/BGSFormFolderKeywordList.h"
 #include "RE/B/BSGalaxy.h"
+#include "RE/B/BGSGameplayOption.h"
 #include "RE/B/BGSGenericBaseForm.h"
 #include "RE/B/BGSGenericBaseFormTemplate.h"
 #include "RE/B/BGSGroundCover.h"
