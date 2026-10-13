@@ -7,19 +7,32 @@
 
 namespace
 {
-	enum class Operation { Load, Parse, Resolve };
+	enum class Operation
+	{
+		Load,
+		Parse,
+		Resolve,
+		LoadCustom,
+		ApplyCustom
+	};
 
 	struct Call
 	{
 		Operation       operation;
 		RE::ControlMap* map;
 		const char*     text{};
+		std::uint8_t    device{};
 	};
 	std::vector<Call> calls;
 
 	void Load(RE::ControlMap* a_map) { calls.push_back({ Operation::Load, a_map }); }
 	void Parse(RE::ControlMap* a_map, const char* a_text) { calls.push_back({ Operation::Parse, a_map, a_text }); }
 	void Resolve(RE::ControlMap* a_map) { calls.push_back({ Operation::Resolve, a_map }); }
+	void LoadCustom(RE::ControlMap* a_map) { calls.push_back({ Operation::LoadCustom, a_map }); }
+	void ApplyCustom(RE::ControlMap* a_map, std::uint8_t a_device, const char* a_block)
+	{
+		calls.push_back({ Operation::ApplyCustom, a_map, a_block, a_device });
+	}
 
 	struct RowCall
 	{
@@ -104,6 +117,12 @@ namespace REL
 		case 124116: address = reinterpret_cast<std::uintptr_t>(&Load); break;
 		case 124117: address = reinterpret_cast<std::uintptr_t>(&Parse); break;
 		case 124124: address = reinterpret_cast<std::uintptr_t>(&Resolve); break;
+		case 124127:
+			address = reinterpret_cast<std::uintptr_t>(&ApplyCustom);
+			break;
+		case 124129:
+			address = reinterpret_cast<std::uintptr_t>(&LoadCustom);
+			break;
 		default: throw std::runtime_error("Unexpected engine relocation: " + std::to_string(a_id));
 		}
 		return address - REX::FModule::GetExecutingModule().GetBaseAddress();
@@ -140,6 +159,18 @@ int main()
 		check(calls.size() == 4 && calls.back().operation == Operation::Resolve && calls.back().map == &second,
 			"link finalization forwards the target instance without reloading defaults");
 
+		first.LoadCustomMappings();
+		check(calls.size() == 5 && calls.back().operation == Operation::LoadCustom && calls.back().map == &first,
+			"custom loader calls the saved-file entry point without reloading defaults");
+		const char block[] = { 3, 0, 3 };
+		for (std::uint8_t device = 0; device < 3; ++device) {
+			auto* map = device == 1 ? &first : &second;
+			map->ApplyCustomMappings(device, block);
+			check(calls.size() == 6 + device && calls.back().operation == Operation::ApplyCustom &&
+					  calls.back().map == map && calls.back().device == device && calls.back().text == block,
+				"device applicator preserves the instance, byte-sized device and borrowed binary block without extra native calls");
+		}
+
 		const char event[] = "osfsettings/openMenu";
 		const std::array<const char*, 3> tokens{ "0x79", "0xff", "!Jump" };
 		const auto tokenRow = RE::ControlMap::FormatMappingRow(event, tokens[0], tokens[1], tokens[2],
@@ -160,7 +191,7 @@ int main()
 			      rowCalls.back().controlMask == 0x10u && rowCalls.back().groupMask == 0x80000001u && rowCalls.back().required,
 			"numeric formatter receives full device codes, per-device flags and masks without custom conversion");
 		check(numericRow == numericResult && destroyedStrings.size() == 2 && destroyedStrings.back() == rowCalls.back().output &&
-			      calls.size() == 4,
+			      calls.size() == 8,
 			"heap-backed native text is copied and destroyed exactly once without changing the control map");
 		std::cout << checks << '/' << checks << " ControlMap interface checks passed\n";
 		return 0;

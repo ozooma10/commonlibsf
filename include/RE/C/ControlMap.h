@@ -111,8 +111,9 @@ namespace RE
 		};
 
 		// Formats one newline-terminated defaults row using the native formatter.
-		// Token strings accept the native binding syntax; numeric keyboard codes are
-		// virtual-key codes. This only returns text and does not register a mapping.
+		// Token strings accept native syntax, including *0 for an explicit primary
+		// slot (even 0xff*0). Numeric keyboard codes are virtual-key codes.
+		// This only returns text and does not register a mapping.
 		[[nodiscard]] static std::string FormatMappingRow(
 			const char* a_event, const char* a_keyboard, const char* a_mouse, const char* a_gamepad,
 			bool a_keyboardVisible, bool a_mouseVisible, bool a_gamepadVisible,
@@ -130,6 +131,17 @@ namespace RE
 		// Consumes complete NUL-terminated defaults synchronously. Native callers load
 		// saved overrides separately, then resolve links; parsing alone does neither.
 		void ParseMappings(const char* a_text);
+
+		// Loads ControlMap_Custom.txt over existing definitions, then resolves links
+		// and sorts. Does not create missing actions or reload defaults.
+		void LoadCustomMappings();
+
+		// Applies a complete version-3 binary device block, including its length header
+		// (at most 0x4000 bytes). The buffer is borrowed only for this synchronous call.
+		// Device: 0 = keyboard, 1 = mouse, 2 = gamepad. Clears modified flags across
+		// that device before applying overrides; do not use this to remap one action.
+		// Does not create mappings, resolve links or sort; native loading finalizes it.
+		void ApplyCustomMappings(std::uint8_t a_device, const char* a_block);
 
 		// Resolves inherited bindings and restores native ordering after construction.
 		void ResolveLinkedMappings();

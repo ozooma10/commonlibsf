@@ -75,6 +75,20 @@ namespace RE
 		func(this, a_text);
 	}
 
+	void ControlMap::LoadCustomMappings()
+	{
+		using func_t = decltype(&ControlMap::LoadCustomMappings);
+		static REL::Relocation<func_t> func{ ID::ControlMap::LoadCustomMappings };
+		func(this);
+	}
+
+	void ControlMap::ApplyCustomMappings(std::uint8_t a_device, const char* a_block)
+	{
+		using func_t = decltype(&ControlMap::ApplyCustomMappings);
+		static REL::Relocation<func_t> func{ ID::ControlMap::ApplyCustomMappings };
+		func(this, a_device, a_block);
+	}
+
 	void ControlMap::ResolveLinkedMappings()
 	{
 		using func_t = decltype(&ControlMap::ResolveLinkedMappings);

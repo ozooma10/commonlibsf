@@ -904,15 +904,17 @@ namespace RE::ID
 
 	namespace ControlMap
 	{
-		inline constexpr REL::ID FormatMappingRow{ 124100 };             // 1.16.244: native binding-token formatter
-		inline constexpr REL::ID FormatMappingRowWithKeyCodes{ 124101 }; // 1.16.244: numeric overload of the row formatter
-		inline constexpr REL::ID MappingRowStringDtor{ 35706 };          // 1.16.244: native temporary string cleanup
-		inline constexpr REL::ID Singleton{ 938003 };              // 1.16.244: ControlMap**
-		inline constexpr REL::ID InputContextNameTable{ 360965 };  // 1.16.244: const char*[0x51]
-		inline constexpr REL::ID LoadMappings{ 124116 };          // 1.16.244: build and parse baked defaults
-		inline constexpr REL::ID ParseMappings{ 124117 };         // 1.16.244: rebuild from complete default definitions
-		inline constexpr REL::ID ResolveLinkedMappings{ 124124 }; // 1.16.244: resolve inherited bindings and ordering
-		inline constexpr REL::ID ValidateMapping{ 124132 };       // 1.16.244: 0x22EEA90, single-context candidate validation
+		inline constexpr REL::ID FormatMappingRow{ 124100 };              // 1.16.244: native binding-token formatter
+		inline constexpr REL::ID FormatMappingRowWithKeyCodes{ 124101 };  // 1.16.244: numeric overload of the row formatter
+		inline constexpr REL::ID MappingRowStringDtor{ 35706 };           // 1.16.244: native temporary string cleanup
+		inline constexpr REL::ID Singleton{ 938003 };                     // 1.16.244: ControlMap**
+		inline constexpr REL::ID InputContextNameTable{ 360965 };         // 1.16.244: const char*[0x51]
+		inline constexpr REL::ID LoadMappings{ 124116 };                  // 1.16.244: build and parse baked defaults
+		inline constexpr REL::ID ParseMappings{ 124117 };                 // 1.16.244: rebuild from complete default definitions
+		inline constexpr REL::ID ResolveLinkedMappings{ 124124 };         // 1.16.244: resolve inherited bindings and ordering
+		inline constexpr REL::ID ApplyCustomMappings{ 124127 };           // 1.16.244: apply one complete saved device block
+		inline constexpr REL::ID LoadCustomMappings{ 124129 };            // 1.16.244: load ControlMap_Custom.txt overrides
+		inline constexpr REL::ID ValidateMapping{ 124132 };               // 1.16.244: 0x22EEA90, single-context candidate validation
 	}
 
 	namespace ControlsRemappedEvent
