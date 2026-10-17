@@ -78,7 +78,7 @@ namespace RE
 
 		// members
 		BSTArray<EffectItem*>                                        listOfEffects;    // 120
-		std::int32_t                                                 hostileCount;     // 130
+		std::int32_t                                                 hostileCount;     // 138: Spell.IsHostile on 1.16.244
 		EffectSetting*                                               avEffectSetting;  // 138
 		std::uint32_t                                                preloadCount;     // 13C
 		BSTSmartPointer<QueuedFile, BSTSmartPointerGamebryoRefCount> preloadedItem;    // 148
