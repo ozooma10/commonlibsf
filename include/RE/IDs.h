@@ -2864,7 +2864,7 @@ namespace RE::ID
 
 	namespace WeaponFiredEvent
 	{
-		inline constexpr REL::ID GetEventSource{ 0 };  // 773902
+		inline constexpr REL::ID GetEventSource{ 822934 };  // .244: static source at 0x14590A240; OSF RE + scripted-fire consumer proof
 	}
 
 	namespace Workshop::CargoLinkAddedEvent
