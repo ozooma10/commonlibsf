@@ -8,7 +8,7 @@ namespace RE
 {
 	class BSInputDeviceManager :
 		public BSTSingletonSDM<BSInputDeviceManager>,  // 00
-		public BSInputEventSingleUser                 // 10
+		public BSInputEventSingleUser                  // 10
 	{
 	public:
 		SF_RTTI_VTABLE(BSInputDeviceManager);

@@ -12,10 +12,10 @@ namespace RE
 	public:
 		SF_RTTI_VTABLE(BSInputEventSingleUser);
 
-		~BSInputEventSingleUser() override = default;
+		virtual ~BSInputEventSingleUser() = default;  // 00
 
 		// override (BSInputEventReceiver)
-		void PerformInputProcessing(const InputEvent* a_queueHead) override;  // 01
+		virtual void PerformInputProcessing(const InputEvent* a_queueHead) override;  // 01
 	};
 	static_assert(sizeof(BSInputEventSingleUser) == 0x50);
 }

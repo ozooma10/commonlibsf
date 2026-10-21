@@ -221,8 +221,13 @@ namespace RE
 		kAVMD,      // D4 BGSAVMData
 		kPERS,      // D5 TESDataHandlerPersistentCreatedUtil::BGSPersistentIDsForm
 		kCHAL,      // D6 BGSChallengeForm
+		kFXPD,      // D7 BGSFacialExpressionData
+		kGPOF,      // D8 BGSGameplayOption
+		kGPOG,      // D9 BGSGameplayOptionGroup
+		kTDED,      // DA BGSTrackDamageEffectData
+		kGWED,      // DB BGSGravityWielderEffectData
 
-		kTotal  // D7
+		kTotal  // DC
 	};
 
 	[[nodiscard]] inline const char* FormTypeToString(FormType a_formType)

@@ -10,7 +10,7 @@ namespace RE
 	public:
 		SF_RTTI_VTABLE(BSKeyboardDevice);
 
-		~BSKeyboardDevice() override = default;  // 00
+		virtual ~BSKeyboardDevice() = default;  // 00
 	};
 	static_assert(sizeof(BSKeyboardDevice) == 0x80);
 }
