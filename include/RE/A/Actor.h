@@ -353,7 +353,11 @@ namespace RE
 
 		[[nodiscard]] bool IsDead() const
 		{
-			return boolBits.all(RE::Actor::BOOL_BITS::kDead);
+			// Match Papyrus Actor.IsDead: dispatch TESObjectREFR slot 0x10D
+			// with notEssential=true. The cached boolBits flag can remain clear
+			// during real death; the virtual predicate reads the life state.
+			// .244: Papyrus ID 116726 -> Actor ID 100522 (OSF RE).
+			return static_cast<const TESObjectREFR*>(this)->IsDead(true);
 		}
 
 		[[nodiscard]] bool IsHostileToActor(Actor* a_actor)

@@ -4,11 +4,9 @@ namespace RE
 {
 	BSInputDevice::~BSInputDevice()
 	{
-		// The engine entry is a scalar deleting destructor. Flags=0 performs
-		// native cleanup without freeing storage owned by the caller.
 		using func_t = void (*)(BSInputDevice*, std::uint32_t);
 		static REL::Relocation<func_t> func{ ID::BSInputDevice::dtor };
-		func(this, 0);
+		func(this, 0);  // Run the scalar deleting destructor without freeing storage.
 	}
 
 	bool BSInputDevice::GetKeyNameFromCode(std::uint32_t a_keyCode, BSFixedStringCS& a_name) const

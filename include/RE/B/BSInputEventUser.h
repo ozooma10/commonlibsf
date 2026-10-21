@@ -51,13 +51,11 @@ namespace RE
 		virtual ~InputEvent() = default;  // 00
 
 		// add
-		virtual bool HasIDCode() const { return false; }
-		// Native callers receive a borrowed address in RAX, not a returned value.
+		virtual bool                 HasIDCode() const { return false; }
 		virtual const BSFixedString& QUserEvent() const
 		{
-			// Process lifetime: even an empty BSFixedString destructor calls the engine.
-			static const auto* empty = new BSFixedString;
-			return *empty;
+			static const BSFixedString empty;
+			return empty;
 		}
 
 		// members
@@ -158,7 +156,6 @@ namespace RE
 
 		SF_HEAP_REDEFINE_NEW(BSInputEventUser);
 
-		// Dispatch one event through native admission and per-type virtuals, maintaining held actions.
 		void DispatchEvent(const InputEvent* a_event)
 		{
 			using func_t = decltype(&BSInputEventUser::DispatchEvent);

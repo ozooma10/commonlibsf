@@ -7,19 +7,32 @@
 
 namespace
 {
-	enum class Operation { Load, Parse, Resolve };
+	enum class Operation
+	{
+		Load,
+		Parse,
+		Resolve,
+		LoadCustom,
+		ApplyCustom
+	};
 
 	struct Call
 	{
 		Operation       operation;
 		RE::ControlMap* map;
 		const char*     text{};
+		std::uint8_t    device{};
 	};
 	std::vector<Call> calls;
 
 	void Load(RE::ControlMap* a_map) { calls.push_back({ Operation::Load, a_map }); }
 	void Parse(RE::ControlMap* a_map, const char* a_text) { calls.push_back({ Operation::Parse, a_map, a_text }); }
 	void Resolve(RE::ControlMap* a_map) { calls.push_back({ Operation::Resolve, a_map }); }
+	void LoadCustom(RE::ControlMap* a_map) { calls.push_back({ Operation::LoadCustom, a_map }); }
+	void ApplyCustom(RE::ControlMap* a_map, std::uint8_t a_device, const char* a_block)
+	{
+		calls.push_back({ Operation::ApplyCustom, a_map, a_block, a_device });
+	}
 
 	struct RowCall
 	{
@@ -33,7 +46,8 @@ namespace
 		bool                         required;
 	};
 	std::vector<RowCall> rowCalls;
-	std::vector<void*> destroyedStrings;
+	std::vector<void*> allocatedStrings;
+	std::vector<void*> freedStrings;
 	constexpr char tokenResult[] = "engine\trow\n";  // Exercises the full 12-byte inline buffer, including NUL.
 	constexpr char numericResult[] = "native-generated numeric mapping row\n";
 
@@ -46,6 +60,7 @@ namespace
 			auto* data = new char[size];
 			std::memcpy(data, a_text, size);
 			std::memcpy(a_output, &data, sizeof(data));
+			allocatedStrings.push_back(data);
 		} else {
 			std::memcpy(a_output, a_text, size);
 		}
@@ -54,18 +69,13 @@ namespace
 		return a_output;
 	}
 
-	void DestroyString(void* a_output)
+	// BSString releases heap-backed text through the engine allocator.
+	std::byte memoryManager{};
+	void*     GetMemoryManager() { return &memoryManager; }
+	void      FreeMemory(void*, void* a_ptr, bool)
 	{
-		std::uint16_t capacity;
-		std::memcpy(&capacity, static_cast<char*>(a_output) + 0xC, sizeof(capacity));
-		if (capacity > 12) {
-			char* data;
-			std::memcpy(&data, a_output, sizeof(data));
-			std::memset(data, 0xDD, capacity);
-			delete[] data;
-		}
-		std::memset(a_output, 0xDD, 0x10);
-		destroyedStrings.push_back(a_output);
+		freedStrings.push_back(a_ptr);
+		delete[] static_cast<char*>(a_ptr);
 	}
 
 	void* FormatTokens(void* a_output, const char* a_event,
@@ -98,12 +108,19 @@ namespace REL
 	{
 		std::uintptr_t address{};
 		switch (a_id) {
-		case 35706: address = reinterpret_cast<std::uintptr_t>(&DestroyString); break;
+		case 35721: address = reinterpret_cast<std::uintptr_t>(&GetMemoryManager); break;
+		case 123793: address = reinterpret_cast<std::uintptr_t>(&FreeMemory); break;
 		case 124100: address = reinterpret_cast<std::uintptr_t>(&FormatTokens); break;
 		case 124101: address = reinterpret_cast<std::uintptr_t>(&FormatCodes); break;
 		case 124116: address = reinterpret_cast<std::uintptr_t>(&Load); break;
 		case 124117: address = reinterpret_cast<std::uintptr_t>(&Parse); break;
 		case 124124: address = reinterpret_cast<std::uintptr_t>(&Resolve); break;
+		case 124127:
+			address = reinterpret_cast<std::uintptr_t>(&ApplyCustom);
+			break;
+		case 124129:
+			address = reinterpret_cast<std::uintptr_t>(&LoadCustom);
+			break;
 		default: throw std::runtime_error("Unexpected engine relocation: " + std::to_string(a_id));
 		}
 		return address - REX::FModule::GetExecutingModule().GetBaseAddress();
@@ -140,6 +157,18 @@ int main()
 		check(calls.size() == 4 && calls.back().operation == Operation::Resolve && calls.back().map == &second,
 			"link finalization forwards the target instance without reloading defaults");
 
+		first.LoadCustomMappings();
+		check(calls.size() == 5 && calls.back().operation == Operation::LoadCustom && calls.back().map == &first,
+			"custom loader calls the saved-file entry point without reloading defaults");
+		const char block[] = { 3, 0, 3 };
+		for (std::uint8_t device = 0; device < 3; ++device) {
+			auto* map = device == 1 ? &first : &second;
+			map->ApplyCustomMappings(device, block);
+			check(calls.size() == 6 + device && calls.back().operation == Operation::ApplyCustom &&
+					  calls.back().map == map && calls.back().device == device && calls.back().text == block,
+				"device applicator preserves the instance, byte-sized device and borrowed binary block without extra native calls");
+		}
+
 		const char event[] = "osfsettings/openMenu";
 		const std::array<const char*, 3> tokens{ "0x79", "0xff", "!Jump" };
 		const auto tokenRow = RE::ControlMap::FormatMappingRow(event, tokens[0], tokens[1], tokens[2],
@@ -149,8 +178,8 @@ int main()
 			      rowCalls.back().controlMask == 0x80000401u && rowCalls.back().groupMask == 0x40000002u &&
 			      !rowCalls.back().required,
 			"token formatter receives the original pointers, per-device flags and full masks");
-		check(tokenRow == tokenResult && destroyedStrings.size() == 1 && destroyedStrings.back() == rowCalls.back().output,
-			"inline native text is copied before its temporary is destroyed exactly once");
+		check(tokenRow == tokenResult && allocatedStrings.empty() && freedStrings.empty(),
+			"inline native text is copied without touching the engine allocator");
 
 		const std::array<std::uint32_t, 3> codes{ 0x79, 0xFF, 0x80000000u };
 		const auto numericRow = RE::ControlMap::FormatMappingRow(event, codes[0], codes[1], codes[2],
@@ -159,8 +188,8 @@ int main()
 			      rowCalls.back().visible == std::array{ false, true, false } &&
 			      rowCalls.back().controlMask == 0x10u && rowCalls.back().groupMask == 0x80000001u && rowCalls.back().required,
 			"numeric formatter receives full device codes, per-device flags and masks without custom conversion");
-		check(numericRow == numericResult && destroyedStrings.size() == 2 && destroyedStrings.back() == rowCalls.back().output &&
-			      calls.size() == 4,
+		check(numericRow == numericResult && allocatedStrings.size() == 1 && freedStrings == allocatedStrings &&
+			      calls.size() == 8,
 			"heap-backed native text is copied and destroyed exactly once without changing the control map");
 		std::cout << checks << '/' << checks << " ControlMap interface checks passed\n";
 		return 0;
