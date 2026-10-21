@@ -26,18 +26,16 @@ namespace RE
 			}
 		}
 
-		// Exact stack functor used by InitializeHandlers (114215). Keep this
-		// native growth path local to this verified array specialization.
 		struct Allocator
 		{
-			std::uintptr_t vtable;
+			std::uintptr_t  vtable;
 			HandlerStorage* array;
 		};
 		static_assert(sizeof(Allocator) == 0x10);
 		static_assert(offsetof(Allocator, array) == 0x08);
 		using func_t = std::uint32_t (*)(HandlerStorage*, Allocator*, std::uint32_t, std::uint32_t);
 		static REL::Relocation<func_t> append{ ID::BSTArray::AppendIndex };
-		Allocator allocator{ ID::BSTArray::HeapAllocatorFunctorVtable.address(), &handlers };
+		Allocator                      allocator{ ID::BSTArray::HeapAllocatorFunctorVtable.address(), &handlers };
 		a_handler->inputEventHandlingEnabled = true;
 		const auto index = append(&handlers, &allocator, handlers.capacity, sizeof(BSInputEventUser*));
 		if (index == 0xFFFFFFFFu) {

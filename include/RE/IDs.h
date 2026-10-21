@@ -357,10 +357,10 @@ namespace RE::ID
 
 	namespace BSInputEventUser
 	{
-		inline constexpr REL::ID ctor{ 74686 };                     // 1.16.244: initialize native held-action state
-		inline constexpr REL::ID ScalarDeletingDestructor{ 74688 }; // flag 0 releases state without freeing object storage
-		inline constexpr REL::ID DispatchEvent{ 124087 };           // 1.16.244: 0x22DAE00, admission, typed dispatch and held-action bookkeeping
-		inline constexpr REL::ID Unk09{ 124088 };  // 1.16.244: native input vtable slot 9, held/release event gate
+		inline constexpr REL::ID ctor{ 74686 };
+		inline constexpr REL::ID ScalarDeletingDestructor{ 74688 };
+		inline constexpr REL::ID DispatchEvent{ 124087 };
+		inline constexpr REL::ID Unk09{ 124088 };
 	}
 
 	namespace BSLog
@@ -382,6 +382,11 @@ namespace RE::ID
 		inline constexpr REL::ID TryLock{ 0 };  // 74235 - inlined
 		inline constexpr REL::ID Unlock{ 0 };   // 73895 - inlined
 		inline constexpr REL::ID UnlockSubroutine{ 37393 };
+	}
+
+	namespace BSPCKeyboardDevice
+	{
+		inline constexpr REL::ID KeyNameTable{ 361050 };
 	}
 
 	namespace BSPointerHandleManagerInterface
@@ -510,6 +515,11 @@ namespace RE::ID
 		inline constexpr REL::ID Unlock{ 35630 };
 	}
 
+	namespace BSStringT
+	{
+		inline constexpr REL::ID Assign{ 36345 };
+	}
+
 	namespace BSStringPool
 	{
 		namespace Entry
@@ -554,7 +564,7 @@ namespace RE::ID
 	namespace BSTArray
 	{
 		inline constexpr REL::ID U32PushGrow{ 35755 };
-		inline constexpr REL::ID AppendIndex{ 123859 };             // 1.16.244: grow through the supplied allocator functor, return index or UINT32_MAX
+		inline constexpr REL::ID AppendIndex{ 123859 };
 		inline constexpr REL::ID HeapAllocatorFunctorVtable{ 392794 };
 	}
 
@@ -904,24 +914,23 @@ namespace RE::ID
 
 	namespace ControlMap
 	{
-		inline constexpr REL::ID FormatMappingRow{ 124100 };              // 1.16.244: native binding-token formatter
-		inline constexpr REL::ID FormatMappingRowWithKeyCodes{ 124101 };  // 1.16.244: numeric overload of the row formatter
-		inline constexpr REL::ID MappingRowStringDtor{ 35706 };           // 1.16.244: native temporary string cleanup
-		inline constexpr REL::ID Singleton{ 938003 };                     // 1.16.244: ControlMap**
-		inline constexpr REL::ID InputContextNameTable{ 360965 };         // 1.16.244: const char*[0x51]
-		inline constexpr REL::ID LoadMappings{ 124116 };                  // 1.16.244: build and parse baked defaults
-		inline constexpr REL::ID ParseMappings{ 124117 };                 // 1.16.244: rebuild from complete default definitions
-		inline constexpr REL::ID ResolveLinkedMappings{ 124124 };         // 1.16.244: resolve inherited bindings and ordering
-		inline constexpr REL::ID ApplyCustomMappings{ 124127 };           // 1.16.244: apply one complete saved device block
-		inline constexpr REL::ID LoadCustomMappings{ 124129 };            // 1.16.244: load ControlMap_Custom.txt overrides
-		inline constexpr REL::ID ValidateMapping{ 124132 };               // 1.16.244: 0x22EEA90, single-context candidate validation
+		inline constexpr REL::ID FormatMappingRow{ 124100 };
+		inline constexpr REL::ID FormatMappingRowWithKeyCodes{ 124101 };
+		inline constexpr REL::ID Singleton{ 938003 };
+		inline constexpr REL::ID InputContextNameTable{ 360965 };
+		inline constexpr REL::ID LoadMappings{ 124116 };
+		inline constexpr REL::ID ParseMappings{ 124117 };
+		inline constexpr REL::ID ResolveLinkedMappings{ 124124 };
+		inline constexpr REL::ID ApplyCustomMappings{ 124127 };
+		inline constexpr REL::ID LoadCustomMappings{ 124129 };
+		inline constexpr REL::ID ValidateMapping{ 124132 };
 	}
 
 	namespace ControlsRemappedEvent
 	{
 		inline constexpr REL::ID GetEventSource{ 0 };  // 136133
-		inline constexpr REL::ID Dispatch{ 88944 };             // 1.16.244: remap commit notification dispatch
-		inline constexpr REL::ID EventSourceStorage{ 947462 };  // 1.16.244: lazily initialized event-source storage
+		inline constexpr REL::ID Dispatch{ 88944 };
+		inline constexpr REL::ID EventSourceStorage{ 947462 };
 	}
 
 	namespace CraftingMenu_CloseMenu
@@ -1242,7 +1251,7 @@ namespace RE::ID
 
 	namespace IDEvent
 	{
-		inline constexpr REL::ID QUserEvent{ 124035 }; // 1.16.244: returns a borrowed BSFixedString reference, including DISABLED
+		inline constexpr REL::ID QUserEvent{ 124035 };
 	}
 
 	namespace idLogging
@@ -1414,14 +1423,12 @@ namespace RE::ID
 	{
 		inline constexpr REL::ID Singleton{ 883591 };
 		inline constexpr REL::ID WorldRoot{ 0 };  // 887308
-		// Authored roles: global input initialization/teardown containing the MenuControls lifecycle calls.
-		inline constexpr REL::ID InitializeInputSingletons{ 99490 }; // 1.16.244
-		inline constexpr REL::ID ShutdownInputSingletons{ 99491 };   // 1.16.244
+		inline constexpr REL::ID InitializeInputSingletons{ 99490 };
+		inline constexpr REL::ID ShutdownInputSingletons{ 99491 };
 	}
 
 	namespace MenuControls
 	{
-		// 1.16.244: native handler initialization, removal, dispatch and both teardown paths.
 		inline constexpr REL::ID Singleton{ 938076 };
 		inline constexpr REL::ID InitializeHandlers{ 114215 };
 		inline constexpr REL::ID CleanupHandlers{ 114216 };
@@ -2061,12 +2068,12 @@ namespace RE::ID
 	{
 		inline constexpr REL::ID SetGameplayOptionIndex{ 88744 };  // 1.16.242/244; osf-re ui.gameplay_options
 		inline constexpr REL::ID SaveSettings{ 88689 };  // 1.16.242/244; osf-re ui.gameplay_options
-		inline constexpr REL::ID PublishBindings{ 88747 };  // 1.16.244: synchronous binding-definition iteration
-		inline constexpr REL::ID PublishBinding{ 88748 };  // 1.16.244: internal row visitor, not an instance method
-		inline constexpr REL::ID BindingDefinitions{ 918356 };  // 1.16.244: borrowed BSTArray<BindingDefinition>
-		inline constexpr REL::ID EvaluateRemapCandidate{ 88672 }; // 1.16.244: 0x150E950, global pending candidate evaluation
-		inline constexpr REL::ID Singleton{ 939451 };  // 1.16.244: 0x61EF3F8, complete-object pointer
-		inline constexpr REL::ID CancelRemap{ 88684 }; // 1.16.244: 0x15108E0, clears the global pending remap and publishes its state
+		inline constexpr REL::ID PublishBindings{ 88747 };
+		inline constexpr REL::ID PublishBinding{ 88748 };
+		inline constexpr REL::ID BindingDefinitions{ 918356 };
+		inline constexpr REL::ID EvaluateRemapCandidate{ 88672 };
+		inline constexpr REL::ID Singleton{ 939451 };
+		inline constexpr REL::ID CancelRemap{ 88684 };
 	}
 
 	namespace ShipCameraStateToggled
