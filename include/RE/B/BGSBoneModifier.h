@@ -13,7 +13,7 @@ namespace RE
 		~BGSBoneModifier() override;  // 00
 
 		// members
-		void* unk30;  // 30
+		void* unk30;  // 38 - BoneModifierData*; legacy member name retained
 	};
 	static_assert(sizeof(BGSBoneModifier) == 0x40);
 }
