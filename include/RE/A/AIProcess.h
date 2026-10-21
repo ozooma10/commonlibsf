@@ -11,6 +11,7 @@
 
 namespace RE
 {
+	class Actor;
 	class ActorKnowledge;
 	class bhkCharacterController;
 	class DialogueItem;
@@ -54,7 +55,10 @@ namespace RE
 		// members
 		std::byte                      pad000[0x13C];           // 000
 		FADE_STATE                     fadeState;               // 13C
-		std::byte                      pad140[0x1B8];           // 140
+		std::byte                      pad140[0x120];           // 140
+		BSPointerHandle<TESObjectREFR>  lookTarget;              // 260; .244 native look-target arbitration
+		std::int32_t                   lookTargetPriority;      // 264; -1 none, 0 automatic, 4 script, 7 AimAtLocation
+		std::byte                      pad268[0x90];            // 268
 		BSFixedStringCS                strVoiceSubtitle;        // 2F8
 		std::byte                      pad300[0x14];            // 300
 		BSReadWriteLock                knowledgeLock;           // 314
@@ -105,6 +109,8 @@ namespace RE
 		bool                           capLinePlaying;          // 584
 	};
 	static_assert(offsetof(HighProcessData, fadeState) == 0x13C);
+	static_assert(offsetof(HighProcessData, lookTarget) == 0x260);
+	static_assert(offsetof(HighProcessData, lookTargetPriority) == 0x264);
 	static_assert(offsetof(HighProcessData, strVoiceSubtitle) == 0x2F8);
 	static_assert(offsetof(HighProcessData, knowledgeLock) == 0x314);
 	static_assert(offsetof(HighProcessData, deathForceDirection) == 0x34C);
@@ -181,6 +187,49 @@ namespace RE
 	class AIProcess
 	{
 	public:
+		// Descriptive names. Native world-space input to AimAtLocation; copies
+		// the point, retains no caller pointer. Call on the actor's process on
+		// the engine thread, with valid middleHigh and an exclusively owned target.
+		// This does not reserve ownership: native AimAtLocation first selects
+		// the live player as look target at priority 7, then clears/sets this point.
+		void SetAimTarget(Actor* a_actor, const NiPoint3* a_worldPoint)
+		{
+			using func_t = decltype(&AIProcess::SetAimTarget);
+			static REL::Relocation<func_t> func{ ID::AIProcess::SetAimTarget };
+			func(this, a_actor, a_worldPoint);
+		}
+
+		// Cancels the process target AND any queued target copy. May also stop
+		// an active native aim helper; do not clear another caller's ownership.
+		void ClearAimTarget(Actor* a_actor)
+		{
+			using func_t = decltype(&AIProcess::ClearAimTarget);
+			static REL::Relocation<func_t> func{ ID::AIProcess::ClearAimTarget };
+			func(this, a_actor);
+		}
+
+		// Descriptive names, .244: arbitrates high-process look target by signed
+		// priority. Stores a handle, not the caller's pointer. Native priority 7
+		// with the live player reserves explicit world aiming; null is cancellation,
+		// not a durable reservation. Requires engine-thread actor/process ownership,
+		// valid high process and readback: the native function can refuse a request.
+		void SetLookTarget(Actor* a_actor, TESObjectREFR* a_target, std::int32_t a_priority)
+		{
+			using func_t = decltype(&AIProcess::SetLookTarget);
+			static REL::Relocation<func_t> func{ ID::AIProcess::SetLookTarget };
+			func(this, a_actor, a_target, a_priority);
+		}
+
+		// Releases only the matching priority. Uses the proven false native flag
+		// for releasing an owned priority-7 reservation after ClearAimTarget.
+		// The unproven true-flag behavior is intentionally not exposed here.
+		void ClearLookTarget(Actor* a_actor, std::int32_t a_priority)
+		{
+			using func_t = void (*)(AIProcess*, Actor*, std::int32_t, bool);
+			static REL::Relocation<func_t> func{ ID::AIProcess::ClearLookTarget };
+			func(this, a_actor, a_priority, false);
+		}
+
 		float GetActorLightLevel() const
 		{
 			return high ? high->lightLevel : 0.0f;

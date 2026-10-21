@@ -315,6 +315,15 @@ namespace RE
 			func(this, a_immediate, a_resetAI);
 		}
 
+		// Reference pitch plus native high-process aim offset (radians,
+		// negative upward). Descriptive name; .244 gameplay.projectile_launch.
+		[[nodiscard]] float GetAimPitch() const
+		{
+			using func_t = decltype(&Actor::GetAimPitch);
+			static REL::Relocation<func_t> func{ ID::Actor::GetAimPitch };
+			return func(this);
+		}
+
 		[[nodiscard]] ActorKnowledge* GetActorKnowledge(Actor* a_actor)
 		{
 			using func_t = decltype(&Actor::GetActorKnowledge);
