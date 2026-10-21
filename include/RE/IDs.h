@@ -2525,7 +2525,7 @@ namespace RE::ID
 
 	namespace TakeoffMenu_ExitShip
 	{
-		inline constexpr REL::ID GetEventSource{ 0 };  // 141823
+		inline constexpr REL::ID GetEventSource{ 93873 };  // 1.16.244: RVA 1678CF0; native ExitShip round-trip verified 2026-10-21
 	}
 
 	namespace TakeoffMenu_Launch
