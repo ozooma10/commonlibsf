@@ -169,7 +169,7 @@ namespace RE::ID
 
 	namespace BGSEditorID
 	{
-		inline constexpr REL::ID Register{ 0 };  // 86172
+		inline constexpr REL::ID Register{ 47386 };  // 86172
 	}
 
 	namespace BGSEntryPoint
@@ -1146,7 +1146,7 @@ namespace RE::ID
 
 	namespace ExtraDataList
 	{
-		inline constexpr REL::ID HasQuestObjectAlias{ 0 };  // 83336
+		inline constexpr REL::ID HasQuestObjectAlias{ 45044 };  // 83336
 	}
 
 	namespace FavoritesMenu_AssignQuickkey
@@ -1501,8 +1501,9 @@ namespace RE::ID
 	{
 		// 1.16.244, osf-re ui.message_box. Names describe the recovered roles.
 		inline constexpr REL::ID Singleton{ 938019 };          // pointer slot, RVA 0x61DE720
-		inline constexpr REL::ID ShowOneButton{ 114231 };       // RVA 0x1ED62B0; consumes the request
-		inline constexpr REL::ID RequestStringAssign{ 36345 }; // RVA 0x2D31D0; inline/heap string
+		inline constexpr REL::ID CreateMessageBox{ 114231 };   // RVA 0x1ED62B0; consumes the request
+		inline constexpr REL::ID ShowOneButton{ CreateMessageBox };
+		inline constexpr REL::ID RequestStringAssign{ BSStringT::Assign }; // RVA 0x2D31D0; inline/heap string
 		inline constexpr REL::ID RequestDestroy{ 43998 };      // RVA 0x4DF060; three strings + callback
 	}
 
@@ -2776,11 +2777,10 @@ namespace RE::ID
 		inline constexpr REL::ID GetSpaceship{ 119881 };
 		inline constexpr REL::ID GetSpaceshipParentDock{ 0 };  // 174134
 		inline constexpr REL::ID GetSpaceshipPilot{ 119876 };
-		inline constexpr REL::ID GetValue{ 0 };  // 107605
+		inline constexpr REL::ID GetValue{ 64271 };  // 107605
 		inline constexpr REL::ID HasKeyword{ 42794 };
 		inline constexpr REL::ID IsCrimeToActivate{ 0 };  // 106755
 		inline constexpr REL::ID IsInSpace{ 63482 };
-		inline constexpr REL::ID IsInSpaceship{ 119881 };
 		inline constexpr REL::ID IsObjectEquipped{ 0 };  // 106991
 		inline constexpr REL::ID IsSpaceshipDocked{ 120230 };
 		inline constexpr REL::ID IsSpaceshipLanded{ 119909 };

@@ -18,7 +18,7 @@ namespace RE
 	class StarMap::GalaxyState
 	{
 	public:
-		inline static constexpr auto PRIMARY_VTABLE = VTABLE::StarMap__GalaxyState[4];
+		inline static constexpr auto PRIMARY_VTABLE = VTABLE::StarMap__GalaxyState[1];
 
 		[[nodiscard]] TESFormID GetSelectedSystem() const noexcept
 		{
@@ -121,7 +121,7 @@ namespace RE
 	class StarMap::StarMapMenu
 	{
 	public:
-		inline static constexpr auto PRIMARY_VTABLE = VTABLE::StarMap__StarMapMenu[12];
+		inline static constexpr auto PRIMARY_VTABLE = VTABLE::StarMap__StarMapMenu[0];
 
 		[[nodiscard]] void* GetDataModel() noexcept
 		{
